@@ -1,0 +1,40 @@
+version: '3'
+services:
+  node-app:
+    build:
+      context: .
+      args:
+        NODE_ENV: development
+    volumes:
+      - ./:/app:ro
+      - /app/node_modules
+    environment:
+      PORT: "${PORT}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_IP: "${DB_IP}"
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - database
+
+    command: npm run dev
+      
+  database:
+    image: mariadb
+    container_name: loadingProblemDb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_ROOT_HOST : "${DB_HOST}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+    volumes:
+      - maria-db:/data/db
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+volumes:
+  maria-db:
+    
