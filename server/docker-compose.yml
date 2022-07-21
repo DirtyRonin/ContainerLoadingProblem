@@ -1,13 +1,14 @@
 version: '3'
 services:
-  node-app:
+  express:
     build:
       context: .
       args:
         NODE_ENV: development
     volumes:
-      - ./:/app:ro
+      - ./:/app/server:ro
       - /app/node_modules
+    container_name: loadingProblem_Express
     environment:
       PORT: "${PORT}"
       MYSQL_USER: "${DB_USERNAME}"
@@ -23,7 +24,7 @@ services:
       
   database:
     image: mariadb
-    container_name: loadingProblemDb
+    container_name: loadingProblem_DB
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
@@ -35,6 +36,9 @@ services:
       - maria-db:/data/db
     ports:
       - '${DB_PORT}:${DB_PORT}'
+  
 volumes:
   maria-db:
+
+
     
