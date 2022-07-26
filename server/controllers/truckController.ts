@@ -1,0 +1,97 @@
+import { Request, Response, NextFunction } from "express";
+import { Repository } from "sequelize-typescript";
+
+import { Truck } from "../models/truck";
+import { ITruckController } from "./ITruckController";
+
+export class TruckController implements ITruckController {
+  private readonly truckRepository: Repository<Truck>;
+
+  constructor(repo: Repository<Truck>) {
+    this.truckRepository = repo;
+  }
+
+  public GetTrucks = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const trucks = await this.truckRepository.findAll();
+
+      return res.status(200).json(trucks);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public GetTruckById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const truck = await this.truckRepository.findByPk(req.params.id);
+      if (!truck) return res.status(404).json("id not found");
+
+      return res.status(200).json(truck);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public CreateTruck = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const newTruck = await this.truckRepository.create(req.body);
+      if (!newTruck) return res.status(500).json("could not create truck");
+
+      return res.status(201).json(newTruck);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public UpdateTruck = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id } = req.body;
+      await this.truckRepository.update({ ...req.body }, { where: { id } });
+
+      const updatedTruck = await this.truckRepository.findByPk(id);
+      if (!updatedTruck) return res.status(404).json("id not found");
+
+      res.status(200).json(updatedTruck);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public DeleteTruck = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id } = req.params;
+
+      const truck = await this.truckRepository.findByPk(id);
+      if (!truck) return res.status(404).json(-1);
+
+      await truck?.destroy();
+      const reloadTruck = await this.truckRepository.findByPk(id);
+
+      if (reloadTruck) return res.status(500).json(-1);
+
+      return res.status(200).json(id);
+    } catch (error) {
+      next(error);
+    }
+  };
+}

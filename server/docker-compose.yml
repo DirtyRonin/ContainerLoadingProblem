@@ -9,36 +9,34 @@ services:
       - ./:/app/server:ro
       - /app/node_modules
     container_name: loadingProblem_Express
-    environment:
-      PORT: "${PORT}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_DATABASE: "${DB_DATABASE}"
-      MYSQL_IP: "${DB_IP}"
     ports:
-      - '${PORT}:${PORT}'
+      - '3000:3000'
+    environment:
+      DB_PORT: 3306
+      DB_ROOT_PASSWORD: root
+      DB_DATABASE: truckloading
+      DB_HOST : database
+      DB_USERNAME: root
+      DB_PASSWORD: root
     depends_on:
       - database
 
-    command: npm run dev
+    command: bash -c 'while !</dev/tcp/database/3306; do sleep 1; done; npm run dev'
       
   database:
     image: mariadb
     container_name: loadingProblem_DB
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
-      MYSQL_ROOT_HOST : "${DB_HOST}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: truckloading
+      # MYSQL_ROOT_HOST : database
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: root
     volumes:
       - maria-db:/data/db
     ports:
-      - '${DB_PORT}:${DB_PORT}'
+      - '3306:3306'
   
 volumes:
   maria-db:
-
-
-    
