@@ -23,7 +23,7 @@ app.get("/alive/", (req, res) => {
     console.error("Unable to connect to the database:", error);
   }
   
-  // await sequelize.sync();
+  await sequelize.sync();
   
   createServer(app).listen(port, () => {
     console.log(`server running on port ${port}`);

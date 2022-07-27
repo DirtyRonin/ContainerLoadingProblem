@@ -12,6 +12,9 @@ module.exports = {
     alias: {
       src: path.resolve(__dirname, "src/"),
       api: path.resolve(__dirname, "src/api/"),
+      models: path.resolve(__dirname, "src/model/"),
+      pages:path.resolve(__dirname, "src/pages/"),
+      hooks:path.resolve(__dirname, "src/hooks/"),
     },
   },
   target: "web",

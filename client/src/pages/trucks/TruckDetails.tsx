@@ -4,10 +4,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 
-import { Truck } from "../models/truck";
-import { useAppDispatch, useAppSelector } from "../hooks";
-import { UpdateTruck, CreateTruck, SelectTruckState } from "./truckSlice";
-import { SelectTruckListState } from "./truckListSlice";
+import { Truck } from "../../models/Truck";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { UpdateTruck, CreateTruck, SelectTruckState } from "./TruckSlice";
+import { SelectTruckListState } from "./TruckListSlice";
 
 export const TruckDetails = () => {
   const dispatch = useAppDispatch();

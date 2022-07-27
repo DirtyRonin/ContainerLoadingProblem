@@ -1,4 +1,4 @@
-import { ITruck } from "../models/truck";
+import { ITruck } from "../models/Truck";
 import api from "./baseApi";
 
 const apiName = "trucks";

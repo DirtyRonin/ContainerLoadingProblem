@@ -1,5 +1,5 @@
 import {Sequelize} from "sequelize-typescript"
-import { Truck } from "../models/truck"
+import { Goods, Truck } from "../models/index"
 import {config} from "./config"
 
 console.log(config)
@@ -13,5 +13,5 @@ export const sequelize = new Sequelize({
   port: +DB_PORT,
   dialect: 'mariadb',
   repositoryMode:true,
-  models:[Truck]
+  models:[Truck,Goods]
 })

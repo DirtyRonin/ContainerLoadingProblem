@@ -1,12 +1,16 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import trucksReducer from "./pages/truckSlice";
-import truckListReducer from "./pages/truckListSlice";
+import trucksReducer from "./pages/trucks/TruckSlice";
+import truckListReducer from "./pages/trucks/TruckListSlice";
+import goodsReducer from "./pages/goods/slices/GoodsSlice";
+import goodsListReducer from "./pages/goods/slices/GoodsListSlice";
 
 export const store = configureStore({
   reducer: {
     trucksGlobal: trucksReducer,
     truckListGlobal: truckListReducer,
+    goodsGlobal: goodsReducer,
+    goodsListGlobal: goodsListReducer,
   },
 });
 

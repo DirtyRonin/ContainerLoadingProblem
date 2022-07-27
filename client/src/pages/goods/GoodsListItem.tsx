@@ -2,35 +2,35 @@ import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import TruckIcon from "@mui/icons-material/LocalShipping";
+import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ITruck } from "../models/truck";
+import { IGoods } from "../../models/Goods";
 
-import { SelectTruckListState, SelectTruckId } from "./truckListSlice";
-import { DeleteTruck } from "./truckSlice";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { SelectGoodsId, SelectGoodsListState } from "./slices/GoodsListSlice";
+import { DeleteGoods } from "./slices/GoodsSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import ListItem from "@mui/material/ListItem";
 import IconButton from "@mui/material/IconButton";
 
 interface Props {
-  truck: ITruck;
+  goods: IGoods;
 }
 
-export const TruckListItem = (props: Props) => {
-  const { truck } = props;
+export const GoodsListItem = (props: Props) => {
+  const { goods } = props;
 
   const dispatch = useAppDispatch();
-  const { selectedTruckId } = useAppSelector(SelectTruckListState);
+  const { selectedGoodsId } = useAppSelector(SelectGoodsListState);
 
   const handleOnSelect = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => dispatch(SelectTruckId(truck.id));
+  ) => dispatch(SelectGoodsId(goods.id));
 
   const handleOnDelete = () => {
-    dispatch(DeleteTruck(truck.id));
-  }
+    dispatch(DeleteGoods(goods.id));
+  };
 
-  const isSelected =()=> selectedTruckId === truck.id;
+  const isSelected = () => selectedGoodsId === goods.id;
 
   return (
     <ListItem
@@ -43,12 +43,9 @@ export const TruckListItem = (props: Props) => {
     >
       <ListItemButton selected={isSelected()} onClick={handleOnSelect}>
         <ListItemIcon>
-          <TruckIcon />
+          <ViewInArIcon />
         </ListItemIcon>
-        <ListItemText
-          primary={truck.vehicleIdentifier}
-          secondary={truck.vehicleIdentifier}
-        />
+        <ListItemText primary={goods.name} secondary={goods.name} />
       </ListItemButton>
     </ListItem>
   );
