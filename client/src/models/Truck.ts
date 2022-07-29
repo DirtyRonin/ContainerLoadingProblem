@@ -9,9 +9,7 @@ export interface ITruck {
   dischargeTime: number;
 }
 
-
-
-export class Truck implements ITruck{
+export class Truck implements ITruck {
   constructor(
     public id: number,
     public vehicleIdentifier: string,
@@ -35,7 +33,11 @@ export class Truck implements ITruck{
       truck.dischargeTime
     );
   }
-  public static AsDefault(vehicleIdentifier = '') {
-    return new Truck(0, vehicleIdentifier, 0, 0, 0, 0, 0, 0);
-  }
+  public static AsDefault = (vehicleIdentifier = "") =>
+    new Truck(0, vehicleIdentifier, 0, 0, 0, 0, 0, 0);
+
+  public static As15er = (vehicleIdentifier = "As15er") =>
+    new Truck(0, vehicleIdentifier, 400, 200, 700, 15000, 3000, 1500);
+
+
 }

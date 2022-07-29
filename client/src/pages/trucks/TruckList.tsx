@@ -17,7 +17,7 @@ export const TruckList = () => {
 
 
   const { trucks } = useAppSelector(SelectTruckState);
-  const newTruck = Truck.AsDefault("Create New Truck")
+  const newTruck = Truck.As15er("Create New As15er")
 
   const mergeTrucks = [newTruck,...trucks]
 

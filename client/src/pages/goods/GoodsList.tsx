@@ -17,7 +17,7 @@ export const GoodsList = () => {
 
 
   const { goods } = useAppSelector(SelectGoodsState);
-  const newGoods = Goods.AsDefault("Create New Goods")
+  const newGoods = Goods.AsSuperHeavy("Create Super Heavy Goods")
 
   const mergeGoods = [newGoods,...goods]
 

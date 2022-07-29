@@ -20,4 +20,5 @@ export class Goods implements IGoods {
   ) {}
 
   public static AsDefault = (name = "") => new Goods(0, name, 0, 0, 0, 0,0);
+  public static AsSuperHeavy = (name = "Medium Sized Goods") => new Goods(0, name, 100,100,100, 1000,20);
 }

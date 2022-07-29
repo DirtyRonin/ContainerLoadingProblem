@@ -25,7 +25,7 @@ export const TruckDetails = () => {
   const memoizedSelectedTruck = useMemo(
     () =>
       trucks.find((truck) => truck.id === selectedTruckId) ??
-      Truck.AsDefault("Create New Truck"),
+      Truck.As15er("Create New As15er"),
     [selectedTruckId, trucks]
   );
 

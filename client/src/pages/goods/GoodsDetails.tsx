@@ -24,7 +24,7 @@ export const GoodsDetails = () => {
   const memoizedSelectedGoods = useMemo(
     () =>
     goods.find((x) => x.id === selectedGoodsId) ??
-      Goods.AsDefault("Create New Goods"),
+      Goods.AsSuperHeavy("Create New Super Heavy Goods"),
     [selectedGoodsId, goods]
   );
 
