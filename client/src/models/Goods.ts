@@ -1,11 +1,8 @@
-export interface IGoods {
+import { IContainer } from ".";
+
+export interface IGoods extends IContainer {
   id: number;
   name: string;
-  height: number;
-  width: number;
-  length: number;
-  weight: number;
-  quantity:number;
 }
 
 export class Goods implements IGoods {
@@ -15,10 +12,13 @@ export class Goods implements IGoods {
     public height: number,
     public width: number,
     public length: number,
-    public weight: number,
-    public quantity:number
+    public weight: number
   ) {}
 
-  public static AsDefault = (name = "") => new Goods(0, name, 0, 0, 0, 0,0);
-  public static AsSuperHeavy = (name = "Medium Sized Goods") => new Goods(0, name, 100,100,100, 1000,20);
+  public static AsInitializeDefault = (name = "") =>
+    new Goods(0, name, 0, 0, 0, 0);
+  public static AsSuperHeavy = (name = "Medium Sized Goods") =>
+    new Goods(0, name, 100, 100, 100, 1000);
+
+  public GetArea = ():number => this.length * this.width;
 }
