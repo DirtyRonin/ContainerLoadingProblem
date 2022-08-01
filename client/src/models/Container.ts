@@ -1,15 +1,12 @@
-export interface IContainer {
-  length: number;
-  width: number;
-  height: number;
-}
+import { IContainer } from "../interfaces/index";
 
 export class Container implements IContainer {
   constructor(
     public length: number,
     public width: number,
-    public height: number
+    public height: number,
   ) {}
 
-  public GetArea = ():number => this.length * this.width;
+  public static AsInitializeDefault = new Container(0, 0, 0);
+
 }

@@ -4,7 +4,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IGoods } from "../../models/Goods";
+import { IGoods } from "../../interfaces";
 
 import { SelectGoodsId, SelectGoodsListState } from "./slices/GoodsListSlice";
 import { DeleteGoods } from "./slices/GoodsSlice";

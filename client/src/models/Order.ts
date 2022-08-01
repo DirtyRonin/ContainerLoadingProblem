@@ -1,4 +1,4 @@
-import { IGoods } from ".";
+import { IGoods } from "../interfaces/index";
 
 export interface IOrder {}
 
