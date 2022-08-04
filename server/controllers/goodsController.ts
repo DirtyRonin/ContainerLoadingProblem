@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { Repository } from "sequelize-typescript";
 
 import { Goods } from "../models/goods";
-import { IGoodsController } from "./IGoodsController";
+import { IGoodsController } from "../interfaces";
 
 export class GoodsController implements IGoodsController {
   private readonly goodsRepository: Repository<Goods>;
@@ -11,7 +11,7 @@ export class GoodsController implements IGoodsController {
     this.goodsRepository = repo;
   }
 
-  public GetGoodss = async (
+  public GetAll = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -25,7 +25,7 @@ export class GoodsController implements IGoodsController {
     }
   };
 
-  public GetGoodsById = async (
+  public GetById = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -40,7 +40,7 @@ export class GoodsController implements IGoodsController {
     }
   };
 
-  public CreateGoods = async (
+  public Create = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -55,7 +55,7 @@ export class GoodsController implements IGoodsController {
     }
   };
 
-  public UpdateGoods = async (
+  public Update = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -73,7 +73,7 @@ export class GoodsController implements IGoodsController {
     }
   };
 
-  public DeleteGoods = async (
+  public Delete = async (
     req: Request,
     res: Response,
     next: NextFunction

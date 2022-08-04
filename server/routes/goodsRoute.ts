@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { IGoodsController } from "../controllers/IGoodsController";
+import { IGoodsController } from "../interfaces";
 
 export const goodsRouter = (controller: IGoodsController) =>
   Router()
-    .get("/goods", controller.GetGoodss)
+    .get("/goods", controller.GetAll)
 
-    .get("/goods/:id", controller.GetGoodsById)
+    .get("/goods/:id", controller.GetById)
 
-    .post("/goods", controller.CreateGoods)
+    .post("/goods", controller.Create)
 
-    .put("/goods", controller.UpdateGoods)
+    .put("/goods", controller.Update)
 
-    .delete("/goods/:id", controller.DeleteGoods);
+    .delete("/goods/:id", controller.Delete);

@@ -14,20 +14,28 @@ app.get("/alive/", (req, res) => {
   console.log("see me ran");
 });
 
+const forceSync = async () => {
+  await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
+  await sequelize.sync({ force: true });
+  await sequelize.query('SET FOREIGN_KEY_CHECKS = 1'); // setting the flag back for security
+};
+
 (async () => {
   
-  try {
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
+  // try {
+  //   await sequelize.authenticate();
+  //   console.log("Connection has been established successfully.");
+  // } catch (error) {
+  //   console.error("Unable to connect to the database:", error);
+  // }
   
-  await sequelize.sync();
+  // await sequelize.sync();  
+  // await forceSync(); 
   
   createServer(app).listen(port, () => {
     console.log(`server running on port ${port}`);
   });
 })();
 
-// TODO: Test DB Next
+
+

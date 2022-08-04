@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { Repository } from "sequelize-typescript";
 
-import { Truck } from "../models/truck";
-import { ITruckController } from "../interfaces";
+import { IOrderItemController } from "../interfaces";
+import { OrderItem } from "../models";
 
-export class TruckController implements ITruckController {
-  private readonly truckRepository: Repository<Truck>;
+export class OrderItemController implements IOrderItemController {
+  private readonly orderRepository: Repository<OrderItem>;
 
-  constructor(repo: Repository<Truck>) {
-    this.truckRepository = repo;
+  constructor(repo: Repository<OrderItem>) {
+    this.orderRepository = repo;
   }
 
   public GetAll = async (
@@ -17,7 +17,7 @@ export class TruckController implements ITruckController {
     next: NextFunction
   ) => {
     try {
-      const trucks = await this.truckRepository.findAll();
+      const trucks = await this.orderRepository.findAll();
 
       return res.status(200).json(trucks);
     } catch (error) {
@@ -31,7 +31,7 @@ export class TruckController implements ITruckController {
     next: NextFunction
   ) => {
     try {
-      const truck = await this.truckRepository.findByPk(req.params.id);
+      const truck = await this.orderRepository.findByPk(req.params.id);
       if (!truck) return res.status(404).json("id not found");
 
       return res.status(200).json(truck);
@@ -46,8 +46,8 @@ export class TruckController implements ITruckController {
     next: NextFunction
   ) => {
     try {
-      const newTruck = await this.truckRepository.create(req.body);
-      if (!newTruck) return res.status(500).json("could not create truck");
+      const newTruck = await this.orderRepository.create(req.body);
+      if (!newTruck) return res.status(500).json("could not create order");
 
       return res.status(201).json(newTruck);
     } catch (error) {
@@ -62,9 +62,9 @@ export class TruckController implements ITruckController {
   ) => {
     try {
       const { id } = req.body;
-      await this.truckRepository.update({ ...req.body }, { where: { id } });
+      await this.orderRepository.update({ ...req.body }, { where: { id } });
 
-      const updatedTruck = await this.truckRepository.findByPk(id);
+      const updatedTruck = await this.orderRepository.findByPk(id);
       if (!updatedTruck) return res.status(404).json("id not found");
 
       res.status(200).json(updatedTruck);
@@ -81,11 +81,11 @@ export class TruckController implements ITruckController {
     try {
       const { id } = req.params;
 
-      const truck = await this.truckRepository.findByPk(id);
+      const truck = await this.orderRepository.findByPk(id);
       if (!truck) return res.status(404).json(-1);
 
       await truck?.destroy();
-      const reloadTruck = await this.truckRepository.findByPk(id);
+      const reloadTruck = await this.orderRepository.findByPk(id);
 
       if (reloadTruck) return res.status(500).json(-1);
 

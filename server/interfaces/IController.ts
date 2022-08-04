@@ -1,28 +1,28 @@
 import { Request, Response, NextFunction } from "express";
 
 
-export interface ITruckController {
-    GetTrucks: (
+export interface IController {
+    GetAll: (
         req: Request,
         res: Response,
         next: NextFunction
     ) => Promise<Response<any, Record<string, any>> | undefined>;
-    GetTruckById: (
+    GetById: (
         req: Request,
         res: Response,
         next: NextFunction
     ) => Promise<Response<any, Record<string, any>> | undefined>;
-    CreateTruck: (
+    Create: (
         req: Request,
         res: Response,
         next: NextFunction
     ) => Promise<Response<any, Record<string, any>> | undefined>;
-    UpdateTruck: (
+    Update: (
         req: Request,
         res: Response,
         next: NextFunction
     ) => Promise<Response<any, Record<string, any>> | undefined>;
-    DeleteTruck: (
+    Delete: (
         req: Request,
         res: Response,
         next: NextFunction

@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { ITruckController } from "../controllers/ITruckController";
+import { ITruckController } from "../interfaces";
 
 export const truckRouter = (controller: ITruckController) =>
   Router()
-    .get("/trucks", controller.GetTrucks)
+    .get("/trucks", controller.GetAll)
 
-    .get("/trucks/:id", controller.GetTruckById)
+    .get("/trucks/:id", controller.GetById)
 
-    .post("/trucks", controller.CreateTruck)
+    .post("/trucks", controller.Create)
 
-    .put("/trucks", controller.UpdateTruck)
+    .put("/trucks", controller.Update)
 
-    .delete("/trucks/:id", controller.DeleteTruck);
+    .delete("/trucks/:id", controller.Delete);

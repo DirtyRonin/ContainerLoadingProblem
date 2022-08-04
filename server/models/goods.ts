@@ -1,7 +1,11 @@
-import { Column, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, Model, Table } from 'sequelize-typescript';
+import { GoodsOrderItem, OrderItem } from './';
 
 @Table
 export class Goods extends Model {
+  @BelongsToMany(() => Goods, () => GoodsOrderItem)
+  orderItems!: OrderItem[];
+
   @Column name!: string;
   @Column height!: number;
   @Column width!: number;
