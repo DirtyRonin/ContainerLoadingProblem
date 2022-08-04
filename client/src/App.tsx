@@ -1,34 +1,26 @@
 import React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+import SharedLayout from './pages/sharedLayout';
+import Dashboard from './pages/dashboard';
+import Trucks from './pages/trucks';
+import Goods from './pages/goods';
+import LoadAnalysis from './pages/loadFactor';
 import './App.css';
 
-import { Trucks } from './pages/trucks/Trucks';
-import { Goods } from './pages/goods/Goods';
-import AppBar from './components/ui/AppBar';
-
-export function App() {
+export default function App() {
   return (
-    <>
-      <CssBaseline />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SharedLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="trucks" element={<Trucks />} />
+          <Route path="orders" element={<Goods />} />
+          <Route path="analyzer" element={<LoadAnalysis />} />
 
-      <Container maxWidth="lg">
-        <AppBar />
-        <Box
-          sx={{
-            bgcolor: '#cfe8fc',
-            height: '100vh',
-            border: '1px solid black',
-          }}
-        >
-          <Trucks />
-          <Goods />
-        </Box>
-      </Container>
-    </>
+          {/* <Route path='*' element={<Error />} /> */}
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

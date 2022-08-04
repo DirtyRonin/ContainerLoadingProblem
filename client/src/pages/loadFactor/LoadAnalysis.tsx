@@ -1,8 +1,9 @@
-import React from "react";
+import React from 'react';
 
-export const LoadAnalysis = () => {
-
-    
-
-    return <></>
-};
+export default function LoadAnalysis() {
+  return (
+    <>
+      <h1>Meet the analyzer tool</h1>
+    </>
+  );
+}

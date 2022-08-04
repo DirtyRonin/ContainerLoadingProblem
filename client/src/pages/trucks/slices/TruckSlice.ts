@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import type { RootState } from "../../store";
-import { ITruck } from "../../interfaces";
-import { TruckApi } from "../../apis/trucksApi";
-import { AsyncStatus } from "../../models/AsyncStatus";
+import type { RootState } from "../../../store";
+import { ITruck } from "../../../interfaces";
+import { TruckApi } from "../../../apis/trucksApi";
+import { AsyncStatus } from "../../../models/AsyncStatus";
 
 // Define a type for the slice state
 interface TruckState {

@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { SelectTruckState, FetchAllTrucks } from './TruckSlice';
 import CostumList from '../../components/ui/CostumList';
-import { TruckListItem } from './TruckListItem';
+import TruckListItem from './TruckListItem';
 import { Truck } from '../../models';
 import { ITruck } from '../../interfaces';
 import { useEffectOnce } from '../../hooks/useEffectOnce';
+import { FetchAllTrucks, SelectTruckState } from './slices/TruckSlice';
 
-export const TruckList = () => {
+export default function TruckList() {
   const dispatch = useAppDispatch();
 
   useEffectOnce(() => {
@@ -22,5 +22,5 @@ export const TruckList = () => {
 
   const getListItems = (trucks: ITruck[]) => trucks.map((truck) => <TruckListItem truck={truck} />);
 
-  return <CostumList>{getListItems(mergeTrucks)}</CostumList>;
-};
+  return <CostumList orientation='vertical'>{getListItems(mergeTrucks)}</CostumList>;
+}

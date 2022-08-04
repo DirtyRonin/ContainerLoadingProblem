@@ -6,10 +6,10 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 import { Truck } from "../../models/Truck";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { UpdateTruck, CreateTruck, SelectTruckState } from "./TruckSlice";
-import { SelectTruckListState } from "./TruckListSlice";
+import { SelectTruckListState } from "./slices/TruckListSlice";
+import { SelectTruckState, UpdateTruck, CreateTruck } from "./slices/TruckSlice";
 
-export const TruckDetails = () => {
+export default function TruckDetails() {
   const dispatch = useAppDispatch();
   const { loading, trucks } = useAppSelector(SelectTruckState);
   const { selectedTruckId } = useAppSelector(SelectTruckListState);

@@ -4,23 +4,23 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import TruckIcon from "@mui/icons-material/LocalShipping";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ITruck } from "../../interfaces/";
-
-import { SelectTruckListState, SelectTruckId } from "./TruckListSlice";
-import { DeleteTruck } from "./TruckSlice";
-import { useAppDispatch, useAppSelector } from "../../hooks";
 import ListItem from "@mui/material/ListItem";
 import IconButton from "@mui/material/IconButton";
+
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { ITruck } from "../../interfaces/";
+import { SelectTruckListState, SelectTruckId } from "./slices/TruckListSlice";
+import { DeleteTruck } from "./slices/TruckSlice";
 
 interface Props {
   truck: ITruck;
 }
 
-export const TruckListItem = (props: Props) => {
+export default function TruckListItem(props: Props) {
   const { truck } = props;
 
   const dispatch = useAppDispatch();
-  const { selectedTruckId } = useAppSelector(SelectTruckListState);
+  const {selectedTruckId } = useAppSelector(SelectTruckListState);
 
   const handleOnSelect = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 
-import trucksReducer from "./pages/trucks/TruckSlice";
-import truckListReducer from "./pages/trucks/TruckListSlice";
+import trucksReducer from "./pages/trucks/slices/TruckSlice";
+import truckListReducer from "./pages/trucks/slices/TruckListSlice";
 import goodsReducer from "./pages/goods/slices/GoodsSlice";
 import goodsListReducer from "./pages/goods/slices/GoodsListSlice";
 
