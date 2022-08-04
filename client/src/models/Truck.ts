@@ -17,8 +17,8 @@ export class Truck implements ITruck {
     vehicleIdentifier = ""
   ) => new Truck(0, vehicleIdentifier, 0, 0, 0, 0, 0, 0);
 
-  // public static As15er = (vehicleIdentifier = "As15er",helper: IMathHelper) =>
-  //   new Truck(0, vehicleIdentifier, 400, 200, 700, 15000, 3000, 1500, helper);
+  public static As15er = (vehicleIdentifier = "As15er") =>
+    new Truck(0, vehicleIdentifier, 400, 200, 700, 15000, 3000, 1500);
 
   // public static StandardTruck = (vehicleIdentifier = "Standard Truck",helper: IMathHelper) =>
   //   new Truck(0, vehicleIdentifier, 270, 240, 1360, 20000, 100, 100, helper);

@@ -4,7 +4,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import TruckIcon from "@mui/icons-material/LocalShipping";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ITruck } from "../../models/Truck";
+import { ITruck } from "../../interfaces/";
 
 import { SelectTruckListState, SelectTruckId } from "./TruckListSlice";
 import { DeleteTruck } from "./TruckSlice";

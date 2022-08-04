@@ -3,10 +3,10 @@ import {
   IStacking,
   ICargo,
   IContainer,
-  IMathHelper,
+  IContainerHelper,
 } from "../../../interfaces";
 import { testHelper } from "../../";
-import { MathHelper } from "../index";
+import { ContainerHelper } from "../index";
 
 describe("calculating stacking factor", () => {
 
@@ -16,7 +16,7 @@ describe("calculating stacking factor", () => {
   let _container: IContainer;
   let _cargo: ICargo;
 
-  const mathHelper: IMathHelper = new MathHelper();
+  const mathHelper: IContainerHelper = new ContainerHelper();
 
   beforeEach(() => {
     _container = _testContainers.Truck_l1360w240h270;

@@ -4,7 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { SelectTruckState,FetchAllTrucks } from "./TruckSlice";
 import { CostumList } from "../../components/ui/CostumList";
 import { TruckListItem } from "./TruckListItem";
-import { Truck,ITruck } from "../../models/Truck";
+import { Truck } from "../../models";
+import { ITruck } from "../../interfaces";
 import { useEffectOnce } from "../../hooks/useEffectOnce";
 
 export const TruckList = () => {
