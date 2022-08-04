@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { SelectGoodsState,FetchAllGoods } from "./slices/GoodsSlice";
-import { CostumList } from "../../components/ui/CostumList";
+import  CostumList  from "../../components/ui/CostumList";
 import { GoodsListItem } from "./GoodsListItem";
 import { Goods } from "../../models";
 import { IGoods } from "../../interfaces";
