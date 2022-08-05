@@ -1,4 +1,4 @@
 export * from './goods'
 export * from './truck'
-export * from './Order'
+export * from './order'
 export * from './goodsOrder'

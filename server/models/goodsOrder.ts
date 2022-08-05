@@ -1,6 +1,6 @@
 import { Table, Model, ForeignKey, Column } from 'sequelize-typescript';
 import { Goods } from './goods';
-import { Order } from './Order';
+import { Order } from './order';
 
 @Table
 export class GoodsOrder extends Model {
@@ -12,6 +12,7 @@ export class GoodsOrder extends Model {
   @Column
   orderId!: number;
 
-  @Column
-  quantity!: number;
+  @Column quantity!: number;
+  @Column height!: number;
+  @Column isStackable!: boolean;
 }

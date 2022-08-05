@@ -7,9 +7,8 @@ export class Goods extends Model {
   orders!: Order[];
 
   @Column name!: string;
-  @Column height!: number;
   @Column width!: number;
   @Column length!: number;
   @Column weight!: number;
-  @Column isStackable!: boolean;
+  
 }
