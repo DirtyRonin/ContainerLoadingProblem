@@ -12,7 +12,8 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 
-const pages = ['Trucks', 'Orders', 'Analyzer'];
+import { pages } from '../../utils/shared';
+
 const siteName = 'Load Analyzer';
 
 const ResponsiveAppBar = () => {
@@ -25,11 +26,7 @@ const ResponsiveAppBar = () => {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
-  //   const handleNavigationOnClick = useCallback((event: React.MouseEvent<HTMLElement>) => navigate(event., {replace: true}), [navigate]);
-  const handleNavigationOnClick = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event);
-  };
+ 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -87,7 +84,7 @@ const ResponsiveAppBar = () => {
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">
-                    <Link style={{ textDecoration: 'none', color: 'black' }} to={`/${page.toLowerCase()}`}>
+                    <Link style={{ textDecoration: 'none', color: 'black' }} to={`/${page}`}>
                       {page.toUpperCase()}
                     </Link>
                   </Typography>
@@ -119,7 +116,7 @@ const ResponsiveAppBar = () => {
             {pages.map((page) => (
               <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
                 <Typography textAlign="center">
-                  <Link style={{ textDecoration: 'none', color: 'white' }} to={`/${page.toLowerCase()}`}>
+                  <Link style={{ textDecoration: 'none', color: 'white' }} to={`/${page}`}>
                     {page}
                   </Link>
                 </Typography>

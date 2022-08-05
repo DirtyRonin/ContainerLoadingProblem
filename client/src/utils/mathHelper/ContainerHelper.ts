@@ -1,4 +1,4 @@
-import { ICargo, IContainer, IContainerHelper, IStacking } from '../../interfaces/index';
+import { IArea, ICargo, IContainer, IContainerHelper, IStacking } from '../../interfaces/index';
 import { Stacking } from './Stacking';
 
 export class ContainerHelper implements IContainerHelper {
@@ -13,21 +13,21 @@ export class ContainerHelper implements IContainerHelper {
     return { ...truckA };
   };
 
-  public CalculateAreaForRectangle = (container: IContainer): number => container.length * container.width;
+  public CalculateAreaForRectangle = (area: IArea): number => area.length * area.width;
 
   public CalculateGoodsPerRow(singleGoodsWidth: number, containerWidth: number): number {
     return Math.floor(containerWidth / singleGoodsWidth);
   }
-  
+
   public CalculateLoadingMeterBase(singleGoodsOfCargo: IContainer, container: IContainer): number {
-    return this.CalculateAreaForRectangle(singleGoodsOfCargo) / container.width ;
+    return this.CalculateAreaForRectangle(singleGoodsOfCargo) / container.width;
   }
   public CalculateLoadingMeter(baseLoadingMeter: number, stackingFactor: number, countGoods: number): number {
     return (baseLoadingMeter / stackingFactor) * countGoods;
   }
-  
+
   CalculateFullStackedRows(quantity: number, goodsPerFullStackedRow: number): number {
-    return Math.floor(quantity / goodsPerFullStackedRow)
+    return Math.floor(quantity / goodsPerFullStackedRow);
   }
   /** Based on the rule, that even if goods are stackable, the have to be placed horizontal row.
   If a row is full and stacking is allowed, the next row can be started on top of that.  
@@ -38,19 +38,20 @@ export class ContainerHelper implements IContainerHelper {
   };
 
   public CalculateStackingFactor = (cargo: ICargo, containerHeight: number): IStacking => {
-    const { singleGoods, isStackable } = cargo;
+    const { height, isStackable } = cargo;
 
     if (!isStackable) return Stacking.AsInitializeDefault;
 
-    const stackingFactor = Math.floor(containerHeight / singleGoods.height);
-    const remainingHeight = containerHeight - stackingFactor * singleGoods.height;
+    const stackingFactor = Math.floor(containerHeight / height);
+    const remainingHeight = containerHeight - stackingFactor * height;
 
     return new Stacking(stackingFactor, remainingHeight);
   };
 
   public IsFitting = (container: IContainer, cargo: ICargo): boolean => {
     const {
-      singleGoods: { length, width, height },
+      singleGoods: { length, width },
+      height,
     } = cargo;
 
     if (!this.IsValidContainer(container)) return false;
@@ -80,9 +81,9 @@ export class ContainerHelper implements IContainerHelper {
   };
 
   public IsValidCargo = (cargo: ICargo): boolean => {
-    const { singleGoods, quantity } = cargo;
+    const { singleGoods, quantity, height } = cargo;
 
-    if (!this.IsValidContainer(singleGoods)) return false;
+    if (!this.IsValidContainer({ ...singleGoods, height })) return false;
     if (quantity < 1) return false;
 
     return true;

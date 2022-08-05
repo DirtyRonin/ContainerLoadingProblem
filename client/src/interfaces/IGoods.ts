@@ -1,7 +1,7 @@
-import { IContainer } from ".";
+import { IArea } from ".";
 
 
-export interface IGoods extends IContainer {
+export interface IGoods extends IArea {
   id: number;
   name: string;
 }

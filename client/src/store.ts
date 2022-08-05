@@ -4,6 +4,8 @@ import trucksReducer from "./pages/trucks/slices/TruckSlice";
 import truckListReducer from "./pages/trucks/slices/TruckListSlice";
 import goodsReducer from "./pages/goods/slices/GoodsSlice";
 import goodsListReducer from "./pages/goods/slices/GoodsListSlice";
+import orderReducer from "./pages/order/slices/OrderSlice";
+import orderListReducer from "./pages/order/slices/OrderListSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +13,8 @@ export const store = configureStore({
     truckListGlobal: truckListReducer,
     goodsGlobal: goodsReducer,
     goodsListGlobal: goodsListReducer,
+    ordersGlobal: orderReducer,
+    orderListGlobal: orderListReducer,
   },
 });
 

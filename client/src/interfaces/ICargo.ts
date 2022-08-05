@@ -1,7 +1,8 @@
-import { IContainer } from "./IContainer";
+import { IArea } from '.';
 
 export interface ICargo {
-    singleGoods: IContainer;
-    quantity: number;
-    isStackable: boolean;
-  }
+  singleGoods: IArea;
+  quantity: number;
+  height: number;
+  isStackable: boolean;
+}

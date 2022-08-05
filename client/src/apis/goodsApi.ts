@@ -1,4 +1,4 @@
-import { IGoods } from "../models/IGoods";
+import { IGoods } from "../interfaces";
 import api from "./baseApi";
 
 const apiName = "goods";

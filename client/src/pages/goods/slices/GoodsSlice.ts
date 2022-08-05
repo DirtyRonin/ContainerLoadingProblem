@@ -99,7 +99,6 @@ const initialState: GoodsState = {
   
   export const {} = goodSlice.actions;
   
-  // Other code such as selectors can use the imported `RootState` type
   export const SelectGoodsState = (state: RootState) => state.goodsGlobal;
   
   export default goodSlice.reducer;

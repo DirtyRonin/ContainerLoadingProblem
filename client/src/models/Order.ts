@@ -1,7 +1,9 @@
-import { IGoods } from "../interfaces/index";
-
-export interface IOrder {}
+import { IGoods, IOrder } from '../interfaces';
 
 export class Order implements IOrder {
-  constructor(public allGoods: IGoods[]) {}
+  constructor(public id: number, public name: string, public goods: IGoods[]) {}
+
+  public static AsInitializeDefault = (
+    name = ""
+  ) => new Order(0, name, []);
 }
