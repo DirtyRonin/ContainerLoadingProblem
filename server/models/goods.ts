@@ -11,4 +11,5 @@ export class Goods extends Model {
   @Column width!: number;
   @Column length!: number;
   @Column weight!: number;
+  @Column isStackable!: boolean;
 }
