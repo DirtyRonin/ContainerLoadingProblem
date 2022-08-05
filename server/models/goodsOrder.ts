@@ -1,16 +1,16 @@
 import { Table, Model, ForeignKey, Column } from 'sequelize-typescript';
 import { Goods } from './goods';
-import { OrderItem } from './OrderItem';
+import { Order } from './Order';
 
 @Table
-export class GoodsOrderItem extends Model {
+export class GoodsOrder extends Model {
   @ForeignKey(() => Goods)
   @Column
   goodsId!: number;
 
-  @ForeignKey(() => OrderItem)
+  @ForeignKey(() => Order)
   @Column
-  orderItemId!: number;
+  orderId!: number;
 
   @Column
   quantity!: number;

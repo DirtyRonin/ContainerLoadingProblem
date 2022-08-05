@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { Repository } from "sequelize-typescript";
 
-import { IOrderItemController } from "../interfaces";
-import { OrderItem } from "../models";
+import { IOrderController } from "../interfaces";
+import { Order } from "../models";
 
-export class OrderItemController implements IOrderItemController {
-  private readonly orderRepository: Repository<OrderItem>;
+export class OrderController implements IOrderController {
+  private readonly orderRepository: Repository<Order>;
 
-  constructor(repo: Repository<OrderItem>) {
+  constructor(repo: Repository<Order>) {
     this.orderRepository = repo;
   }
 

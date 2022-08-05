@@ -1,19 +1,19 @@
 import { Request, Response, NextFunction } from 'express';
 import { Repository } from 'sequelize-typescript';
 
-import { GoodsOrderItem } from '../models';
-import { IGoodsOrderItemController } from '../interfaces';
+import { GoodsOrder } from '../models';
+import { IGoodsOrderController } from '../interfaces';
 
-export class GoodsOrderItemController implements IGoodsOrderItemController {
-  private readonly goodsOrderItemRepository: Repository<GoodsOrderItem>;
+export class GoodsOrderController implements IGoodsOrderController {
+  private readonly goodsOrderRepository: Repository<GoodsOrder>;
 
-  constructor(repo: Repository<GoodsOrderItem>) {
-    this.goodsOrderItemRepository = repo;
+  constructor(repo: Repository<GoodsOrder>) {
+    this.goodsOrderRepository = repo;
   }
 
   public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const goodsOrderItems = await this.goodsOrderItemRepository.findAll();
+      const goodsOrderItems = await this.goodsOrderRepository.findAll();
 
       return res.status(200).json(goodsOrderItems);
     } catch (error) {
@@ -25,7 +25,7 @@ export class GoodsOrderItemController implements IGoodsOrderItemController {
     try {
       const { orderitemid, goodsid } = req.params;
 
-      const goodsOrderItem = await this.goodsOrderItemRepository.findOne({
+      const goodsOrderItem = await this.goodsOrderRepository.findOne({
         where: { orderitemid, goodsid },
       });
       if (!goodsOrderItem) return res.status(404).json('id not found');
@@ -38,7 +38,7 @@ export class GoodsOrderItemController implements IGoodsOrderItemController {
 
   public Create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const newGoodsOrderItem = await this.goodsOrderItemRepository.create(req.body);
+      const newGoodsOrderItem = await this.goodsOrderRepository.create(req.body);
       if (!newGoodsOrderItem) return res.status(500).json('could not create goods order item');
 
       return res.status(201).json(newGoodsOrderItem);
@@ -50,9 +50,9 @@ export class GoodsOrderItemController implements IGoodsOrderItemController {
   public Update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { orderitemid, goodsid } = req.body;
-      await this.goodsOrderItemRepository.update({ ...req.body }, { where: { orderitemid, goodsid } });
+      await this.goodsOrderRepository.update({ ...req.body }, { where: { orderitemid, goodsid } });
 
-      const updateGoodsOrderItem = await this.goodsOrderItemRepository.findOne({
+      const updateGoodsOrderItem = await this.goodsOrderRepository.findOne({
         where: { orderitemid, goodsid },
       });
       if (!updateGoodsOrderItem) return res.status(404).json('id not found');
@@ -67,13 +67,13 @@ export class GoodsOrderItemController implements IGoodsOrderItemController {
     try {
         const { orderitemid, goodsid } = req.params;
 
-      const goodsOrderItem = await this.goodsOrderItemRepository.findOne({
+      const goodsOrderItem = await this.goodsOrderRepository.findOne({
         where: { orderitemid, goodsid },
       });
       if (!goodsOrderItem) return res.status(404).json(-1);
 
       await goodsOrderItem?.destroy();
-      const reloadGoodsOrderItem = await this.goodsOrderItemRepository.findOne({
+      const reloadGoodsOrderItem = await this.goodsOrderRepository.findOne({
         where: { orderitemid, goodsid },
       });
 
