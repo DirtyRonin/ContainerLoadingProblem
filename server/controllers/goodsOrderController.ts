@@ -23,10 +23,10 @@ export class GoodsOrderController implements IGoodsOrderController {
 
   public GetById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { orderitemid, goodsid } = req.params;
+      const { orderid, goodsid } = req.params;
 
       const goodsOrderItem = await this.goodsOrderRepository.findOne({
-        where: { orderitemid, goodsid },
+        where: { orderid, goodsid },
       });
       if (!goodsOrderItem) return res.status(404).json('id not found');
 
@@ -49,11 +49,11 @@ export class GoodsOrderController implements IGoodsOrderController {
 
   public Update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { orderitemid, goodsid } = req.body;
-      await this.goodsOrderRepository.update({ ...req.body }, { where: { orderitemid, goodsid } });
+      const { orderId, goodsId } = req.body;
+      await this.goodsOrderRepository.update({ ...req.body }, { where: { orderId, goodsId } });
 
       const updateGoodsOrderItem = await this.goodsOrderRepository.findOne({
-        where: { orderitemid, goodsid },
+        where: { orderId, goodsId },
       });
       if (!updateGoodsOrderItem) return res.status(404).json('id not found');
 
@@ -65,21 +65,21 @@ export class GoodsOrderController implements IGoodsOrderController {
 
   public Delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { orderitemid, goodsid } = req.params;
+        const { orderid, goodsid } = req.params;
 
       const goodsOrderItem = await this.goodsOrderRepository.findOne({
-        where: { orderitemid, goodsid },
+        where: { orderid, goodsid },
       });
       if (!goodsOrderItem) return res.status(404).json(-1);
 
       await goodsOrderItem?.destroy();
       const reloadGoodsOrderItem = await this.goodsOrderRepository.findOne({
-        where: { orderitemid, goodsid },
+        where: { orderid, goodsid },
       });
 
       if (reloadGoodsOrderItem) return res.status(500).json(-1);
 
-      return res.status(200).json([orderitemid, goodsid]);
+      return res.status(200).json([orderid, goodsid]);
     } catch (error) {
       next(error);
     }
