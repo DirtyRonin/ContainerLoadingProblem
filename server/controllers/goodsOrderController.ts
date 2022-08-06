@@ -23,11 +23,9 @@ export class GoodsOrderController implements IGoodsOrderController {
 
   public GetById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { orderid, goodsid } = req.params;
+      const { id } = req.params;
 
-      const goodsOrderItem = await this.goodsOrderRepository.findOne({
-        where: { orderid, goodsid },
-      });
+      const goodsOrderItem = await this.goodsOrderRepository.findByPk(id);
       if (!goodsOrderItem) return res.status(404).json('id not found');
 
       return res.status(200).json(goodsOrderItem);
@@ -49,12 +47,10 @@ export class GoodsOrderController implements IGoodsOrderController {
 
   public Update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { orderId, goodsId } = req.body;
-      await this.goodsOrderRepository.update({ ...req.body }, { where: { orderId, goodsId } });
+      const { id } = req.body;
+      await this.goodsOrderRepository.update({ ...req.body }, { where: { id } });
 
-      const updateGoodsOrderItem = await this.goodsOrderRepository.findOne({
-        where: { orderId, goodsId },
-      });
+      const updateGoodsOrderItem = await this.goodsOrderRepository.findByPk(id);
       if (!updateGoodsOrderItem) return res.status(404).json('id not found');
 
       res.status(200).json(updateGoodsOrderItem);
@@ -65,21 +61,17 @@ export class GoodsOrderController implements IGoodsOrderController {
 
   public Delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { orderid, goodsid } = req.params;
+        const { id } = req.params;
 
-      const goodsOrderItem = await this.goodsOrderRepository.findOne({
-        where: { orderid, goodsid },
-      });
+      const goodsOrderItem = await this.goodsOrderRepository.findByPk(id);
       if (!goodsOrderItem) return res.status(404).json(-1);
 
       await goodsOrderItem?.destroy();
-      const reloadGoodsOrderItem = await this.goodsOrderRepository.findOne({
-        where: { orderid, goodsid },
-      });
+      const reloadGoodsOrderItem = await this.goodsOrderRepository.findByPk(id);
 
       if (reloadGoodsOrderItem) return res.status(500).json(-1);
 
-      return res.status(200).json([orderid, goodsid]);
+      return res.status(200).json(id);
     } catch (error) {
       next(error);
     }
