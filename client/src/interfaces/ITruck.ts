@@ -6,4 +6,5 @@ export interface ITruck extends IContainer {
     maxWeight: number;
     loadingTime: number;
     dischargeTime: number;
+    isReadonly: boolean;
   }

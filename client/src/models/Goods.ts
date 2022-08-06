@@ -6,10 +6,11 @@ export class Goods implements IGoods {
     public name: string,
     public width: number,
     public length: number,
+    public isReadonly: boolean,
   ) {}
 
   public static AsInitializeDefault = (name = "") =>
-    new Goods(0, name, 0, 0);
+    new Goods(0, name, 0, 0,false);
   public static AsSuperHeavy = (name = "Medium Sized Goods") =>
-    new Goods(0, name, 100, 100);
+    new Goods(0, name, 100, 100,false);
 }
