@@ -1,6 +1,5 @@
 import { type } from 'os';
 import { Table, Model, ForeignKey, Column, PrimaryKey, DataType } from 'sequelize-typescript';
-import { nameof } from 'ts-simple-nameof';
 import { Goods } from './goods';
 import { Order } from './order';
 

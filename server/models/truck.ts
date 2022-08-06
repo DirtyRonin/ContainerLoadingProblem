@@ -10,4 +10,5 @@ export class Truck extends Model {
   @Column width!: number;
   @Column length!: number;
   @Column maxWeight!: number;
+  @Column static!: boolean;
 }

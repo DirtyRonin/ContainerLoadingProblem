@@ -21,10 +21,10 @@ const forceSync = async () => {
 const migrate = async () => {
   const goodsRepo = sequelize.getRepository(Goods);
   await goodsRepo.bulkCreate([
-    { name: '1/2 Europalette', width: 600, length: 400, weight: 30 },
-    { name: '1/4 Europalette', width: 800, length: 600, weight: 30 },
-    { name: 'Europalette', width: 1200, length: 800, weight: 25 },
-    { name: 'Industriepalette', width: 1200, length: 1000, weight: 30 },
+    { name: '1/2 Europalette', width: 600, length: 400, weight: 30, static: true },
+    { name: '1/4 Europalette', width: 800, length: 600, weight: 30, static: true },
+    { name: 'Europalette', width: 1200, length: 800, weight: 25, static: true },
+    { name: 'Industriepalette', width: 1200, length: 1000, weight: 30, static: true },
   ]);
 
   const trucksRepo = sequelize.getRepository(Truck);
@@ -37,6 +37,7 @@ const migrate = async () => {
       width: 180,
       length: 420,
       maxWeight: 1500,
+      static: true,
     },
     {
       vehicleIdentifier: 'Transporter 1,5T',
@@ -46,6 +47,7 @@ const migrate = async () => {
       width: 220,
       length: 490,
       maxWeight: 1500,
+      static: true,
     },
     {
       vehicleIdentifier: 'Solo LKW 5T',
@@ -55,6 +57,7 @@ const migrate = async () => {
       width: 245,
       length: 620,
       maxWeight: 5000,
+      static: true,
     },
     {
       vehicleIdentifier: 'Solo LKW 6T',
@@ -64,6 +67,7 @@ const migrate = async () => {
       width: 245,
       length: 720,
       maxWeight: 6000,
+      static: true,
     },
     {
       vehicleIdentifier: 'Standard Sattelauflieger',
@@ -73,6 +77,7 @@ const migrate = async () => {
       width: 245,
       length: 1360,
       maxWeight: 25000,
+      static: true,
     },
   ]);
 };

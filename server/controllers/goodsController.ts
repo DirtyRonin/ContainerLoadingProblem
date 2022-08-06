@@ -66,6 +66,7 @@ export class GoodsController implements IGoodsController {
 
       const updatedGoods = await this.goodsRepository.findByPk(id);
       if (!updatedGoods) return res.status(404).json("id not found");
+      if (updatedGoods.static) return res.status(404).json("not authorized");
 
       res.status(200).json(updatedGoods);
     } catch (error) {
@@ -83,6 +84,7 @@ export class GoodsController implements IGoodsController {
 
       const goods = await this.goodsRepository.findByPk(id);
       if (!goods) return res.status(404).json(-1);
+      if (goods.static) return res.status(404).json(-1);
 
       await goods?.destroy();
       const reloadGoods = await this.goodsRepository.findByPk(id);
