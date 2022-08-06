@@ -66,7 +66,7 @@ export class TruckController implements ITruckController {
 
       const updatedTruck = await this.truckRepository.findByPk(id);
       if (!updatedTruck) return res.status(404).json("id not found");
-      if (updatedTruck.static) return res.status(404).json("not authorized");
+      if (updatedTruck.isReadonly) return res.status(404).json("not authorized");
 
       res.status(200).json(updatedTruck);
     } catch (error) {
@@ -84,7 +84,7 @@ export class TruckController implements ITruckController {
 
       const truck = await this.truckRepository.findByPk(id);
       if (!truck) return res.status(404).json(-1);
-      if (truck.static) return res.status(404).json(-1);
+      if (truck.isReadonly) return res.status(404).json(-1);
 
       await truck?.destroy();
       const reloadTruck = await this.truckRepository.findByPk(id);
