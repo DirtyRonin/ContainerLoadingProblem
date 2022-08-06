@@ -6,9 +6,9 @@ import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IOrder } from "../../interfaces";
 
-import { SelectOrderId, SelectOrderListState } from './slices/OrderListSlice';
-import { DeleteOrder } from "./slices/OrderSlice";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { SelectOrderId, SelectOrderListState } from '../../store/slices/order/OrderListSlice';
+import { DeleteOrder } from "../../store/slices/order/OrderSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import ListItem from "@mui/material/ListItem";
 import IconButton from "@mui/material/IconButton";
 

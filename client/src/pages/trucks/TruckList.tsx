@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import CostumList from '../../components/ui/CostumList';
 import TruckListItem from './TruckListItem';
 import { Truck } from '../../models';
 import { ITruck } from '../../interfaces';
 import { useEffectOnce } from '../../hooks/useEffectOnce';
-import { FetchAllTrucks, SelectTruckState } from './slices/TruckSlice';
+import { FetchAllTrucks, SelectTruckState } from '../../store/slices/truck/TruckSlice';
 
 export default function TruckList() {
   const dispatch = useAppDispatch();

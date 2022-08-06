@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { SelectOrderState, FetchAllOrder } from './slices/OrderSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { SelectOrderState, FetchAllOrder } from '../../store/slices/order/OrderSlice';
 import CostumList from '../../components/ui/CostumList';
 import { OrderListItem } from './OrderListItem';
 import { Order } from '../../models';

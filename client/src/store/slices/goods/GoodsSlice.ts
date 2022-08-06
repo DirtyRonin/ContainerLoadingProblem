@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-import type { RootState } from "../../../store";
+import type { RootState } from "../../store";
 import { IGoods } from "../../../interfaces";
 import { GoodsApi } from "../../../apis/goodsApi";
 import { AsyncStatus } from "../../../models/AsyncStatus";

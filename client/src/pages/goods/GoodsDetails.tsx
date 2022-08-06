@@ -5,9 +5,8 @@ import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 import { Goods } from "../../models/Goods";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { UpdateGoods, CreateGoods, SelectGoodsState } from "./slices/GoodsSlice";
-import { SelectGoodsListState } from "./slices/GoodsListSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { SelectGoodsListState,UpdateGoods, CreateGoods, SelectGoodsState } from '../../store/slices/goods';
 
 export const GoodsDetails = () => {
   const dispatch = useAppDispatch();

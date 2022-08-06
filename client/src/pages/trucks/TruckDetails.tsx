@@ -5,9 +5,8 @@ import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 import { Truck } from "../../models/Truck";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { SelectTruckListState } from "./slices/TruckListSlice";
-import { SelectTruckState, UpdateTruck, CreateTruck } from "./slices/TruckSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { SelectTruckListState,SelectTruckState, UpdateTruck, CreateTruck } from "../../store/slices/truck";
 
 export default function TruckDetails() {
   const dispatch = useAppDispatch();
