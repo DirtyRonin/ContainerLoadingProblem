@@ -1,30 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, {  } from 'react';
 
+import { useAppDispatch, useAppSelector, SelectGoodsState, FetchAllGoods } from '../../../store';
 import CostumList from '../../../components/ui/CostumList';
-import { AsyncStatus } from '../../../models';
 import { IGoods } from '../../../interfaces';
-import { GoodsApi } from '../../../apis/goodsApi';
 import ListItem from './showGoodsListItem';
+import { useEffectOnce } from '../../../hooks/useEffectOnce';
 
 export default function DashboardTruckList() {
-  const [goods, setGoods] = useState<IGoods[]>([]);
-  const [status, setStatus] = useState<AsyncStatus>('idle');
+  const dispatch = useAppDispatch();
+  const { goods, loading } = useAppSelector(SelectGoodsState);
 
-  useEffect(() => {
-    if (status !== 'idle') return;
-
-    setStatus('pending');
-    GoodsApi.FetchGoods()
-      .then((result) => {
-        setGoods(result);
-        setStatus('succeeded');
-      })
-      .catch((error: Error) => {
-        setStatus('failed');
-        return error;
-      });
-  }, [status]);
-
+  useEffectOnce(() => {
+    if (loading !== 'idle') return;
+    
+    dispatch(FetchAllGoods());
+  });
   const getListItems = (goods: IGoods[]) => goods.map((singleGoods) => <ListItem singleGoods={singleGoods} />);
 
   return <CostumList orientation="horizontal">{getListItems(goods)}</CostumList>;

@@ -9,12 +9,14 @@ import { useEffectOnce } from '../../hooks/useEffectOnce';
 
 export const GoodsList = () => {
   const dispatch = useAppDispatch();
+  const { goods, loading } = useAppSelector(SelectGoodsState);
 
   useEffectOnce(() => {
+    if (loading !== 'idle') return;
+    
     dispatch(FetchAllGoods());
   });
 
-  const { goods } = useAppSelector(SelectGoodsState);
   const newGoods = Goods.AsSuperHeavy('Create Super Heavy Goods');
 
   const mergeGoods = [newGoods, ...goods];
