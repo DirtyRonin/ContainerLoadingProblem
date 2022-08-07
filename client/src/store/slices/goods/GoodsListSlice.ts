@@ -1,30 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from "../../store";
+import type { RootState } from '../../store';
+import {DeleteGoods} from './GoodsSlice'
+import { IGoods } from '../../../interfaces';
+import { Goods } from '../../../models';
 
 interface IGoodsListState {
-  selectedGoodsId: number;
+  selectedSingleGoods: IGoods;
 }
 
 const initialState: IGoodsListState = {
-  selectedGoodsId: 0,
+  selectedSingleGoods: Goods.AsInitializeDefault(),
 };
 
 export const goodsListSlice = createSlice({
-  name: "goodsList",
+  name: 'goodsList',
   initialState,
   reducers: {
-    SelectGoodsId: (state, action: PayloadAction<number>) => {
-      state.selectedGoodsId = action.payload;
+    SelectSingleGoods: (state, action: PayloadAction<IGoods>) => {
+      state.selectedSingleGoods = action.payload;
     },
-    UnselectGoodsId: (state) => {
-      state.selectedGoodsId = 0;
+    UnselectSingleGoods: (state) => {
+      state.selectedSingleGoods = initialState.selectedSingleGoods;
     },
   },
+  extraReducers(builder) {
+    builder
+    .addCase(DeleteGoods.fulfilled, (state, action) => {
+      state.selectedSingleGoods = initialState.selectedSingleGoods;
+    })
+  }
 });
 
-export const { SelectGoodsId, UnselectGoodsId } = goodsListSlice.actions;
+export const { SelectSingleGoods, UnselectSingleGoods } = goodsListSlice.actions;
 
 export const SelectGoodsListState = (state: RootState) => state.goodsListGlobal;
 
