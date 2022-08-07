@@ -2,6 +2,7 @@ import { ICargo } from "../interfaces";
 import api from "./baseApi";
 
 const apiName = "goodsorders";
+const filteredByOrderId = "filterGoodsOrdersByOrderId"
 
 const FetchCargo = async (): Promise<ICargo[]> => {
   const result = await api().get(apiName);
@@ -21,6 +22,10 @@ const UpdateCargo = async (cargo: ICargo): Promise<ICargo> => {
 };
 const DeleteCargo = async (id: number): Promise<number> => {
   const result = await api().delete(`${apiName}/${id}`);
+  return result.data;
+};
+const FilterCargoByOrderId = async (id: number): Promise<ICargo[]> => {
+  const result = await api().get(`${filteredByOrderId}/${id}`);
   return result.data;
 };
 
