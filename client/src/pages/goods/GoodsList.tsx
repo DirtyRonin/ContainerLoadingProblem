@@ -21,7 +21,7 @@ export const GoodsList = () => {
 
   const mergeGoods = [newGoods, ...goods];
 
-  const getListItems = (goods: IGoods[]) => goods.map((x) => <GoodsListItem goods={x} />);
+  const getListItems = (goods: IGoods[]) => goods.map((x) => <GoodsListItem singleGoods={x} />);
 
   return <CostumList orientation="vertical">{getListItems(mergeGoods)}</CostumList>;
 };
