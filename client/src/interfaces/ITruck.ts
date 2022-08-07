@@ -1,7 +1,6 @@
-import { IContainer } from "./IContainer";
+import { IContainer,IEntity } from ".";
 
-export interface ITruck extends IContainer {
-    id: number;
+export interface ITruck extends IContainer,IEntity {
     vehicleIdentifier: string;
     maxWeight: number;
     loadingTime: number;

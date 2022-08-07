@@ -1,7 +1,6 @@
-import { IGoods } from './index';
+import { IGoods, IEntity } from '.';
 
-export interface IOrder {
-  id:number;
+export interface IOrder extends IEntity {
   goods: IGoods[];
   name: string;
 }

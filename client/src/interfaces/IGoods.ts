@@ -1,8 +1,6 @@
-import { IArea } from ".";
+import { IArea, IEntity } from '.';
 
-
-export interface IGoods extends IArea {
-  id: number;
+export interface IGoods extends IArea, IEntity {
   name: string;
   isReadonly: boolean;
 }
