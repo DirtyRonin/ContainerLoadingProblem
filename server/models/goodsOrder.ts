@@ -1,5 +1,5 @@
 import { type } from 'os';
-import { Table, Model, ForeignKey, Column, PrimaryKey, DataType } from 'sequelize-typescript';
+import { Table, Model, ForeignKey, Column, PrimaryKey, DataType, BelongsTo } from 'sequelize-typescript';
 import { Goods } from './goods';
 import { Order } from './order';
 
@@ -16,9 +16,15 @@ export class GoodsOrder extends Model {
   @Column
   goodsId!: number;
 
+  @BelongsTo(()=>Goods)
+  singleGoods!:Goods
+
   @ForeignKey(() => Order)
   @Column
   orderId!: number;
+
+  @BelongsTo(()=>Order)
+  order!:Order
 
   @Column quantity!: number;
   @Column height!: number;

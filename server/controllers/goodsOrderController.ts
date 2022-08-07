@@ -1,19 +1,27 @@
 import { Request, Response, NextFunction } from 'express';
 import { Repository } from 'sequelize-typescript';
 
-import { GoodsOrder } from '../models';
+import { GoodsOrder,Goods } from '../models';
 import { IGoodsOrderController } from '../interfaces';
+import { FindOptions } from 'sequelize/types';
 
 export class GoodsOrderController implements IGoodsOrderController {
-  private readonly goodsOrderRepository: Repository<GoodsOrder>;
+  // private readonly goodsOrderRepository: Repository<GoodsOrder>;
 
-  constructor(repo: Repository<GoodsOrder>) {
-    this.goodsOrderRepository = repo;
-  }
+  // constructor(repo: Repository<GoodsOrder>) {
+  //   this.goodsOrderRepository = repo;
+  // }
+
+private readonly options:FindOptions<any> = {include:[this.goodsRepository]}
+
+  constructor(
+    private readonly goodsOrderRepository: Repository<GoodsOrder>,
+    private readonly goodsRepository: Repository<Goods>
+  ){}
 
   public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const goodsOrderItems = await this.goodsOrderRepository.findAll();
+      const goodsOrderItems = await this.goodsOrderRepository.findAll(this.options);
 
       return res.status(200).json(goodsOrderItems);
     } catch (error) {
@@ -25,7 +33,7 @@ export class GoodsOrderController implements IGoodsOrderController {
     try {
       const { id } = req.params;
 
-      const goodsOrderItem = await this.goodsOrderRepository.findByPk(id);
+      const goodsOrderItem = await this.goodsOrderRepository.findByPk(id,this.options);
       if (!goodsOrderItem) return res.status(404).json('id not found');
 
       return res.status(200).json(goodsOrderItem);
@@ -50,7 +58,7 @@ export class GoodsOrderController implements IGoodsOrderController {
       const { id } = req.body;
       await this.goodsOrderRepository.update({ ...req.body }, { where: { id } });
 
-      const updateGoodsOrderItem = await this.goodsOrderRepository.findByPk(id);
+      const updateGoodsOrderItem = await this.goodsOrderRepository.findByPk(id,this.options);
       if (!updateGoodsOrderItem) return res.status(404).json('id not found');
 
       res.status(200).json(updateGoodsOrderItem);

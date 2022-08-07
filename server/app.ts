@@ -19,7 +19,7 @@ const orderRepository = sequelize.getRepository(Order);
 const orderController = new OrderController(orderRepository);
 
 const goodsOrderRepository = sequelize.getRepository(GoodsOrder);
-const goodsOrderController = new GoodsOrderController(goodsOrderRepository);
+const goodsOrderController = new GoodsOrderController(goodsOrderRepository,goodsRepository);
 
 export const app = express();
 app.use(json());
