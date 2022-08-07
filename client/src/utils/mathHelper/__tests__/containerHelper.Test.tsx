@@ -91,25 +91,25 @@ describe('Testing Math Helper', () => {
       });
 
       it('a cargo with a smaller length than one should return FALSE', () => {
-        _cargo = new Cargo(new Area(0, 120), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Area(0, 120), 1, false, 60);
 
         const result = _helper.IsValidCargo(_cargo);
         expect(result).toEqual(false);
       });
       it('a cargo with a smaller width than one should return FALSE', () => {
-        _cargo = new Cargo(new Area(120, 0), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Area(120, 0), 1, false, 60);
 
         const result = _helper.IsValidCargo(_cargo);
         expect(result).toEqual(false);
       });
       it('a cargo with a smaller height than one should return FALSE', () => {
-        _cargo = new Cargo(new Area(120, 120), 1, false, 0);
+        _cargo = new Cargo(0,0,0,new Area(120, 120), 1, false, 0);
 
         const result = _helper.IsValidCargo(_cargo);
         expect(result).toEqual(false);
       });
       it('a cargo with a smaller quantity than one should return FALSE', () => {
-        _cargo = new Cargo(new Area(120, 120), 0, false, 60);
+        _cargo = new Cargo(0,0,0,new Area(120, 120), 0, false, 60);
 
         const result = _helper.IsValidCargo(_cargo);
         expect(result).toEqual(false);
@@ -129,40 +129,40 @@ describe('Testing Math Helper', () => {
       });
 
       it("one piece of of oversized length 'oversized_box_l1500w120h80' should be FALSE for a container of type 'Truck_l1360w240h270' .", () => {
-        _cargo = new Cargo(_testAreas.oversized_area_l1500w120, 1, false,80);
+        _cargo = new Cargo(0,0,0,_testAreas.oversized_area_l1500w120, 1, false,80);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(false);
       });
       it("a cargo of same length should be TRUE for a container of type 'Truck_l1360w240h270' .", () => {
-        _cargo = new Cargo(new Container(1360, 240, 270), 1, false,270);
+        _cargo = new Cargo(0,0,0,new Container(1360, 240, 270), 1, false,270);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(true);
       });
 
       it("one piece of of oversized width 'oversized_box_l120w1600h80' should be FALSE for a container of type 'Truck_l1360w240h270' .", () => {
-        _cargo = new Cargo(_testAreas.oversized_area_l120w1600, 1, false,80);
+        _cargo = new Cargo(0,0,0,_testAreas.oversized_area_l120w1600, 1, false,80);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(false);
       });
       it("a cargo of same width should be TRUE for a container of type 'Truck_l1360w240h270' .", () => {
-        _cargo = new Cargo(new Container(120, 240, 270), 1, false,270);
+        _cargo = new Cargo(0,0,0,new Container(120, 240, 270), 1, false,270);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(true);
       });
 
       it("one piece of oversized height 'oversized_box_l120w120h1700' should be FALSE for a container of type 'Truck_l1360w240h270' .", () => {
-        _cargo = new Cargo(_testAreas.oversized_area_l120w120h, 1, false,1700);
+        _cargo = new Cargo(0,0,0,_testAreas.oversized_area_l120w120h, 1, false,1700);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(false);
       });
 
       it("a cargo of same height should be TRUE for a container of type 'Truck_l1360w240h270' .", () => {
-        _cargo = new Cargo(new Container(120, 60, 270), 1, false,270);
+        _cargo = new Cargo(0,0,0,new Container(120, 60, 270), 1, false,270);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(true);
@@ -187,25 +187,25 @@ describe('Testing Math Helper', () => {
       // focus length
 
       it("a cargo with a length of 121 is greater than the container's length and width of type 'box_l100w120h80' and should return FALSE.", () => {
-        _cargo = new Cargo(new Container(121, 60, 60), 1, false,60);
+        _cargo = new Cargo(0,0,0,new Container(121, 60, 60), 1, false,60);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(false);
       });
       it("a cargo with a length of 120 is greater than the container's length and smaller than or equals to the container's width of type 'box_l100w120h80' and should return TRUE.", () => {
-        _cargo = new Cargo(new Container(120, 60, 60), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Container(120, 60, 60), 1, false, 60);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(true);
       });
       it("a cargo with a length of 120 and is greater than the container's length and smaller than or equals to the container's width of type 'box_l100w120h80' and should return FALSE, because container's width of 101 is greater than length of the container", () => {
-        _cargo = new Cargo(new Container(120, 101, 60), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Container(120, 101, 60), 1, false, 60);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(false);
       });
       it("a cargo with a length of 120 and is greater than the container's length and smaller than or equals to the container's width of type 'box_l100w120h80' and should return TRUE, because container's width of 100 is smaller than or equals to length of the container", () => {
-        _cargo = new Cargo(new Container(120, 100, 60), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Container(120, 100, 60), 1, false, 60);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(true);
@@ -214,27 +214,27 @@ describe('Testing Math Helper', () => {
       // focus width
 
       it("a cargo with a width of 161 is greater than the container's length and width of type 'box_l160w120h80' and should return FALSE.", () => {
-        _cargo = new Cargo(new Container(120, 161, 60), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Container(120, 161, 60), 1, false, 60);
 
         const result = _helper.IsFitting(containerWidth, _cargo);
         expect(result).toEqual(false);
       });
 
       it("a cargo with a width of 160 is greater than the container's width and smaller than or equals to the container's length of type 'box_l160w120h80' and should return TRUE.", () => {
-        _cargo = new Cargo(new Container(120, 160, 60), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Container(120, 160, 60), 1, false, 60);
 
         const result = _helper.IsFitting(containerWidth, _cargo);
         expect(result).toEqual(true);
       });
 
       it("a cargo with a width of 160 and is greater than the container's width and smaller than or equals to the container's length of type 'box_l160w120h80' and should return FALSE, because container's length of 121 is greater than width of the container", () => {
-        _cargo = new Cargo(new Container(121, 160, 60), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Container(121, 160, 60), 1, false, 60);
 
         const result = _helper.IsFitting(containerWidth, _cargo);
         expect(result).toEqual(false);
       });
       it("a cargo with a length of 160 and is greater than the container's width and smaller than or equals to the container's length of type 'box_l160w120h80' and should return TRUE, because container's length of 120 is smaller than or equals to width of the container", () => {
-        _cargo = new Cargo(new Container(120, 160, 60), 1, false, 60);
+        _cargo = new Cargo(0,0,0,new Container(120, 160, 60), 1, false, 60);
 
         const result = _helper.IsFitting(containerWidth, _cargo);
         expect(result).toEqual(true);

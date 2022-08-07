@@ -25,11 +25,9 @@ const testContainers = {
   Truck_l1360w240h270: new Container(1360, 240, 270),
 };
 
-
-
 const testCargos = {
-  AsInitializeDefault: new Cargo(Area.AsInitializeDefault, 0, false, 0),
-  area_l100w120: new Cargo( new Area(100, 120),1,false,80),
+  AsInitializeDefault: new Cargo(0, 0, 0, Area.AsInitializeDefault, 0, false, 0),
+  area_l100w120: new Cargo(0, 0, 0, new Area(100, 120), 1, false, 80),
   // area_l80w120: new Cargo((80, 120),1,false,80),
   // area_l160w120: new Cargo((160, 120),1,false,80),
   // oversized_area_l1500w120: new Cargo((1500, 120),1,false,80),

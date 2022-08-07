@@ -1,15 +1,9 @@
-import { Cargo } from "../../../models";
-import {
-  IStacking,
-  ICargo,
-  IContainer,
-  IContainerHelper,
-} from "../../../interfaces";
-import { testHelper } from "../../";
-import { ContainerHelper } from "../index";
+import { Cargo } from '../../../models';
+import { IStacking, ICargo, IContainer, IContainerHelper } from '../../../interfaces';
+import { testHelper } from '../../';
+import { ContainerHelper } from '../index';
 
-describe("calculating stacking factor", () => {
-
+describe('calculating stacking factor', () => {
   const _testContainers = testHelper.testContainers;
   const _testCargos = testHelper.testCargos;
   const _testAreas = testHelper.testAreas;
@@ -24,7 +18,7 @@ describe("calculating stacking factor", () => {
   });
 
   afterEach(() => {
-    _container ={} as IContainer;
+    _container = {} as IContainer;
     _cargo = {} as ICargo;
   });
 
@@ -39,7 +33,7 @@ describe("calculating stacking factor", () => {
   });
 
   it("stacking factor should be 3 and rest height should be 30 when 'isStackable' is set to true and type of the cargo's container is 'l100w120h80'", () => {
-    _cargo = new Cargo(_testAreas.area_l100w120, 3, true,80);
+    _cargo = new Cargo(0, 0, 0, _testAreas.area_l100w120, 3, true, 80);
 
     const result = mathHelper.CalculateStackingFactor(_cargo, _container.height);
     expect(result).toEqual<IStacking>({
