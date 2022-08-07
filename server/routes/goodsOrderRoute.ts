@@ -11,4 +11,6 @@ export const goodsOrderRouter = (controller: IGoodsOrderController) =>
 
     .put("/goodsorders", controller.Update)
 
-    .delete("/goodsorders/:id", controller.Delete);
+    .delete("/goodsorders/:id", controller.Delete)
+
+    .get("/filterGoodsOrdersByOrderId/:id", controller.FilteredByOrderId)
