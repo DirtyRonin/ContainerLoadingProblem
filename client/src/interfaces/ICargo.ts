@@ -1,9 +1,9 @@
-import { IArea, IEntity } from '.';
+import { IGoods, IEntity } from '.';
 
 export interface ICargo extends IEntity{
   goodsId: number;
   orderId: number;
-  singleGoods: IArea;
+  singleGoods: IGoods;
   quantity: number;
   height: number;
   isStackable: boolean;
