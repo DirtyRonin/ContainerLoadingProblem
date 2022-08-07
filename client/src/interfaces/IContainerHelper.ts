@@ -8,7 +8,7 @@ export interface IContainerHelper {
   IsValidCargo(cargo: ICargo): boolean;
 
   CalculateFullStackedRows(quantity: number, goodsPerFullStackedRow: number): number;
-  CalculateLoadingMeterBase(singleGoodsOfCargo: IContainer, container: IContainer): number;
+  CalculateLoadingMeterBase(singleGoodsOfCargo: IArea, container: IContainer): number;
   CalculateLoadingMeter(baseLoadingMeter: number, stackingFactor: number, countGoods: number): number;
   CalculateAreaForRectangle: (area: IArea) => number;
   CalculateStackingFactor: (cargo: ICargo, containerHeight: number) => IStacking;

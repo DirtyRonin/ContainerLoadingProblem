@@ -19,7 +19,7 @@ export class ContainerHelper implements IContainerHelper {
     return Math.floor(containerWidth / singleGoodsWidth);
   }
 
-  public CalculateLoadingMeterBase(singleGoodsOfCargo: IContainer, container: IContainer): number {
+  public CalculateLoadingMeterBase(singleGoodsOfCargo: IArea, container: IContainer): number {
     return this.CalculateAreaForRectangle(singleGoodsOfCargo) / container.width;
   }
   public CalculateLoadingMeter(baseLoadingMeter: number, stackingFactor: number, countGoods: number): number {
