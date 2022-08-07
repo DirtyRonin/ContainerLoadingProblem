@@ -2,7 +2,7 @@ import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import ViewInArIcon from "@mui/icons-material/ViewInAr";
+import NextPlanIcon from '@mui/icons-material/NextPlan';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IOrder } from "../../interfaces";
 
@@ -43,7 +43,7 @@ export const OrderListItem = (props: Props) => {
     >
       <ListItemButton selected={isSelected()} onClick={handleOnSelect}>
         <ListItemIcon>
-          <ViewInArIcon />
+          <NextPlanIcon />
         </ListItemIcon>
         <ListItemText primary={order.name} secondary={order.name} />
       </ListItemButton>

@@ -11,11 +11,14 @@ import { useEffectOnce } from '../../hooks/useEffectOnce';
 export const OrderList = () => {
   const dispatch = useAppDispatch();
 
+  const { orders, loading } = useAppSelector(SelectOrderState);
+
   useEffectOnce(() => {
+    if (loading !== 'idle') return;
+
     dispatch(FetchAllOrder());
   });
 
-  const { orders } = useAppSelector(SelectOrderState);
   const newOrder = Order.AsInitializeDefault('New Order');
 
   const mergeOrder = [newOrder, ...orders];

@@ -9,6 +9,7 @@ export class LoadAnalyzer implements ILoadAnalyzer {
     let loadSummaries = 0;
 
     for (let i = 0; i < containers.length; i++)
+    
       for (let y = 0; y < cargos.length; y++) {
         loadSummaries += (await this.AnalyseSingleLoad(cargos[y], containers[i])).loadingMeter;
       }
@@ -23,7 +24,7 @@ export class LoadAnalyzer implements ILoadAnalyzer {
   // row.length = column.length
   public AnalyseSingleLoad = async (singleCargo: ICargo, container: IContainer): Promise<ILoadSummary> => {
     // let's make this function async
-    await setTimeout(() => {}, 10);
+    setTimeout(() => {}, 10);
 
     return this.Build(this._containerHelper, singleCargo, container);
   };
@@ -90,76 +91,5 @@ export class LoadAnalyzer implements ILoadAnalyzer {
 
     return loadingMeterTotalFullStackedGoods + containerHelper.CalculateLoadingMeter(loadingMeterBase, 1, minimumColumns);
   }
-  // *******************
-
-  /*
-  // the Top-Down view of the loading area will be compared to a grid
-  // the assumption is that a single Cargo holds the same type of goods
-  // every column is the same ===> a single piece of goods (width, length, height)
-  // row =loadingArea.Width / column.width => without a rest
-  // row.length = column.length
-  public CalculateMinimumLoadingMeter = async (singleCargo: ICargo, container: IContainer): Promise<number> => {
-    // packing order
-    // first fill all columns of a row
-    // than start stacking
-
-    // let'S make this function async
-    await setTimeout(() => {}, 10);
-
-    const { height: containerHeight, width: containerWidth } = container;
-    const { singleGoods, quantity } = singleCargo;
-
-    if(!this._containerHelper.IsValidContainer(container)) return 0
-    if(!this._containerHelper.IsValidCargo(singleCargo)) return 0
-
-    // loading meter for a single piece of goods
-    // it takes a single column in a single row
-    const baseLoadingMeter = this._containerHelper.CalculateLoadingMeterBase(singleGoods, container);
-
-    if (quantity === 1) return baseLoadingMeter;
-
-    // how many pieces of goods can be stacked on top of each other
-    const { countFullStackedRows, countFullStackedSingleGoodsPerRow, loadingMeterForFullStackedRows, countSingleGoodsPerRow } = this.getLoadingMeterForFullStackedRows(singleCargo, containerHeight, containerWidth, singleGoods, quantity, baseLoadingMeter);
-
-    const countRemainingSingleGoods = quantity - countFullStackedRows * countFullStackedSingleGoodsPerRow;
-
-    if (countRemainingSingleGoods === 0) return loadingMeterForFullStackedRows;
-
-    return (
-      loadingMeterForFullStackedRows + this._getLoadingMeter(baseLoadingMeter, 1, this._getMinimumColumnsFromRest(countSingleGoodsPerRow, countRemainingSingleGoods))
-    );
-  };
-
-  private getLoadingMeterForFullStackedRows(singleCargo: ICargo, containerHeight: number, containerWidth: number, singleGoods: IContainer, quantity: number, baseLoadingMeter: number) {
-    const stackingFactor = this._containerHelper.CalculateStackingFactor(singleCargo, containerHeight).stackingFactor;
-
-
-    const countSingleGoodsPerRow = this._calculateColumnsPerRow(containerWidth, singleGoods.width);
-
-    // amount of pieces of a full Row
-    const countFullStackedSingleGoodsPerRow = stackingFactor * countSingleGoodsPerRow;
-
-    const countFullStackedRows = Math.floor(quantity / countFullStackedSingleGoodsPerRow);
-
-    // get the loading meter for the 'ground' goods
-    const loadingMeterForFullStackedRows = countFullStackedRows === 0 ? 0 : this._getLoadingMeter(baseLoadingMeter, stackingFactor, countFullStackedRows * countFullStackedSingleGoodsPerRow);
-    return { countFullStackedRows, countFullStackedSingleGoodsPerRow, loadingMeterForFullStackedRows, countSingleGoodsPerRow };
-  }
-
-  private _getLoadingMeter(baseLoadingMeter: number, stackingFactor: number, countGoods: number) {
-    return (baseLoadingMeter / stackingFactor) * countGoods;
-  }
-
-  private _calculateColumnsPerRow(containerwidth: number, singleGoodsWidth: number) {
-    return Math.floor(containerwidth / singleGoodsWidth);
-  }
-
-  private _getMinimumColumnsFromRest(columnsPerRow: number, remainingPieces: number) {
-    if (remainingPieces >= columnsPerRow) return columnsPerRow;
-
-    return remainingPieces;
-  }
-
  
- */
 }

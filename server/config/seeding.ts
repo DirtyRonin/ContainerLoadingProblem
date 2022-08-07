@@ -4,10 +4,10 @@ import { sequelize } from './db';
 export default async function seeding(): Promise<void> {
   const goodsRepo = sequelize.getRepository(Goods);
   await goodsRepo.bulkCreate([
-    { name: '1/2 Europalette', width: 600, length: 400, weight: 30, isReadonly: true },
-    { name: '1/4 Europalette', width: 800, length: 600, weight: 30, isReadonly: true },
-    { name: 'Europalette', width: 1200, length: 800, weight: 25, isReadonly: true },
-    { name: 'Industriepalette', width: 1200, length: 1000, weight: 30, isReadonly: true },
+    { name: '1/2 Europalette', width: 60, length: 40, weight: 30, isReadonly: true },
+    { name: '1/4 Europalette', width: 80, length: 60, weight: 30, isReadonly: true },
+    { name: 'Europalette', width: 120, length: 80, weight: 25, isReadonly: true },
+    { name: 'Industriepalette', width: 120, length: 100, weight: 30, isReadonly: true },
   ]);
 
   const trucksRepo = sequelize.getRepository(Truck);

@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import ViewInArIcon from '@mui/icons-material/ViewInAr';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ICargo, IGoods } from '../../interfaces';
 
@@ -56,7 +56,7 @@ export default function CargoListItem(props: Props) {
   return show(
     <ListItemButton selected={isSelected()} onClick={handleOnSelect}>
       <ListItemIcon>
-        <ViewInArIcon />
+        <InventoryIcon />
       </ListItemIcon>
       <ListItemText primary={cargo?.singleGoods.name} secondary={cargo.quantity} />
     </ListItemButton>

@@ -22,7 +22,7 @@ export default function CostumList({ children, orientation }: ListItemProps) {
 const theme = {
   verticalTheme: {
     Box: {
-      width: '100%',
+      width: '90%',
       // maxWidth: 360,
       maxHeight: 400,
       bgcolor: 'background.paper',
@@ -31,7 +31,6 @@ const theme = {
       border: '1px solid black',
     },
     List: {
-      width: '100%',
       // maxWidth: 360,
       bgcolor: 'background.paper',
       position: 'relative',
