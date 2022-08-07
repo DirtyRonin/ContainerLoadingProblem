@@ -4,7 +4,6 @@ import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { Order } from '../../models/Order';
-import  Orders  from './orderItems/OrderItems';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { UpdateOrder, CreateOrder, SelectOrderState } from '../../store/slices/order/OrderSlice';
 import { SelectOrderListState } from '../../store/slices/order/OrderListSlice';
@@ -66,7 +65,6 @@ export const OrderDetails = () => {
             {IsUpdate(selectedOrderId) ? 'update' : 'add'}
           </LoadingButton>
         </div>
-        <Orders />
       </Box>
     </>
   );
