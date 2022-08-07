@@ -58,7 +58,7 @@ export default function CargoListItem(props: Props) {
       <ListItemIcon>
         <ViewInArIcon />
       </ListItemIcon>
-      <ListItemText primary={(cargo.singleGoods as IGoods)?.name ?? 'Primary'} secondary={cargo.quantity} />
+      <ListItemText primary={cargo?.singleGoods.name} secondary={cargo.quantity} />
     </ListItemButton>
   );
 }
