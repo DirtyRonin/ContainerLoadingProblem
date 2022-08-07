@@ -23,7 +23,7 @@ const theme = {
   verticalTheme: {
     Box: {
       width: '100%',
-      maxWidth: 360,
+      // maxWidth: 360,
       maxHeight: 400,
       bgcolor: 'background.paper',
       ml: 3,
@@ -32,18 +32,18 @@ const theme = {
     },
     List: {
       width: '100%',
-      maxWidth: 360,
+      // maxWidth: 360,
       bgcolor: 'background.paper',
       position: 'relative',
       overflow: 'auto',
-      maxHeight: 400,
+      maxHeight: 200,
       '& ul': { padding: 0 },
     },
   },
   horizontalTheme: {
     Box: {
-      width: '100%',
-      maxWidth: 360,
+      width: '70%',
+      // maxWidth: 360,
       maxHeight: 120,
       bgcolor: 'background.paper',
       ml: 3,
@@ -53,12 +53,11 @@ const theme = {
     List: {
       display: 'flex',
       flexDirection: 'row',
-      width: '100%',
-      maxWidth: 360,
+      // width: '100%',
       bgcolor: 'background.paper',
       position: 'relative',
       overflow: 'auto',
-      maxHeight: 400,
+      // maxHeight: 175,
       '& ul': { padding: 0 },
     },
   },
