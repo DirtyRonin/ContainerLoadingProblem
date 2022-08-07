@@ -12,5 +12,5 @@ export class Cargo implements ICargo {
     public height: number
   ) {}
 
-  public static AsInitializeDefault = (singleGoods?: IGoods) => new Cargo(0,0,0,singleGoods ?? Goods.AsInitializeDefault(''), 0, false, 0);
+  public static AsInitializeDefault = (singleGoods?: IGoods) => new Cargo(0,0,0,singleGoods ?? Goods.AsInitializeDefault('Empty'), 0, false, 0);
 }
