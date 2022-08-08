@@ -28,5 +28,5 @@ export default function CargoList() {
 
   const getListItems = (cargos: ICargo[]) => cargos.map((x) => <CargoListItem cargo={x} />);
 
-  return <CostumList orientation="horizontal">{getListItems(newCargos)}</CostumList>;
+  return <CostumList orientation="vertical">{getListItems(newCargos)}</CostumList>;
 }

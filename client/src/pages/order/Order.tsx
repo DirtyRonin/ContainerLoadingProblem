@@ -9,20 +9,22 @@ export default function Order() {
   return (
     <>
       <Grid container>
-        <Grid item md={12} spacing={2}>
-          <OrderDetails />
-        </Grid>
-        <Grid container md={12} >
-          <Grid item md={3}>
+        <Grid container md={12}>
+          <Grid item md={7}>
             <OrderList />
           </Grid>
-          <Grid container md={9} spacing={2}>
-            <Grid item md={6}>
-              <CargoSlider />
-            </Grid>
-            <Grid item md={7}>
-              <CargoDetails />
-            </Grid>
+
+          <Grid item md={5} spacing={2}>
+            <OrderDetails />
+          </Grid>
+        </Grid>
+
+        <Grid container md={12}>
+          <Grid item md={7}>
+            <CargoSlider />
+          </Grid>
+          <Grid item md={5}>
+            <CargoDetails />
           </Grid>
         </Grid>
       </Grid>
