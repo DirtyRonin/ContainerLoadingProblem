@@ -8,8 +8,12 @@ export default function Trucks() {
   return (
     <>
       <Grid container spacing={2}>
-        <TruckList />
-        <TruckDetails />
+        <Grid item spacing={2} md={7}>
+          <TruckList />
+        </Grid>
+        <Grid item spacing={2} md={5}>
+          <TruckDetails />
+        </Grid>
       </Grid>
     </>
   );
