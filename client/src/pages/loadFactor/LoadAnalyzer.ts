@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash/cloneDeep';
-import { ICargo, IContainer, IContainerHelper, ILoadAnalyzer, ILoadSummary } from '../../interfaces';
+import { ICargo, ITruck, IContainer, IContainerHelper, ILoadAnalyzer, ILoadSummary } from '../../interfaces';
 import { LoadSummary } from './LoadSummary';
 
 export class LoadAnalyzer implements ILoadAnalyzer {
@@ -8,17 +8,34 @@ export class LoadAnalyzer implements ILoadAnalyzer {
   public AnalyzeLoading = async (cargos: ICargo[], containers: IContainer[]): Promise<number> => {
     let loadSummaries = 0;
 
-    const sortedContainers = [...containers].sort( (a,b) => this._containerHelper.CompareByVolume(a,b))
+    const sortedContainers = [...containers].sort((a, b) => this._containerHelper.CompareByVolume(a, b));
 
-    const sortedCargosDic =  this._containerHelper.SortCargos([...cargos])
+    const sortedCargosDic = this._containerHelper.SortCargos([...cargos]);
 
-    
+    const loading = {};
 
-    for (let i = 0; i < containers.length; i++)
-    
+    for (let i = 0; i < sortedContainers.length; i++)
       for (let y = 0; y < cargos.length; y++) {
         loadSummaries += (await this.AnalyseSingleLoad(cargos[y], containers[i])).loadingMeter;
       }
+
+    return loadSummaries;
+  };
+
+  public AnalyzeLoadingForSummaries = async (cargos: ICargo[], containers: ITruck[]): Promise<{ [key: number]: ILoadSummary[] }> => {
+    const loadSummaries: { [key: number]: ILoadSummary[] } = {};
+
+    const sortedContainers = [...containers].sort((a, b) => this._containerHelper.CompareByVolume(a, b));
+
+    // const sortedCargosDic =  this._containerHelper.SortCargos([...cargos])
+
+    for (let i = 0; i < sortedContainers.length; i++) {
+      loadSummaries[sortedContainers[i].id] = [];
+
+      for (let y = 0; y < cargos.length; y++) {
+        loadSummaries[sortedContainers[i].id].push(await this.AnalyseSingleLoad(cargos[y], sortedContainers[i]));
+      }
+    }
 
     return loadSummaries;
   };
@@ -97,5 +114,4 @@ export class LoadAnalyzer implements ILoadAnalyzer {
 
     return loadingMeterTotalFullStackedGoods + containerHelper.CalculateLoadingMeter(loadingMeterBase, 1, minimumColumns);
   }
- 
 }
