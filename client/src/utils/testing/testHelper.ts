@@ -23,6 +23,7 @@ const testAreas = {
 const testContainers = {
   AsInitializeDefault: new Container(0, 0, 0),
   Truck_l1360w240h270: new Container(1360, 240, 270),
+  Truck_l500w240h200:new Container(500, 240, 200),
 };
 
 const testCargos = {

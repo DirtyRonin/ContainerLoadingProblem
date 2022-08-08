@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { ICargo, IContainer, IArea, IStacking } from './index';
 
 export interface IContainerHelper {
@@ -11,6 +12,10 @@ export interface IContainerHelper {
   CalculateLoadingMeterBase(singleGoodsOfCargo: IArea, container: IContainer): number;
   CalculateLoadingMeter(baseLoadingMeter: number, stackingFactor: number, countGoods: number): number;
   CalculateAreaForRectangle: (area: IArea) => number;
+  CalculateVolumeForRectangle(container: IContainer): number;
   CalculateStackingFactor: (cargo: ICargo, containerHeight: number) => IStacking;
   CalculateGoodsPerRow(singleGoodsWidth: number, containerWidth: number): number;
+
+  CompareByVolume(a: IContainer, b: IContainer, mulitplierA?: number, mulitplierB?: number): number;
+  SortCargos(cargos: ICargo[]): _.Dictionary<ICargo[]>;
 }

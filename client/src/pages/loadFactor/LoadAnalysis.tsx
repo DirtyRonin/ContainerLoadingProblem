@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 
 import TruckSlider from './truckSlider/truckSlider';
 import OrderSlider from './orderSlider/OrderSlider';
-import OrderSummary from './orderSummary/orderSummaryItem';
+import OrderSummary from './summaryTree/summaryTree';
 
 export default function LoadAnalysis() {
   return (

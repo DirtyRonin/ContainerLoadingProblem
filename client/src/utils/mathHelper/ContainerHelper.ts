@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { IArea, ICargo, IContainer, IContainerHelper, IStacking } from '../../interfaces/index';
 import { Stacking } from './Stacking';
 
@@ -13,7 +15,37 @@ export class ContainerHelper implements IContainerHelper {
     return { ...truckA };
   };
 
-  public CalculateAreaForRectangle = (area: IArea): number => area.length * area.width;
+  public CompareByVolume = (a: IContainer, b: IContainer, mulitplierA = 1, mulitplierB = 1): number => {
+    const volumeA = this.CalculateVolumeForRectangle(a) * mulitplierA;
+    const volumeB = this.CalculateVolumeForRectangle(b) * mulitplierB;
+
+    if (volumeA < volumeB) return 1;
+    if (volumeA > volumeB) return -1;
+
+    return 0;
+  };
+
+  public SortCargos(cargos: ICargo[]) {
+    const all = [...cargos];
+
+    const groups = _.groupBy(all, (cargo) => cargo.orderId);
+
+    Object.keys(groups).forEach((key) =>
+      groups[key].sort((a, b) =>
+        this.CompareByVolume(
+          { length: a.singleGoods.length, width: a.singleGoods.width, height: a.height },
+          { length: b.singleGoods.length, width: b.singleGoods.width, height: b.height },
+          a.quantity,
+          b.quantity
+        )
+      )
+    );
+
+    return groups;
+  }
+
+  public CalculateVolumeForRectangle = (container: IContainer) => this.CalculateAreaForRectangle(container) * container.height;
+  CalculateAreaForRectangle = (area: IArea): number => area.length * area.width;
 
   public CalculateGoodsPerRow(singleGoodsWidth: number, containerWidth: number): number {
     return Math.floor(containerWidth / singleGoodsWidth);

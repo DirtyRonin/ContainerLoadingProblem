@@ -8,6 +8,12 @@ export class LoadAnalyzer implements ILoadAnalyzer {
   public AnalyzeLoading = async (cargos: ICargo[], containers: IContainer[]): Promise<number> => {
     let loadSummaries = 0;
 
+    const sortedContainers = [...containers].sort( (a,b) => this._containerHelper.CompareByVolume(a,b))
+
+    const sortedCargosDic =  this._containerHelper.SortCargos([...cargos])
+
+    
+
     for (let i = 0; i < containers.length; i++)
     
       for (let y = 0; y < cargos.length; y++) {
