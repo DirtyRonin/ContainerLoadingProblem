@@ -10,6 +10,7 @@ import orderListReducer from "./slices/order/OrderListSlice";
 import orderMultiSelectReducer from "./slices/order/OrderMultiSelectSlice";
 import cargoReducer from "./slices/cargo/CargoSlice";
 import cargoListReducer from "./slices/cargo/CargoListSlice";
+import summaryReducer from "./slices/summaryTree/summaryTreeSlice";
 
 export const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
     orderMultiSelectGlobal: orderMultiSelectReducer,
     cargosGlobal: cargoReducer,
     cargoListGlobal: cargoListReducer,
+    summaryGlobal: summaryReducer,
   },
 });
 
