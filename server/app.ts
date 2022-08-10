@@ -6,8 +6,9 @@ const cors = require('cors');
 
 import { sequelize } from './config/db';
 import { goodsRouter, truckRouter, orderRouter, goodsOrderRouter } from './routes';
-import { Goods, GoodsOrder, Order, Truck } from './models';
-import { GoodsController, TruckController, OrderController, GoodsOrderController } from './controllers';
+import { Goods, GoodsOrder, GoodsOrderTruck, Order, Truck } from './models';
+import { GoodsController, TruckController, OrderController, GoodsOrderController, GoodsOrderTruckController } from './controllers';
+import { goodsOrderTruckRouter } from './routes/goodsOrderTruckRoute';
 
 const truckRepository = sequelize.getRepository(Truck);
 const truckController = new TruckController(truckRepository);
@@ -21,6 +22,9 @@ const orderController = new OrderController(orderRepository);
 const goodsOrderRepository = sequelize.getRepository(GoodsOrder);
 const goodsOrderController = new GoodsOrderController(goodsOrderRepository,goodsRepository);
 
+const goodsOrderTruckRepository = sequelize.getRepository(GoodsOrderTruck);
+const goodsOrderTruckController = new GoodsOrderTruckController(goodsOrderTruckRepository);
+
 export const app = express();
 app.use(json());
 
@@ -30,6 +34,7 @@ app.use(truckRouter(truckController));
 app.use(goodsRouter(goodsController));
 app.use(orderRouter(orderController));
 app.use(goodsOrderRouter(goodsOrderController));
+app.use(goodsOrderTruckRouter(goodsOrderTruckController));
 
 app.use(
   strongErrorHandler({

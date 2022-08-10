@@ -31,9 +31,6 @@ export default function OrderSummaryItem() {
   const containerHelper = new ContainerHelper();
   const loadAnalyzer = new LoadAnalyzer(containerHelper);
 
-  /** identified by truckId and cargoId */
-  const [selectedSummaries, setSelectedSummaries] = useState<ILoadSummary[]>([]);
-
   const [selectedCargos, setSelectedCargos] = useState<ICargo[]>([]);
   const [selectedTrucks, setSelectedTrucks] = useState<ITruck[]>([]);
   const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
@@ -144,7 +141,7 @@ export default function OrderSummaryItem() {
   };
 
   const getCargoTreeItemsCheckable = (truckId: number, orderId: number) =>
-    cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} />);
+    cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId}/>);
 
   // LoadingCargoTreeItem
 

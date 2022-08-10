@@ -14,10 +14,11 @@ import { Cargo } from '../../../models';
 interface IProps {
   truckId: number;
   cargoId: number;
+  orderId: number;
 }
 
 export default function LoadingCargoTreeItems(props: IProps) {
-  const { truckId, cargoId } = props;
+  const { truckId, cargoId, orderId } = props;
   const dispatch = useAppDispatch();
   const { cargos } = useAppSelector(SelectCargoState);
   const { selectedloadSummaries, loadSummaries } = useAppSelector(SelectSummaryState);
@@ -27,20 +28,19 @@ export default function LoadingCargoTreeItems(props: IProps) {
 
   useEffect(() => {
     const cargo = cargos.find((x) => x.id === cargoId);
-    if(cargo )setCargo(cargo)
+    if (cargo) setCargo(cargo);
 
-    const selectedSummary = loadSummaries[truckId]?.find((x) => x.cargo.id === cargoId )
-    if(selectedSummary) setSummary(selectedSummary)
-
-  }, [cargos,loadSummaries]);
+    const selectedSummary = loadSummaries[truckId]?.find((x) => x.cargo.id === cargoId);
+    if (selectedSummary) setSummary(selectedSummary);
+  }, [cargos, loadSummaries]);
 
   const onCargoCheckedChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    if(checked) {
-      dispatch(AddSelectedSummary({truckId,cargoId}))
-      return 
+    if (checked) {
+      dispatch(AddSelectedSummary({ truckId, cargoId, orderId }));
+      return;
     }
-    
-    dispatch(RemoveSelectedSummary({truckId,cargoId}))
+
+    dispatch(RemoveSelectedSummary({ truckId, cargoId, orderId }));
   };
 
   const isChecked = () => {
