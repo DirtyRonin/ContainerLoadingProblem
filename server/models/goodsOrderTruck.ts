@@ -1,37 +1,52 @@
-import { type } from 'os';
-import { Table, Model, ForeignKey, Column, PrimaryKey, DataType, BelongsTo } from 'sequelize-typescript';
-import { Goods } from './goods';
-import { Order } from './order';
-import { Truck } from './truck';
+// import { type } from 'os';
+// import { Table, Model, ForeignKey, Column, PrimaryKey, DataType, BelongsTo } from 'sequelize-typescript';
+// import { ModelAttributeColumnOptions } from 'sequelize/types';
+// import { Goods } from './goods';
+// import { Order } from './order';
+// import { Truck } from './truck';
 
-@Table
-export class GoodsOrderTruck extends Model {
-  @Column({
-    primaryKey: true,
-    type: DataType.BIGINT,
-    autoIncrement:true
-  })
-  id!: number;
+// const config: Partial<ModelAttributeColumnOptions> = { unique: false, allowNull: false };
 
-  @ForeignKey(() => Goods)
-  @Column
-  goodsId!: number;
+// @Table
+// export class GoodsOrderTruck extends Model {
+//   @Column({
+//     primaryKey: true,
+//     type: DataType.Int,
+//     autoIncrement: true,
+//   })
+//   id!: number;
 
-  @BelongsTo(()=>Goods)
-  singleGoods!:Goods
+//   @ForeignKey(() => Order)
+//   @Column(config)
+//   orderId!: number;
 
-  @ForeignKey(() => Order)
-  @Column
-  orderId!: number;
+//   @BelongsTo(() => Order)
+//   order!: Order;
 
-  @BelongsTo(()=>Order)
-  order!:Order
 
-  @ForeignKey(() => Truck)
-  @Column
-  truckId!: number;
+//   @ForeignKey(() => Goods)
+//   @Column({
+//     type: DataType.INTEGER,
+//     references: {
+//       model: 'Truck',
+//       key: 'id',
+//     },
+//     unique: false,
+//     allowNull: false,
+//   })
+//   goodsId!: number;
 
-  @BelongsTo(()=>Truck)
-  truck!:Truck
+//   @BelongsTo(() => Goods)
+//   singleGoods!: Goods;
 
-}
+
+//   @ForeignKey(() => Truck)
+//   @Column(config)
+//   truckId!: number;
+
+//   @BelongsTo(() => Truck)
+//   truck!: Truck;
+
+//   @Column({ allowNull: false })
+//   loadingMeter!: number;
+// }

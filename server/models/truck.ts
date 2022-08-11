@@ -1,7 +1,5 @@
-import { Column, Model, Table, BelongsToMany } from 'sequelize-typescript';
-import { Goods } from './goods';
-import { GoodsOrderTruck } from './goodsOrderTruck';
-import { Order } from './order';
+import { Column, Model, Table, HasMany } from 'sequelize-typescript';
+import { Cargo } from './cargo';
 
 @Table
 export class Truck extends Model {
@@ -12,11 +10,7 @@ export class Truck extends Model {
   @Column width!: number;
   @Column length!: number;
   @Column maxWeight!: number;
-  @Column isReadonly!: boolean;
 
-  @BelongsToMany(() => Goods, () => GoodsOrderTruck)
-  assignedGoods!: Goods[];
-
-  @BelongsToMany(() => Order, () => GoodsOrderTruck)
-  assignedOrders!: Order[];
+  @HasMany(() => Cargo)
+  cargos!: Cargo[];
 }

@@ -1,21 +1,21 @@
-import { BelongsToMany, Column, Model, Table } from 'sequelize-typescript';
-import { GoodsOrder, GoodsOrderTruck, Order, Truck } from './';
+// import { BelongsToMany, Column, Model, Table } from 'sequelize-typescript';
+// import { Cargo, GoodsOrderTruck, Order, Truck } from './';
 
-@Table
-export class Goods extends Model {
-  @BelongsToMany(() => Goods, () => GoodsOrder)
-  orders!: Order[];
+// @Table
+// export class Goods extends Model {
+//   @BelongsToMany(() => Order, () => Cargo)
+//   orders!: Order[];
 
-  @BelongsToMany(() => Goods, () => GoodsOrderTruck)
-  assignedOrders!: Order[];
+//   @BelongsToMany(() => Order, () => GoodsOrderTruck)
+//   assignedOrders!: Order[];
 
-  @BelongsToMany(() => Truck, () => GoodsOrderTruck)
-  assignedTrucks!: Truck[];
+//   @BelongsToMany(() => Truck, () => GoodsOrderTruck)
+//   assignedTrucks!: Truck[];
 
-  @Column name!: string;
-  @Column width!: number;
-  @Column length!: number;
-  @Column weight!: number;
-  @Column isReadonly!: boolean;
+//   @Column name!: string;
+//   @Column width!: number;
+//   @Column length!: number;
+//   @Column weight!: number;
+//   @Column isReadonly!: boolean;
   
-}
+// }

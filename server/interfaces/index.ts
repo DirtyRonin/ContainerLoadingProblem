@@ -1,5 +1,5 @@
 export * from './IGoodsController'
 export * from './ITruckController'
 export * from './IOrderController'
-export * from './IGoodsOrderController'
+export * from './ICargoController'
 export * from './IGoodsOrderTruckController'
