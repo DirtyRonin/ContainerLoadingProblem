@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { Repository, Sequelize } from 'sequelize-typescript';
+const { Op } = require("sequelize");
 
 import { Cargo } from '../models/cargo';
 import { ICargoController } from '../interfaces';
@@ -9,7 +10,7 @@ export class CargoController implements ICargoController {
 
   public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const cargos = await this.cargoRepository.findAll({include : this.sequelize.models['TruckLoading']});
+      const cargos = await this.cargoRepository.findAll({ include: this.sequelize.models['TruckLoading'] });
 
       return res.status(200).json(cargos);
     } catch (error) {
@@ -17,10 +18,26 @@ export class CargoController implements ICargoController {
     }
   };
 
-  public GetAllByOrderId = async (req: Request, res: Response, next: NextFunction) => {
+  public FilterByOrderId = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { orderId } = req.params;
       const cargos = await this.cargoRepository.findAll({ where: { orderId } });
+
+      return res.status(200).json(cargos);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public FilterByOrderIds = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const orderIds:number[] = req.body.orderIds;
+      console.log(orderIds)
+      const cargos = await this.cargoRepository.findAll({
+        where: {
+          orderId: {[Op.in] :  orderIds  },
+        },
+      });
 
       return res.status(200).json(cargos);
     } catch (error) {

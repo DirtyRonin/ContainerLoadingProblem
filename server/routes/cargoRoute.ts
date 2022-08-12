@@ -13,4 +13,6 @@ export const cargoRouter = (controller: ICargoController) =>
 
     .delete("/cargos/:id", controller.Delete)
 
-    .get("/filterCargoByOrderId/:orderId", controller.GetAllByOrderId)
+    .get("/filterCargoByOrderId/:orderId", controller.FilterByOrderId)
+
+    .put("/filterCargoByOrderIds", controller.FilterByOrderIds)
