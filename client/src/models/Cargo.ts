@@ -4,13 +4,19 @@ import { Goods } from '.';
 export class Cargo implements ICargo {
   constructor(
     public id: number,
-    public goodsId: number,
+    public truckId: number | null,
     public orderId: number,
-    public singleGoods: IGoods,
+    public name: string,
+    public width: number,
+    public length: number,
+    public weight: number,
     public quantity: number,
     public isStackable: boolean,
-    public height: number
+    public height: number,
   ) {}
 
-  public static AsInitializeDefault = (singleGoods?: IGoods) => new Cargo(0,0,0,singleGoods ?? Goods.AsInitializeDefault('Empty'), 0, false, 0);
+  public static AsInitializeDefault = (singleGoods?: IGoods) => {
+    const {name,width,length} = singleGoods ?? Goods.AsInitializeDefault('Empty');
+    return new Cargo(0,null,0,name,width,length,0,0,false,0);
+  };
 }

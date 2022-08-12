@@ -1,18 +1,9 @@
-import { IGoods } from "../interfaces/index";
+import { IGoods } from '../interfaces/index';
 
 export class Goods implements IGoods {
-  constructor(
-    public id: number,
-    public name: string,
-    public width: number,
-    public length: number,
-    public isReadonly: boolean,
-  ) {}
+  constructor(public name: string, public width: number, public length: number) {}
 
-  public static AsInitializeDefault = (name = "") =>
-    new Goods(0, name, 0, 0,false);
-  public static WithValues = (length:number,width:number) =>
-    new Goods(0, '', width, length,false);
-  public static AsSuperHeavy = (name = "Medium Sized Goods") =>
-    new Goods(0, name, 100, 100,false);
+  public static AsInitializeDefault = (name = '') => new Goods(name, 0, 0);
+  public static WithValues = (length: number, width: number) => new Goods('', width, length);
+  public static AsSuperHeavy = (name = 'Medium Sized Goods') => new Goods(name, 100, 100);
 }

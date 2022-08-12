@@ -22,7 +22,7 @@ export const OrderDetails = () => {
 
   useEffect(() => {
     const newOrder = memoizedSelectedOrder;
-    setName(newOrder.name);
+    setName(newOrder.orderName);
   }, [memoizedSelectedOrder]);
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +34,7 @@ export const OrderDetails = () => {
   const IsUpdate = (id: number) => (id < 1 ? false : true);
 
   const handleClickSubmit = () => {
-    const newOrder = new Order(selectedOrderId, name, []);
+    const newOrder = new Order(selectedOrderId, name);
 
     if (IsUpdate(selectedOrderId)) {
       dispatch(UpdateOrder(newOrder));

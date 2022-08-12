@@ -1,10 +1,10 @@
-import { IGoods, IEntity } from '.';
+import { IContainer, IEntity } from '.';
 
-export interface ICargo extends IEntity{
-  goodsId: number;
+export interface ICargo extends IEntity,IContainer {
+  truckId: number | null;
   orderId: number;
-  singleGoods: IGoods;
+  name: string;
+  weight: number;
   quantity: number;
-  height: number;
   isStackable: boolean;
 }

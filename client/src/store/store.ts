@@ -3,8 +3,8 @@ import { configureStore } from "@reduxjs/toolkit";
 import trucksReducer from "./slices/truck/TruckSlice";
 import truckListReducer from "./slices/truck/TruckListSlice";
 import truckMultiSelectReducer from "./slices/truck/TruckMultiSelectSlice";
-import goodsReducer from "./slices/goods/GoodsSlice";
-import goodsListReducer from "./slices/goods/GoodsListSlice";
+// import goodsReducer from "./slices/goods/GoodsSlice";
+// import goodsListReducer from "./slices/goods/GoodsListSlice";
 import orderReducer from "./slices/order/OrderSlice";
 import orderListReducer from "./slices/order/OrderListSlice";
 import orderMultiSelectReducer from "./slices/order/OrderMultiSelectSlice";
@@ -17,8 +17,8 @@ export const store = configureStore({
     trucksGlobal: trucksReducer,
     truckListGlobal: truckListReducer,
     truckMultiSelectGlobal: truckMultiSelectReducer,
-    goodsGlobal: goodsReducer,
-    goodsListGlobal: goodsListReducer,
+    // goodsGlobal: goodsReducer,
+    // goodsListGlobal: goodsListReducer,
     ordersGlobal: orderReducer,
     orderListGlobal: orderListReducer,
     orderMultiSelectGlobal: orderMultiSelectReducer,

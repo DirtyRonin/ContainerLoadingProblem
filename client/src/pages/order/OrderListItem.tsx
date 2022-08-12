@@ -45,7 +45,7 @@ export const OrderListItem = (props: Props) => {
         <ListItemIcon>
           <NextPlanIcon />
         </ListItemIcon>
-        <ListItemText primary={order.name} secondary={order.name} />
+        <ListItemText primary={order.orderName} secondary={order.orderName} />
       </ListItemButton>
     </ListItem>
   );

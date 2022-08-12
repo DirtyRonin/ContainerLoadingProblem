@@ -84,7 +84,7 @@ export default function OrderSummaryItem() {
 
   const getOrderTreeItems = () =>
     selectedOrders.map((order) => (
-      <TreeItem nodeId={`#${order.name}-${order.id}`} label={`#${order.name}-${order.id}`}>
+      <TreeItem nodeId={`#${order.orderName}-${order.id}`} label={`#${order.orderName}-${order.id}`}>
         {getCargoTreeItems(order.id)}
       </TreeItem>
     ));

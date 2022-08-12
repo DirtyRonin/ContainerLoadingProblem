@@ -44,7 +44,7 @@ export default function OrderSliderItem  (props: Props) {
         <ListItemIcon>
           <NextPlanIcon />
         </ListItemIcon>
-        <ListItemText primary={order.name}  />
+        <ListItemText primary={order.orderName}  />
         <ListItemIcon>
           <Checkbox
             edge="end"

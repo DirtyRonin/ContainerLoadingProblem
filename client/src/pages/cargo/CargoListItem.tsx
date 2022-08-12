@@ -4,7 +4,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ICargo, IGoods } from '../../interfaces';
+import { ICargo } from '../../interfaces';
 
 import { useAppDispatch, useAppSelector, SelectCargo, SelectCargoListState, DeleteCargo } from '../../store';
 import ListItem from '@mui/material/ListItem';
@@ -58,7 +58,7 @@ export default function CargoListItem(props: Props) {
       <ListItemIcon>
         <InventoryIcon />
       </ListItemIcon>
-      <ListItemText primary={cargo?.singleGoods.name} secondary={cargo.quantity} />
+      <ListItemText primary={cargo.name} secondary={`${cargo.length} * ${cargo.width}`} />
     </ListItemButton>
   );
 }
