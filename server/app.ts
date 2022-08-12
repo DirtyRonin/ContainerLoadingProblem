@@ -16,7 +16,7 @@ const truckController = new TruckController(truckRepository);
 // const goodsController = new GoodsController(goodsRepository);
 
 const orderRepository = sequelize.getRepository(Order);
-const orderController = new OrderController(orderRepository);
+const orderController = new OrderController(orderRepository,sequelize);
 
 const cargoRepository = sequelize.getRepository(Cargo);
 const cargoController = new CargoController(cargoRepository);

@@ -1,14 +1,18 @@
 import { Request, Response, NextFunction } from "express";
-import { Repository } from "sequelize-typescript";
+import { Repository, Sequelize } from "sequelize-typescript";
 
 import { IOrderController } from "../interfaces";
-import { Order } from "../models";
+import { Cargo, Order } from "../models";
 
 export class OrderController implements IOrderController {
-  private readonly orderRepository: Repository<Order>;
+  
+  constructor(
+    private readonly orderRepository: Repository<Order>,
+    private readonly sequelize: Sequelize,
 
-  constructor(repo: Repository<Order>) {
-    this.orderRepository = repo;
+  ) {
+    // this.orderRepository = repo;
+    // private readonly sequelize: Sequelize;
   }
 
   public GetAll = async (
@@ -17,9 +21,9 @@ export class OrderController implements IOrderController {
     next: NextFunction
   ) => {
     try {
-      const trucks = await this.orderRepository.findAll();
+      const orders = await this.orderRepository.findAll({include:[this.sequelize.models['Cargo']]});
 
-      return res.status(200).json(trucks);
+      return res.status(200).json(orders);
     } catch (error) {
       next(error);
     }
@@ -31,10 +35,10 @@ export class OrderController implements IOrderController {
     next: NextFunction
   ) => {
     try {
-      const truck = await this.orderRepository.findByPk(req.params.id);
-      if (!truck) return res.status(404).json("id not found");
+      const order = await this.orderRepository.findByPk(req.params.id);
+      if (!order) return res.status(404).json("id not found");
 
-      return res.status(200).json(truck);
+      return res.status(200).json(order);
     } catch (error) {
       next(error);
     }
@@ -46,10 +50,10 @@ export class OrderController implements IOrderController {
     next: NextFunction
   ) => {
     try {
-      const newTruck = await this.orderRepository.create(req.body);
-      if (!newTruck) return res.status(500).json("could not create order");
+      const newOrder = await this.orderRepository.create(req.body);
+      if (!newOrder) return res.status(500).json("could not create order");
 
-      return res.status(201).json(newTruck);
+      return res.status(201).json(newOrder);
     } catch (error) {
       next(error);
     }
@@ -64,10 +68,10 @@ export class OrderController implements IOrderController {
       const { id } = req.body;
       await this.orderRepository.update({ ...req.body }, { where: { id } });
 
-      const updatedTruck = await this.orderRepository.findByPk(id);
-      if (!updatedTruck) return res.status(404).json("id not found");
+      const updatedOrder = await this.orderRepository.findByPk(id);
+      if (!updatedOrder) return res.status(404).json("id not found");
 
-      res.status(200).json(updatedTruck);
+      res.status(200).json(updatedOrder);
     } catch (error) {
       next(error);
     }
@@ -81,13 +85,13 @@ export class OrderController implements IOrderController {
     try {
       const { id } = req.params;
 
-      const truck = await this.orderRepository.findByPk(id);
-      if (!truck) return res.status(404).json(-1);
+      const order = await this.orderRepository.findByPk(id);
+      if (!order) return res.status(404).json(-1);
 
-      await truck?.destroy();
-      const reloadTruck = await this.orderRepository.findByPk(id);
+      await order?.destroy();
+      const reloadOrder = await this.orderRepository.findByPk(id);
 
-      if (reloadTruck) return res.status(500).json(-1);
+      if (reloadOrder) return res.status(500).json(-1);
 
       return res.status(200).json(id);
     } catch (error) {
