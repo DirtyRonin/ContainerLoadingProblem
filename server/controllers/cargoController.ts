@@ -1,21 +1,13 @@
-import { Request, Response, NextFunction } from "express";
-import { Repository } from "sequelize-typescript";
+import { Request, Response, NextFunction } from 'express';
+import { Repository } from 'sequelize-typescript';
 
-import { Cargo } from "../models/cargo";
-import { ICargoController } from "../interfaces";
+import { Cargo } from '../models/cargo';
+import { ICargoController } from '../interfaces';
 
 export class CargoController implements ICargoController {
-  private readonly cargoRepository: Repository<Cargo>;
+  constructor(private readonly cargoRepository: Repository<Cargo>) {}
 
-  constructor(repo: Repository<Cargo>) {
-    this.cargoRepository = repo;
-  }
-
-  public GetAll = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const cargos = await this.cargoRepository.findAll();
 
@@ -25,14 +17,21 @@ export class CargoController implements ICargoController {
     }
   };
 
-  public GetById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public GetAllByOrderId = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const {orderId} = req.params
+      const cargos = await this.cargoRepository.findAll({where:{orderId}});
+
+      return res.status(200).json(cargos);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public GetById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const cargo = await this.cargoRepository.findByPk(req.params.id);
-      if (!cargo) return res.status(404).json("id not found");
+      if (!cargo) return res.status(404).json('id not found');
 
       return res.status(200).json(cargo);
     } catch (error) {
@@ -40,14 +39,10 @@ export class CargoController implements ICargoController {
     }
   };
 
-  public Create = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public Create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newCargo = await this.cargoRepository.create(req.body);
-      if (!newCargo) return res.status(500).json("could not create cargo");
+      if (!newCargo) return res.status(500).json('could not create cargo');
 
       return res.status(201).json(newCargo);
     } catch (error) {
@@ -55,17 +50,13 @@ export class CargoController implements ICargoController {
     }
   };
 
-  public Update = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public Update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.body;
       await this.cargoRepository.update({ ...req.body }, { where: { id } });
 
       const updatedCargo = await this.cargoRepository.findByPk(id);
-      if (!updatedCargo) return res.status(404).json("id not found");
+      if (!updatedCargo) return res.status(404).json('id not found');
 
       res.status(200).json(updatedCargo);
     } catch (error) {
@@ -73,11 +64,7 @@ export class CargoController implements ICargoController {
     }
   };
 
-  public Delete = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public Delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
 

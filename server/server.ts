@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import { sequelize } from './config/db';
 import seeding from './config/seeding';
 import { app } from './app';
-import { Truck } from './models';
+import { Cargo, Order, Truck } from './models';
 import { DataType } from 'sequelize-typescript';
 
 const port = process.env.PORT || 3000;
@@ -16,9 +16,6 @@ app.get('/alive/', (req, res) => {
 const forceSync = async () => {
   await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
   await sequelize.sync({ force: true });
-
- const query = sequelize.getQueryInterface();
- 
 
   await sequelize.query('SET FOREIGN_KEY_CHECKS = 1'); // setting the flag back for security
   await seeding();
@@ -33,7 +30,7 @@ const forceSync = async () => {
   // }
 
   // await sequelize.sync();
-  await forceSync();
+  // await forceSync();
 
   createServer(app).listen(port, () => {
     console.log(`server running on port ${port}`);
