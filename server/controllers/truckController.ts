@@ -1,15 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { Repository } from "sequelize-typescript";
+import { Repository, Sequelize } from "sequelize-typescript";
 
 import { Truck } from "../models/truck";
 import { ITruckController } from "../interfaces";
 
 export class TruckController implements ITruckController {
-  private readonly truckRepository: Repository<Truck>;
+  ;
 
-  constructor(repo: Repository<Truck>) {
-    this.truckRepository = repo;
-  }
+  constructor(private readonly truckRepository: Repository<Truck>,private readonly sequelize: Sequelize,) {  }
 
   public GetAll = async (
     req: Request,
@@ -17,7 +15,7 @@ export class TruckController implements ITruckController {
     next: NextFunction
   ) => {
     try {
-      const trucks = await this.truckRepository.findAll();
+      const trucks = await this.truckRepository.findAll({include:this.sequelize.models['TruckLoading']});
 
       return res.status(200).json(trucks);
     } catch (error) {

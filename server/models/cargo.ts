@@ -1,17 +1,16 @@
-import { BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { HasOne,BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import {  } from 'sequelize/types';
 import { Order } from './order';
-import { Truck } from './truck';
+import { TruckLoading } from './truckLoading';
 
 
 
 @Table
 export class Cargo extends Model {
-  @ForeignKey(() => Truck)
-  @Column({allowNull:true})
-  truckId!: number;
+  @HasOne(() => TruckLoading)
+  truckLoading!: TruckLoading;
 
-  @BelongsTo(() => Truck)
-  truck!: Truck;
+  
 
   @ForeignKey(() => Order)
   @Column({allowNull:false})

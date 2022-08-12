@@ -1,4 +1,4 @@
-import { Cargo, Order, Truck } from '../models';
+import { Cargo, Order, Truck, TruckLoading } from '../models';
 import { sequelize } from './db';
 
 export default async function seeding(): Promise<void> {
@@ -66,9 +66,16 @@ export default async function seeding(): Promise<void> {
   
   const cargoRepo = sequelize.getRepository(Cargo);
   await cargoRepo.bulkCreate([
-    { name: 'Auf 1/2 Europalette', width: 60, length: 40, weight: 30, quantity: 40, height: 80, isStackable: true ,orderId:1,truckId:1},
+    { name: 'Auf 1/2 Europalette', width: 60, length: 40, weight: 30, quantity: 40, height: 80, isStackable: true ,orderId:1},
     { name: 'Auf 1/4 Europalette', width: 80, length: 60, weight: 30, quantity: 10, height: 110, isStackable: true,orderId:2 },
     { name: 'Auf Europalette', width: 120, length: 80, weight: 25, quantity: 10, height: 100, isStackable: true,orderId:2 },
     { name: 'Auf Industriepalette', width: 120, length: 100, weight: 30, quantity: 10, height: 120, isStackable: true,orderId:2 },
+  ]);
+  const truckLoadingRepo = sequelize.getRepository(TruckLoading);
+  await truckLoadingRepo.bulkCreate([
+    { loadingMeter: 500, truckId:1,cargoId:1},
+    { loadingMeter: 500, truckId:1,cargoId:2},
+    { loadingMeter: 500, truckId:2,cargoId:3},
+    
   ]);
 }

@@ -10,7 +10,7 @@ import { Cargo,Order, Truck } from './models';
 import { CargoController, TruckController, OrderController } from './controllers';
 
 const truckRepository = sequelize.getRepository(Truck);
-const truckController = new TruckController(truckRepository);
+const truckController = new TruckController(truckRepository,sequelize);
 
 // const goodsRepository = sequelize.getRepository(Goods);
 // const goodsController = new GoodsController(goodsRepository);
@@ -19,7 +19,7 @@ const orderRepository = sequelize.getRepository(Order);
 const orderController = new OrderController(orderRepository,sequelize);
 
 const cargoRepository = sequelize.getRepository(Cargo);
-const cargoController = new CargoController(cargoRepository);
+const cargoController = new CargoController(cargoRepository,sequelize);
 
 // const goodsOrderTruckRepository = sequelize.getRepository(GoodsOrderTruck);
 // const goodsOrderTruckController = new GoodsOrderTruckController(goodsOrderTruckRepository);

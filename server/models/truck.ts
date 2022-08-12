@@ -1,5 +1,5 @@
 import { Column, Model, Table, HasMany } from 'sequelize-typescript';
-import { Cargo } from './cargo';
+import { TruckLoading } from './truckLoading';
 
 @Table
 export class Truck extends Model {
@@ -11,6 +11,6 @@ export class Truck extends Model {
   @Column length!: number;
   @Column maxWeight!: number;
 
-  @HasMany(() => Cargo)
-  cargos!: Cargo[];
+  @HasMany(() => TruckLoading)
+  truckLoadings!: TruckLoading[];
 }

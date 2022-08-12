@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
-import { Repository } from 'sequelize-typescript';
+import { Repository, Sequelize } from 'sequelize-typescript';
 
 import { Cargo } from '../models/cargo';
 import { ICargoController } from '../interfaces';
 
 export class CargoController implements ICargoController {
-  constructor(private readonly cargoRepository: Repository<Cargo>) {}
+  constructor(private readonly cargoRepository: Repository<Cargo>, private readonly sequelize: Sequelize) {}
 
   public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const cargos = await this.cargoRepository.findAll();
+      const cargos = await this.cargoRepository.findAll({include : this.sequelize.models['TruckLoading']});
 
       return res.status(200).json(cargos);
     } catch (error) {
@@ -19,8 +19,8 @@ export class CargoController implements ICargoController {
 
   public GetAllByOrderId = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {orderId} = req.params
-      const cargos = await this.cargoRepository.findAll({where:{orderId}});
+      const { orderId } = req.params;
+      const cargos = await this.cargoRepository.findAll({ where: { orderId } });
 
       return res.status(200).json(cargos);
     } catch (error) {
