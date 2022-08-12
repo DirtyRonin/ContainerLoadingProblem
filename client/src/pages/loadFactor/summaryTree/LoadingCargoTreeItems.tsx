@@ -3,12 +3,11 @@ import { TreeItem } from '@mui/lab';
 import { Checkbox, Typography } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { useEffectOnce } from '../../../hooks/useEffectOnce';
 
 import { SelectCargoState } from '../../../store/slices/cargo/CargoSlice';
 import { SelectSummaryState, AddSelectedSummary, RemoveSelectedSummary } from '../../../store/slices/summaryTree/summaryTreeSlice';
 
-import { ICargo, ILoadSummary, ITruck } from '../../../interfaces';
+import { ICargo, ILoadSummary } from '../../../interfaces';
 import { Cargo } from '../../../models';
 
 interface IProps {
@@ -51,7 +50,7 @@ export default function LoadingCargoTreeItems(props: IProps) {
     return (
       <>
         <Checkbox onChange={onCargoCheckedChange} checked={isChecked()} />
-        <Typography variant="caption">{`#${thisCargo.singleGoods.name}-${thisCargo.id}`}</Typography>
+        <Typography variant="caption">{`#${thisCargo.name}-${thisCargo.id}`}</Typography>
         <br />
         <Typography variant="caption">{`Required Loading Meter: ${Math.round(thisSummary.loadingMeter)} cm`}</Typography>
       </>
@@ -60,7 +59,7 @@ export default function LoadingCargoTreeItems(props: IProps) {
 
   return (
     <>
-      <TreeItem nodeId={`#${thisCargo.singleGoods.name}-${thisCargo.id}`} label={treeLabel()} />
+      <TreeItem nodeId={`#${thisCargo.name}-${thisCargo.id}`} label={treeLabel()} />
     </>
   );
 }

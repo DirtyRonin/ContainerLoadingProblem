@@ -93,14 +93,14 @@ export default function OrderSummaryItem() {
     cargos
       .filter((x) => x.orderId === orderId)
       .map((cargo) => (
-        <TreeItem nodeId={`#${cargo.singleGoods.name}-${cargo.id}`} label={`#${cargo.singleGoods.name}-${cargo.id}`}>
+        <TreeItem nodeId={`#${cargo.name}-${cargo.id}`} label={`#${cargo.name}-${cargo.id}`}>
           <TreeItem
-            nodeId={`#${cargo.singleGoods.name}-sizes-${cargo.id}`}
-            label={`${cargo.singleGoods.length}l * ${cargo.singleGoods.width}w * ${cargo.height}h`}
+            nodeId={`#${cargo.name}-sizes-${cargo.id}`}
+            label={`${cargo.length}l * ${cargo.width}w * ${cargo.height}h`}
           ></TreeItem>
-          <TreeItem nodeId={`#${cargo.singleGoods.name}-quantity-${cargo.id}`} label={`${cargo.quantity} X`}></TreeItem>
+          <TreeItem nodeId={`#${cargo.name}-quantity-${cargo.id}`} label={`${cargo.quantity} X`}></TreeItem>
           <TreeItem
-            nodeId={`#${cargo.singleGoods.name}-isStackable-${cargo.id}`}
+            nodeId={`#${cargo.name}-isStackable-${cargo.id}`}
             label={`Stackable: ${cargo.isStackable ? 'Yes' : 'No'}`}
           ></TreeItem>
         </TreeItem>

@@ -59,7 +59,7 @@ export class LoadAnalyzer implements ILoadAnalyzer {
 
     const stacking = containerHelper.CalculateStackingFactor(cargo, container.height);
 
-    const goodsPerRow = containerHelper.CalculateGoodsPerRow(cargo.singleGoods.width, container.width);
+    const goodsPerRow = containerHelper.CalculateGoodsPerRow(cargo.width, container.width);
 
     // amount of pieces of a full Row
     const goodsPerFullStackedRow = stacking.stackingFactor * goodsPerRow;
@@ -68,7 +68,7 @@ export class LoadAnalyzer implements ILoadAnalyzer {
 
     const fullStackedGoods = fullStackedRows * goodsPerFullStackedRow;
 
-    const loadingMeterBase = containerHelper.CalculateLoadingMeterBase(cargo.singleGoods, container);
+    const loadingMeterBase = containerHelper.CalculateLoadingMeterBase(cargo, container);
 
     const loadingMeterFullStackedRows = containerHelper.CalculateLoadingMeter(loadingMeterBase, stacking.stackingFactor, fullStackedGoods);
 
