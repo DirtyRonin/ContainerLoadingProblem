@@ -1,7 +1,8 @@
-import { ITruck } from "../models/Truck";
+import { ITruck } from "../interfaces";
 import api from "./baseApi";
 
 const apiName = "trucks";
+const filterTrucksByIds = 'filterTrucksByIds'
 
 const FetchTrucks = async (): Promise<ITruck[]> => {
   const result = await api().get(apiName);
@@ -23,6 +24,10 @@ const DeleteTruck = async (id: number): Promise<number> => {
   const result = await api().delete(`${apiName}/${id}`);
   return result.data;
 };
+const FilterTruckByIds = async (ids: number[]): Promise<ITruck[]> => {
+  const result = await api().put(`${filterTrucksByIds}`,{ids});
+  return result.data;
+};
 
 export const TruckApi = {
   FetchTrucks,
@@ -30,4 +35,5 @@ export const TruckApi = {
   CreateTruck,
   UpdateTruck,
   DeleteTruck,
+  FilterTruckByIds,
 };

@@ -19,4 +19,14 @@ export class Cargo implements ICargo {
     const {name,width,length} = singleGoods ?? Goods.AsInitializeDefault('Empty');
     return new Cargo(0,null,0,name,width,length,0,0,false,0);
   };
+  public static WithGoods = (id: number,
+    truckId: number | null,
+    orderId: number,
+    singleGoods: IGoods | null,
+    quantity: number,
+    isStackable: boolean,
+    height: number,) => {
+    const {name,width,length} = singleGoods ?? Goods.AsInitializeDefault('Empty');
+    return new Cargo(id,truckId,orderId,name,width,length,0,quantity,isStackable,height);
+  };
 }

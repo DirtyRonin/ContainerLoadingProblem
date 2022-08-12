@@ -11,4 +11,6 @@ export const truckRouter = (controller: ITruckController) =>
 
     .put("/trucks", controller.Update)
 
-    .delete("/trucks/:id", controller.Delete);
+    .delete("/trucks/:id", controller.Delete)
+
+    .put("/filterTrucksByIds", controller.FilterByIds)

@@ -3,13 +3,10 @@ import api from "./baseApi";
 
 const apiName = "cargos";
 const filteredByOrderId = "filterCargoByOrderId"
+const filterCargoByOrderIds = 'filterCargoByOrderIds'
 
 const FetchCargo = async (): Promise<ICargo[]> => {
   const result = await api().get(apiName);
-  return result.data;
-};
-const FetchCargoByOrderId = async (id: number): Promise<ICargo[]> => {
-  const result = await api().get(`${filteredByOrderId}/${id}`);
   return result.data;
 };
 const FetchCargoById = async (id: number): Promise<ICargo> => {
@@ -32,10 +29,15 @@ const FilterCargoByOrderId = async (id: number): Promise<ICargo[]> => {
   const result = await api().get(`${filteredByOrderId}/${id}`);
   return result.data;
 };
+const FilterCargoByOrderIds = async (orderIds: number[]): Promise<ICargo[]> => {
+  const result = await api().put(`${filterCargoByOrderIds}`,{orderIds});
+  return result.data;
+};
 
 export const CargoApi = {
   FetchCargo,
-  FetchCargoByOrderId,
+  FilterCargoByOrderId,
+  FilterCargoByOrderIds,
   FetchCargoById,
   CreateCargo,
   UpdateCargo,

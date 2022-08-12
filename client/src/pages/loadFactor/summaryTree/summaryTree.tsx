@@ -5,8 +5,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
 
 import { SelectOrderState } from '../../../store/slices/order/OrderSlice';
-import { SelectTruckState } from '../../../store/slices/truck/TruckSlice';
-import { FetchAllCargo, SelectCargoState } from '../../../store/slices/cargo/CargoSlice';
+import { SelectTruckState,FilterTrucksByIds } from '../../../store/slices/truck/TruckSlice';
+import { FetchAllCargo, SelectCargoState, FetchCargoByOrderIds } from '../../../store/slices/cargo/CargoSlice';
 import { SelectTruckMultiSelectState } from '../../../store/slices/truck/TruckMultiSelectSlice';
 import { SelectOrderMultiSelectState } from '../../../store/slices/order/OrderMultiSelectSlice';
 import { SelectSummaryState, SetSummaries } from '../../../store/slices/summaryTree/summaryTreeSlice';
@@ -43,10 +43,16 @@ export default function OrderSummaryItem() {
     dispatch(FetchAllCargo());
   });
 
+  // useEffect(()=>{
+  //   dispatch(FetchCargoByOrderIds(selectedOrderIds));
+  // },[selectedOrderIds,dispatch])
+
+
+
   useEffect(() => {
-    const myCargos = getCargosByOrderIds();
     const myTrucks = getTrucksByTruckIds();
     const myOrders = getOrdersByOrderIds();
+    const myCargos = getCargosByOrderIds();
 
     setSelectedCargos(myCargos);
     setSelectedTrucks(myTrucks);
@@ -83,14 +89,14 @@ export default function OrderSummaryItem() {
     }, [] as ICargo[]);
 
   const getOrderTreeItems = () =>
-    selectedOrders.map((order) => (
+  selectedOrders.map((order) => (
       <TreeItem nodeId={`#${order.orderName}-${order.id}`} label={`#${order.orderName}-${order.id}`}>
         {getCargoTreeItems(order.id)}
       </TreeItem>
     ));
 
   const getCargoTreeItems = (orderId: number) =>
-    cargos
+  cargos
       .filter((x) => x.orderId === orderId)
       .map((cargo) => (
         <TreeItem nodeId={`#${cargo.name}-${cargo.id}`} label={`#${cargo.name}-${cargo.id}`}>
@@ -107,7 +113,7 @@ export default function OrderSummaryItem() {
       ));
 
   const getTruckTreeItems = () =>
-    selectedTrucks.map((truck) => (
+  selectedTrucks.map((truck) => (
       <TreeItem
         nodeId={`#${truck.vehicleIdentifier}-${truck.id}`}
         label={`#${truck.vehicleIdentifier}-${truck.id} ${remainingSpaceMessage(truck)}`}
@@ -123,9 +129,9 @@ export default function OrderSummaryItem() {
 
     if (relatedCargoIds.length === 0) return message(truck.length);
 
-    const relatedSelectedSummaries = loadSummaries[truck.id]?.filter((x) => x.cargo.id);
+    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries[truck.id]?.filter((x) => x.cargo.id);
 
-    if (relatedSelectedSummaries.length === 0) return message(truck.length);
+    if (relatedSelectedSummaries === undefined || relatedSelectedSummaries.length === 0) return message(truck.length);
 
     const remainingLoadingMeter = relatedCargoIds.reduce((prev, current) => {
       const relatedSummary = loadSummaries[truck.id]?.find((x) => x.cargo.id === current)?.loadingMeter;
@@ -152,7 +158,7 @@ export default function OrderSummaryItem() {
       aria-label="file system navigator"
       defaultCollapseIcon={<ExpandMoreIcon />}
       defaultExpandIcon={<ChevronRightIcon />}
-      sx={{ height: 240, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+      sx={{ height: 640, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
     >
       <TreeItem nodeId="1" label="Trucks">
         {getTruckTreeItems()}

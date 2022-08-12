@@ -33,7 +33,7 @@ describe('calculating stacking factor', () => {
   });
 
   it("stacking factor should be 3 and rest height should be 30 when 'isStackable' is set to true and type of the cargo's container is 'l100w120h80'", () => {
-    _cargo = new Cargo(0, 0, 0, _testAreas.area_l100w120, 3, true, 80);
+    _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l100w120, 3, true, 80);
 
     const result = mathHelper.CalculateStackingFactor(_cargo, _container.height);
     expect(result).toEqual<IStacking>({

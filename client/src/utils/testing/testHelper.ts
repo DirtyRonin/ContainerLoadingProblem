@@ -27,8 +27,8 @@ const testContainers = {
 };
 
 const testCargos = {
-  AsInitializeDefault: new Cargo(0, 0, 0, Goods.AsInitializeDefault(), 0, false, 0),
-  area_l100w120: new Cargo(0, 0, 0,  Goods.WithValues(100, 120), 1, false, 80),
+  AsInitializeDefault: Cargo.WithGoods(0, 0, 0, Goods.AsInitializeDefault(), 0, false, 0),
+  area_l100w120: Cargo.WithGoods(0, 0, 0,  Goods.WithValues(100, 120), 1, false, 80),
   // area_l80w120: new Cargo((80, 120),1,false,80),
   // area_l160w120: new Cargo((160, 120),1,false,80),
   // oversized_area_l1500w120: new Cargo((1500, 120),1,false,80),

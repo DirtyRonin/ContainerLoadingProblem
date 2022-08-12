@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useAppDispatch, useAppSelector, SelectCargoState, SelectOrderListState, FetchCargoByOrderID,UnselectCargo } from '../../store';
+import { useAppDispatch, useAppSelector, SelectCargoState, SelectOrderListState, FetchCargoByOrderId,UnselectCargo } from '../../store';
 import CostumList from '../../components/ui/CostumList';
 import ListItem from './CargoListItem';
 import { Cargo } from '../../models';
@@ -13,7 +13,7 @@ export default function CargoList() {
 
   useEffect(() => {
     dispatch(UnselectCargo())
-    dispatch(FetchCargoByOrderID(selectedOrderId));
+    dispatch(FetchCargoByOrderId(selectedOrderId));
 
   }, [selectedOrderId]);
 

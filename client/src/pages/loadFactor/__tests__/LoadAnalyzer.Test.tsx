@@ -62,7 +62,7 @@ describe('Testing Loading Meter Functions', () => {
       });
       it('should be 120', async () => {
         _containers = [_testContainers.Truck_l1360w240h270];
-        _cargos = [new Cargo(0, 0, 0, _testAreas.area_l80w120, 1, false, 120), new Cargo(0, 0, 0, _testAreas.area_l80w120, 3, true, 120)];
+        _cargos = [Cargo.WithGoods(0, 0, 0, _testAreas.area_l80w120, 1, false, 120), Cargo.WithGoods(0, 0, 0, _testAreas.area_l80w120, 3, true, 120)];
 
         const result = await _loadingMeter.AnalyzeLoading(_cargos, _containers);
         expect(result).toEqual(120);
@@ -70,8 +70,8 @@ describe('Testing Loading Meter Functions', () => {
       it('should be 160', async () => {
         _containers = [_testContainers.Truck_l1360w240h270];
         _cargos = [
-          new Cargo(0, 0, 0, _testAreas.area_l80w120, 17, false, 120),
-          new Cargo(0, 0, 0, _testAreas.area_l80w120, 17, false, 120),
+          Cargo.WithGoods(0, 0, 0, _testAreas.area_l80w120, 17, false, 120),
+          Cargo.WithGoods(0, 0, 0, _testAreas.area_l80w120, 17, false, 120),
         ];
 
         const result = await _loadingMeter.AnalyzeLoading(_cargos, _containers);
@@ -91,35 +91,35 @@ describe('Testing Loading Meter Functions', () => {
       });
 
       it("should be 0.5 loading meter for the quantity of one piece of 'box_l100w120h80'", async () => {
-        _cargo = new Cargo(0, 0, 0, _testAreas.area_l100w120, 1, false, 80);
+        _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l100w120, 1, false, 80);
 
         const result = _loadingMeter.AnalyseSingleLoad(_cargo, _container);
         await expect(result).resolves.toHaveProperty(propName_loadingMeter, 50);
       });
 
       it("should be 1.0 loading meter for the quantity of two pieces of 'box_l100w120h80' next to each other in the same row", async () => {
-        _cargo = new Cargo(0, 0, 0, _testAreas.area_l100w120, 2, false, 80);
+        _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l100w120, 2, false, 80);
 
         const result = _loadingMeter.AnalyseSingleLoad(_cargo, _container);
         await expect(result).resolves.toHaveProperty(propName_loadingMeter, 100);
       });
 
       it("should be 1.0 loading meter for the quantity of two pieces of 'box_l100w120h80' next to each other in the same row even isStackable is true", async () => {
-        _cargo = new Cargo(0, 0, 0, _testAreas.area_l100w120, 2, true, 80);
+        _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l100w120, 2, true, 80);
 
         const result = _loadingMeter.AnalyseSingleLoad(_cargo, _container);
         await expect(result).resolves.toHaveProperty(propName_loadingMeter, 100);
       });
 
       it("should be 0.5 loading meter for three pieces of 'box_l100w120h80' stacked on each other", async () => {
-        _cargo = new Cargo(0, 0, 0, _testAreas.area_l100w120, 3, true, 80);
+        _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l100w120, 3, true, 80);
 
         const result = _loadingMeter.AnalyseSingleLoad(_cargo, _container);
         await expect(result).resolves.toHaveProperty(propName_loadingMeter, 100);
       });
 
       it("should be 1 loading meter for four pieces of 'box_l100w120h80' stacked on and next to each other", async () => {
-        _cargo = new Cargo(0, 0, 0, _testAreas.area_l100w120, 4, true, 80);
+        _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l100w120, 4, true, 80);
 
         const result = _loadingMeter.AnalyseSingleLoad(_cargo, _container);
         await expect(result).resolves.toHaveProperty(propName_loadingMeter, 100);
@@ -135,20 +135,20 @@ describe('Testing Loading Meter Functions', () => {
         });
 
         it('should be 320 with 16 pieces', async () => {
-          _cargo = new Cargo(0, 0, 0, _testAreas.area_l80w120, 16, true, 120);
+          _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l80w120, 16, true, 120);
 
           const result = _loadingMeter.AnalyseSingleLoad(_cargo, _container);
           await expect(result).resolves.toHaveProperty(propName_loadingMeter, 320);
         });
         it('should be 320 with 14 pieces', async () => {
-          _cargo = new Cargo(0, 0, 0, _testAreas.area_l80w120, 14, true, 120);
+          _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l80w120, 14, true, 120);
 
           const result = _loadingMeter.AnalyseSingleLoad(_cargo, _container);
           await expect(result).resolves.toHaveProperty(propName_loadingMeter, 320);
         });
 
         it('should be 160', async () => {
-          _cargo = new Cargo(0, 0, 0, _testAreas.area_l160w120, 6, true, 80);
+          _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.area_l160w120, 6, true, 80);
 
           const result = _loadingMeter.AnalyseSingleLoad(_cargo, _container);
           await expect(result).resolves.toHaveProperty(propName_loadingMeter, 160);

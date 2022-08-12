@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Repository, Sequelize } from "sequelize-typescript";
+const { Op } = require("sequelize");
 
 import { Truck } from "../models/truck";
 import { ITruckController } from "../interfaces";
@@ -33,6 +34,21 @@ export class TruckController implements ITruckController {
       if (!truck) return res.status(404).json("id not found");
 
       return res.status(200).json(truck);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public FilterByIds = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const ids:number[] = req.body.ids;
+      const cargos = await this.truckRepository.findAll({
+        where: {
+          id: {[Op.in] :  ids  },
+        },
+      });
+
+      return res.status(200).json(cargos);
     } catch (error) {
       next(error);
     }

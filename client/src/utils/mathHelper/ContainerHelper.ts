@@ -33,8 +33,8 @@ export class ContainerHelper implements IContainerHelper {
     Object.keys(groups).forEach((key) =>
       groups[key].sort((a, b) =>
         this.CompareByVolume(
-          { length: a.singleGoods.length, width: a.singleGoods.width, height: a.height },
-          { length: b.singleGoods.length, width: b.singleGoods.width, height: b.height },
+          { length: a.length, width: a.width, height: a.height },
+          { length: b.length, width: b.width, height: b.height },
           a.quantity,
           b.quantity
         )
@@ -82,7 +82,7 @@ export class ContainerHelper implements IContainerHelper {
 
   public IsFitting = (container: IContainer, cargo: ICargo): boolean => {
     const {
-      singleGoods: { length, width },
+      length, width ,
       height,
     } = cargo;
 
@@ -113,10 +113,9 @@ export class ContainerHelper implements IContainerHelper {
   };
 
   public IsValidCargo = (cargo: ICargo): boolean => {
-    const { singleGoods, quantity, height } = cargo;
 
-    if (!this.IsValidContainer({ ...singleGoods, height })) return false;
-    if (quantity < 1) return false;
+    if (!this.IsValidContainer(cargo)) return false;
+    if (cargo.quantity < 1) return false;
 
     return true;
   };
