@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import CostumList from '../../components/ui/CostumList';
+import CustomList from '../../components/ui/CostumList';
 import { ITruck } from '../../interfaces';
 import ListItem from './dashboardTruckListItem';
 import { useEffectOnce } from '../../hooks/useEffectOnce';
@@ -18,5 +18,5 @@ export default function DashboardTruckList() {
 
   const getListItems = (trucks: ITruck[]) => trucks.map((truck) => <ListItem truck={truck} />);
 
-  return <CostumList orientation="horizontal">{getListItems(trucks)}</CostumList>;
+  return <CustomList orientation="horizontal">{getListItems(trucks)}</CustomList>;
 }

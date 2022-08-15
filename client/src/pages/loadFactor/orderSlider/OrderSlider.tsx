@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CostumList from '../../../components/ui/CostumList';
+import CustomList from '../../../components/ui/CostumList';
 import ListItem from './OrderSliderItem';
 import { useEffectOnce } from '../../../hooks/useEffectOnce';
 import { FetchAllOrder, SelectOrderState, useAppDispatch, useAppSelector } from '../../../store';
@@ -17,5 +17,5 @@ export default function OrderSlider() {
 
   const getListItems = () => orders.map((order) => <ListItem order={order} />);
 
-  return <CostumList orientation="vertical">{getListItems()}</CostumList>;
+  return <CustomList orientation="vertical">{getListItems()}</CustomList>;
 }

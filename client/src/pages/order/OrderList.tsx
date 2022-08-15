@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { SelectOrderState, FetchAllOrder } from '../../store/slices/order/OrderSlice';
-import CostumList from '../../components/ui/CostumList';
+import CustomList from '../../components/ui/CostumList';
 import { OrderListItem } from './OrderListItem';
 import { Order } from '../../models';
 import { IOrder } from '../../interfaces';
@@ -25,5 +25,5 @@ export const OrderList = () => {
 
   const getListItems = (orders: IOrder[]) => orders.map((x) => <OrderListItem order={x} />);
 
-  return <CostumList orientation="vertical">{getListItems(mergeOrder)}</CostumList>;
+  return <CustomList orientation="vertical">{getListItems(mergeOrder)}</CustomList>;
 };

@@ -7,7 +7,7 @@ type ListItemProps = {
   children: React.ReactNode;
 };
 
-export default function CostumList({ children, orientation }: ListItemProps) {
+export default function CustomList({ children, orientation }: ListItemProps) {
   const currentTheme = orientation === 'horizontal' ? theme.horizontalTheme : theme.verticalTheme;
 
   return (

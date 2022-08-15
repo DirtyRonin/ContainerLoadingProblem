@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CostumList from '../../../components/ui/CostumList';
+import CustomList from '../../../components/ui/CostumList';
 import { ITruck } from '../../../interfaces';
 import ListItem from './truckSliderItems';
 import { useEffectOnce } from '../../../hooks/useEffectOnce';
@@ -18,5 +18,5 @@ export default function TruckSlider() {
 
   const getListItems = (trucks: ITruck[]) => trucks.map((truck) => <ListItem truck={truck} />);
 
-  return <CostumList orientation="vertical">{getListItems(trucks)}</CostumList>;
+  return <CustomList orientation="vertical">{getListItems(trucks)}</CustomList>;
 }

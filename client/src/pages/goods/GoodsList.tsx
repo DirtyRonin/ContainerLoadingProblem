@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { useAppDispatch, useAppSelector, SelectGoodsState, FetchAllGoods } from '../../store';
-import CostumList from '../../components/ui/CostumList';
+import CustomList from '../../components/ui/CostumList';
 import { GoodsListItem } from './GoodsListItem';
 import { Goods } from '../../models';
 import { IGoods } from '../../interfaces';
@@ -23,5 +23,5 @@ export const GoodsList = () => {
 
   const getListItems = (goods: IGoods[]) => goods.map((x) => <GoodsListItem singleGoods={x} />);
 
-  return <CostumList orientation="vertical">{getListItems(mergeGoods)}</CostumList>;
+  return <CustomList orientation="vertical">{getListItems(mergeGoods)}</CustomList>;
 };

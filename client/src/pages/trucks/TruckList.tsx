@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import CostumList from '../../components/ui/CostumList';
+import CustomList from '../../components/ui/CostumList';
 import TruckListItem from './TruckListItem';
 import { Truck } from '../../models';
 import { ITruck } from '../../interfaces';
@@ -23,5 +23,5 @@ export default function TruckList() {
 
   const getListItems = (trucks: ITruck[]) => trucks.map((truck) => <TruckListItem truck={truck} />);
 
-  return <CostumList orientation="vertical">{getListItems(mergeTrucks)}</CostumList>;
+  return <CustomList orientation="vertical">{getListItems(mergeTrucks)}</CustomList>;
 }
