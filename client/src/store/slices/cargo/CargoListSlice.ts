@@ -11,7 +11,18 @@ interface ICargoListState {
 }
 
 const initialState: ICargoListState = {
-  selectedCargo: Cargo.AsInitializeDefault(),
+  selectedCargo: { 
+    id:0,
+    truckId:null,
+    orderId:0,
+    name:'',
+    width:0,
+    length:0,
+    weight:0,
+    quantity:0,
+    isStackable:false,
+    height:0 ,
+  },
 };
 
 export const cargoListSlice = createSlice({
