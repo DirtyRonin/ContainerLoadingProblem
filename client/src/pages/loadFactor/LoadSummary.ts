@@ -1,7 +1,5 @@
 import { ICargo, IContainer, IStacking } from '../../interfaces';
-import { ILoadSummary } from '../../interfaces/ILoadSummary';
-import { Cargo, Container } from '../../models';
-import { Stacking } from '../../utils/mathHelper';
+import { ILoadSummary,initializeLoadSummary } from '../../interfaces/ILoadSummary';
 
 /** Contains Data for comparing Loads with each oter */
 export class LoadSummary implements ILoadSummary {
@@ -31,5 +29,5 @@ export class LoadSummary implements ILoadSummary {
   ) {}
 
   public static BuildInvalidLoadSummary = () =>
-    new LoadSummary(Cargo.AsInitializeDefault(), Container.AsInitializeDefault, Stacking.AsInitializeDefault, 0, 0, 0, 0, 0, 0, 0, false);
+  initializeLoadSummary();
 }

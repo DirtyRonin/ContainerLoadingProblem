@@ -3,26 +3,14 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../store';
 import { DeleteCargo } from './CargoSlice';
-import { ICargo } from '../../../interfaces';
-import { Cargo } from '../../../models';
+import { ICargo,initializeCargo } from '../../../interfaces';
 
 interface ICargoListState {
   selectedCargo: ICargo;
 }
 
 const initialState: ICargoListState = {
-  selectedCargo: { 
-    id:0,
-    truckId:null,
-    orderId:0,
-    name:'',
-    width:0,
-    length:0,
-    weight:0,
-    quantity:0,
-    isStackable:false,
-    height:0 ,
-  },
+  selectedCargo: initializeCargo()
 };
 
 export const cargoListSlice = createSlice({

@@ -13,12 +13,16 @@ interface Props {
 export default function DashboardTruckListItem(props: Props) {
   const { truck } = props;
 
-  return (
-    <ListItem dense={true}>
-      <ListItemIcon>
-        <TruckIcon />
-      </ListItemIcon>
-      <ListItemText primary={truck.vehicleIdentifier} secondary={`#${truck.vehicleIdentifier}-${truck.id}`} />
-    </ListItem>
+  return props !== undefined ? (
+    <React.Fragment key={`dashboardListItem-truckId-${truck.id}`}>
+      <ListItem dense={true}>
+        <ListItemIcon>
+          <TruckIcon />
+        </ListItemIcon>
+        <ListItemText primary={truck.vehicleIdentifier} secondary={`#${truck.vehicleIdentifier}-${truck.id}`} />
+      </ListItem>
+    </React.Fragment>
+  ) : (
+    <></>
   );
 }

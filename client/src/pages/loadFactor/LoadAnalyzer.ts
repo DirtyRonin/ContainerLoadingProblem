@@ -84,8 +84,8 @@ export class LoadAnalyzer implements ILoadAnalyzer {
 
     // config https://www.goodloading.com/de/blog/beladung/wie-plane-ich-die-palettenplatzierung-im-fahrzeug/
 
-    const result = new LoadSummary(
-      cloneDeep(cargo),
+    const result:ILoadSummary = {
+      cargo:cloneDeep(cargo),
       container,
       stacking,
       goodsPerRow,
@@ -95,8 +95,21 @@ export class LoadAnalyzer implements ILoadAnalyzer {
       loadingMeter,
       loadingMeterBase,
       remainingGoods,
-      true
-    );
+      isValid:true
+    };
+    // const result = new LoadSummary(
+    //   cloneDeep(cargo),
+    //   container,
+    //   stacking,
+    //   goodsPerRow,
+    //   goodsPerFullStackedRow,
+    //   fullStackedRows,
+    //   fullStackedGoods,
+    //   loadingMeter,
+    //   loadingMeterBase,
+    //   remainingGoods,
+    //   true
+    // );
 
     return result;
   };

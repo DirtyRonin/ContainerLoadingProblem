@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,14 +8,13 @@ import { IOrder } from '../../../interfaces';
 import { AddOrderId, RemoveOrderId, SelectOrderMultiSelectState } from '../../../store/slices/order/OrderMultiSelectSlice';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import ListItem from '@mui/material/ListItem';
-import { useEffectOnce } from '../../../hooks/useEffectOnce';
 import { Checkbox } from '@mui/material';
 
 interface Props {
   order: IOrder;
 }
 
-export default function OrderSliderItem  (props: Props) {
+export default function OrderSliderItem(props: Props) {
   const { order } = props;
 
   const dispatch = useAppDispatch();
@@ -23,9 +22,9 @@ export default function OrderSliderItem  (props: Props) {
 
   const [isChecked, setChecked] = useState(false);
 
-  useEffectOnce(() => {
+  useEffect(() => {
     setChecked(isOrderChecked());
-  });
+  }, []);
 
   const isOrderChecked = () => (selectedOrderIds.find((x) => x === order.id) ? true : false);
 
@@ -44,7 +43,7 @@ export default function OrderSliderItem  (props: Props) {
         <ListItemIcon>
           <NextPlanIcon />
         </ListItemIcon>
-        <ListItemText primary={order.orderName}  />
+        <ListItemText primary={order.orderName} />
         <ListItemIcon>
           <Checkbox
             edge="end"
@@ -59,4 +58,4 @@ export default function OrderSliderItem  (props: Props) {
       </ListItemButton>
     </ListItem>
   );
-};
+}

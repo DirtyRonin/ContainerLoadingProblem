@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import TruckIcon from '@mui/icons-material/LocalShipping';
 import { ListItemButton, ListItem, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
 
 import { useAppDispatch, useAppSelector, SelectTruckMultiSelectState, RemoveTruckId, AddTruckId } from '../../../store';
 import { ITruck } from '../../../interfaces/';
-import { useEffectOnce } from '../../../hooks/useEffectOnce';
 
 interface Props {
   truck: ITruck;
@@ -19,9 +18,9 @@ export default function TruckSliderListItem(props: Props) {
 
   const [isChecked, setChecked] = useState(false);
 
-  useEffectOnce(() => {
+  useEffect(() => {
     setChecked(isTruckChecked());
-  });
+  }, []);
 
   const isTruckChecked = () => (selectedTruckIds.find((x) => x === truck.id) ? true : false);
 

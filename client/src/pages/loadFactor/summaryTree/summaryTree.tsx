@@ -5,7 +5,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
 
 import { SelectOrderState } from '../../../store/slices/order/OrderSlice';
-import { SelectTruckState,FilterTrucksByIds } from '../../../store/slices/truck/TruckSlice';
+import { SelectTruckState, FilterTrucksByIds } from '../../../store/slices/truck/TruckSlice';
 import { FetchAllCargo, SelectCargoState, FetchCargoByOrderIds } from '../../../store/slices/cargo/CargoSlice';
 import { SelectTruckMultiSelectState } from '../../../store/slices/truck/TruckMultiSelectSlice';
 import { SelectOrderMultiSelectState } from '../../../store/slices/order/OrderMultiSelectSlice';
@@ -13,7 +13,6 @@ import { SelectSummaryState, SetSummaries } from '../../../store/slices/summaryT
 
 import { ICargo, ILoadSummary, IOrder, ITruck } from '../../../interfaces';
 import { useAppSelector, useAppDispatch } from '../../../store/hooks';
-import { useEffectOnce } from '../../../hooks/useEffectOnce';
 import { ContainerHelper } from '../../../utils/mathHelper';
 import { LoadAnalyzer } from '../LoadAnalyzer';
 
@@ -37,17 +36,15 @@ export default function OrderSummaryItem() {
 
   /** Set for Checked Cargo */
 
-  useEffectOnce(() => {
+  useEffect(() => {
     if (loading !== 'idle') return;
 
     dispatch(FetchAllCargo());
-  });
+  }, []);
 
   // useEffect(()=>{
   //   dispatch(FetchCargoByOrderIds(selectedOrderIds));
   // },[selectedOrderIds,dispatch])
-
-
 
   useEffect(() => {
     const myTrucks = getTrucksByTruckIds();
@@ -89,31 +86,25 @@ export default function OrderSummaryItem() {
     }, [] as ICargo[]);
 
   const getOrderTreeItems = () =>
-  selectedOrders.map((order) => (
+    selectedOrders.map((order) => (
       <TreeItem nodeId={`#${order.orderName}-${order.id}`} label={`#${order.orderName}-${order.id}`}>
         {getCargoTreeItems(order.id)}
       </TreeItem>
     ));
 
   const getCargoTreeItems = (orderId: number) =>
-  cargos
+    cargos
       .filter((x) => x.orderId === orderId)
       .map((cargo) => (
         <TreeItem nodeId={`#${cargo.name}-${cargo.id}`} label={`#${cargo.name}-${cargo.id}`}>
-          <TreeItem
-            nodeId={`#${cargo.name}-sizes-${cargo.id}`}
-            label={`${cargo.length}l * ${cargo.width}w * ${cargo.height}h`}
-          ></TreeItem>
+          <TreeItem nodeId={`#${cargo.name}-sizes-${cargo.id}`} label={`${cargo.length}l * ${cargo.width}w * ${cargo.height}h`}></TreeItem>
           <TreeItem nodeId={`#${cargo.name}-quantity-${cargo.id}`} label={`${cargo.quantity} X`}></TreeItem>
-          <TreeItem
-            nodeId={`#${cargo.name}-isStackable-${cargo.id}`}
-            label={`Stackable: ${cargo.isStackable ? 'Yes' : 'No'}`}
-          ></TreeItem>
+          <TreeItem nodeId={`#${cargo.name}-isStackable-${cargo.id}`} label={`Stackable: ${cargo.isStackable ? 'Yes' : 'No'}`}></TreeItem>
         </TreeItem>
       ));
 
   const getTruckTreeItems = () =>
-  selectedTrucks.map((truck) => (
+    selectedTrucks.map((truck) => (
       <TreeItem
         nodeId={`#${truck.vehicleIdentifier}-${truck.id}`}
         label={`#${truck.vehicleIdentifier}-${truck.id} ${remainingSpaceMessage(truck)}`}
@@ -147,7 +138,9 @@ export default function OrderSummaryItem() {
   };
 
   const getCargoTreeItemsCheckable = (truckId: number, orderId: number) =>
-    cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId}/>);
+    cargos
+      .filter((x) => x.orderId === orderId)
+      .map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId} />);
 
   // LoadingCargoTreeItem
 

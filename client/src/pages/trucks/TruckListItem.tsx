@@ -31,6 +31,7 @@ export default function TruckListItem(props: Props) {
 
   return (
     <ListItem
+      key={`truckId-${truck.id}`}
       dense={true}
       secondaryAction={
         <IconButton edge="end" aria-label="delete" onClick={handleOnDelete}>
