@@ -3,8 +3,10 @@ import React, { useState, useEffect } from 'react';
 import TruckIcon from '@mui/icons-material/LocalShipping';
 import { ListItemButton, ListItem, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
 
-import { useAppDispatch, useAppSelector, SelectTruckMultiSelectState, RemoveTruckId, AddTruckId } from '../../../store';
+import { useAppDispatch } from '../../../store';
 import { ITruck } from '../../../interfaces/';
+
+import useTruck from '../contexts/TruckContext';
 
 interface Props {
   truck: ITruck;
@@ -13,8 +15,10 @@ interface Props {
 export default function TruckSliderListItem(props: Props) {
   const { truck } = props;
 
+  const { selectedTruckIds, addSelectedTruckId, removeSelectedTruckId } = useTruck();
+
   const dispatch = useAppDispatch();
-  const { selectedTruckIds } = useAppSelector(SelectTruckMultiSelectState);
+  // const { selectedTruckIds } = useAppSelector(SelectTruckMultiSelectState);
 
   const [isChecked, setChecked] = useState(false);
 
@@ -26,12 +30,14 @@ export default function TruckSliderListItem(props: Props) {
 
   const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isChecked) {
-      dispatch(RemoveTruckId(truck.id));
+      // dispatch(RemoveTruckId(truck.id));
+      removeSelectedTruckId(truck.id);
     } else {
-      dispatch(AddTruckId(truck.id));
+      addSelectedTruckId(truck.id);
+      // dispatch(AddTruckId(truck.id));
     }
+    console.log(selectedTruckIds,truck.id)
     setChecked(!isChecked);
-    console.log(selectedTruckIds);
   };
 
   return (

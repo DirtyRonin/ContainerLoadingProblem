@@ -11,9 +11,9 @@ export class LoadAnalyzer implements ILoadAnalyzer {
 
     const sortedContainers = [...containers].sort((a, b) => this._containerHelper.CompareByVolume(a, b));
 
-    const sortedCargosDic = this._containerHelper.SortCargos([...cargos]);
+    // const sortedCargosDic = this._containerHelper.SortCargos([...cargos]);
 
-    const loading = {};
+    // const loading = {};
 
     for (let i = 0; i < sortedContainers.length; i++)
       for (let y = 0; y < cargos.length; y++) {

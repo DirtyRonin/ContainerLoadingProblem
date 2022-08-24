@@ -29,7 +29,7 @@ export default function LoadingCargoTreeItems(props: IProps) {
     const cargo = cargos.find((x) => x.id === cargoId);
     if (cargo) setCargo(cargo);
 
-    const selectedSummary = loadSummaries[truckId]?.find((x) => x.cargo.id === cargoId);
+    const selectedSummary = loadSummaries.find((x) => x.key === truckId)?.values.find((x) => x.cargo.id === cargoId);
     if (selectedSummary) setSummary(selectedSummary);
   }, [cargos, loadSummaries]);
 
