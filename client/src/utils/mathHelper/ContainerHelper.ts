@@ -77,7 +77,7 @@ export class ContainerHelper implements IContainerHelper {
     const stackingFactor = Math.floor(containerHeight / height);
     const remainingHeight = containerHeight - stackingFactor * height;
 
-    return new Stacking(stackingFactor, remainingHeight);
+    return {stackingFactor, remainingHeight};
   };
 
   public IsFitting = (container: IContainer, cargo: ICargo): boolean => {

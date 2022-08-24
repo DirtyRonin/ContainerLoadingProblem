@@ -105,10 +105,7 @@ export default function OrderSummaryItem() {
 
   const getTruckTreeItems = () =>
     selectedTrucks.map((truck) => (
-      <TreeItem
-        nodeId={`#${truck.vehicleIdentifier}-${truck.id}`}
-        label={`#${truck.vehicleIdentifier}-${truck.id} ${remainingSpaceMessage(truck)}`}
-      >
+      <TreeItem nodeId={`#${truck.vehicleIdentifier}-${truck.id}`} label={`#${truck.vehicleIdentifier}-${truck.id} ${remainingSpaceMessage(truck)}`}>
         {selectedOrderIds.map((orderId) => getCargoTreeItemsCheckable(truck.id, orderId))}
       </TreeItem>
     ));
@@ -120,12 +117,14 @@ export default function OrderSummaryItem() {
 
     if (relatedCargoIds.length === 0) return message(truck.length);
 
-    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries[truck.id]?.filter((x) => x.cargo.id);
+    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries.find((x) => x.key === truck.id)?.values.filter((x) => x.cargo.id);
+    // const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries[truck.id]?.filter((x) => x.cargo.id);
 
     if (relatedSelectedSummaries === undefined || relatedSelectedSummaries.length === 0) return message(truck.length);
 
     const remainingLoadingMeter = relatedCargoIds.reduce((prev, current) => {
-      const relatedSummary = loadSummaries[truck.id]?.find((x) => x.cargo.id === current)?.loadingMeter;
+      const relatedSummary = loadSummaries.find((x) => x.key === truck.id)?.values.find((x) => x.cargo.id === current)?.loadingMeter;
+      // const relatedSummary = loadSummaries[truck.id]?.find((x) => x.cargo.id === current)?.loadingMeter;
       if (!relatedSummary) return -1;
 
       prev -= relatedSummary;
@@ -138,9 +137,7 @@ export default function OrderSummaryItem() {
   };
 
   const getCargoTreeItemsCheckable = (truckId: number, orderId: number) =>
-    cargos
-      .filter((x) => x.orderId === orderId)
-      .map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId} />);
+    cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId} />);
 
   // LoadingCargoTreeItem
 

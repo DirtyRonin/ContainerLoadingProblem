@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { ICargo, ITruck, IContainer, IContainerHelper, ILoadAnalyzer, ILoadSummary } from '../../interfaces';
+import { KeyValueLoadSummary } from '../../models';
 import { LoadSummary } from './LoadSummary';
 
 export class LoadAnalyzer implements ILoadAnalyzer {
@@ -22,19 +23,20 @@ export class LoadAnalyzer implements ILoadAnalyzer {
     return loadSummaries;
   };
 
-  public AnalyzeLoadingForSummaries = async (cargos: ICargo[], containers: ITruck[]): Promise<{ [key: number]: ILoadSummary[] }> => {
-    const loadSummaries: { [key: number]: ILoadSummary[] } = {};
+  public AnalyzeLoadingForSummaries = async (cargos: ICargo[], containers: ITruck[]): Promise<KeyValueLoadSummary[]> => {
+    const loadSummaries: KeyValueLoadSummary[]= [];
 
     const sortedContainers = [...containers].sort((a, b) => this._containerHelper.CompareByVolume(a, b));
 
     // const sortedCargosDic =  this._containerHelper.SortCargos([...cargos])
 
     for (let i = 0; i < sortedContainers.length; i++) {
-      loadSummaries[sortedContainers[i].id] = [];
+      const newEntry:KeyValueLoadSummary = {key:sortedContainers[i].id,values:[]}
 
       for (let y = 0; y < cargos.length; y++) {
-        loadSummaries[sortedContainers[i].id].push(await this.AnalyseSingleLoad(cargos[y], sortedContainers[i]));
+        newEntry.values.push(await this.AnalyseSingleLoad(cargos[y], sortedContainers[i]));
       }
+      loadSummaries.push(newEntry)
     }
 
     return loadSummaries;
@@ -97,20 +99,7 @@ export class LoadAnalyzer implements ILoadAnalyzer {
       remainingGoods,
       isValid:true
     };
-    // const result = new LoadSummary(
-    //   cloneDeep(cargo),
-    //   container,
-    //   stacking,
-    //   goodsPerRow,
-    //   goodsPerFullStackedRow,
-    //   fullStackedRows,
-    //   fullStackedGoods,
-    //   loadingMeter,
-    //   loadingMeterBase,
-    //   remainingGoods,
-    //   true
-    // );
-
+    
     return result;
   };
 

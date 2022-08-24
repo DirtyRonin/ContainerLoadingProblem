@@ -2,24 +2,24 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../store';
-import { SummaryDictionary } from '../../../models';
+import { KeyValueLoadSummary, SummaryDictionary } from '../../../models';
 
 // Define a type for the slice state
 interface SummaryState {
-  loadSummaries: SummaryDictionary;
+  loadSummaries: KeyValueLoadSummary[];
   selectedloadSummaries: { cargoId: number; truckId: number; orderId: number }[];
 }
 
 // Define the initial state using that type
 const initialState: SummaryState = {
-  loadSummaries: {},
+  loadSummaries: [],
   selectedloadSummaries: [],
 };
 export const summarySlice = createSlice({
   name: 'summaryTree',
   initialState,
   reducers: {
-    SetSummaries: (state, action: PayloadAction<SummaryDictionary>) => {
+    SetSummaries: (state, action: PayloadAction<KeyValueLoadSummary[]>) => {
       state.loadSummaries = action.payload;
     },
     AddSelectedSummary: (state, action: PayloadAction<{ cargoId: number; truckId: number; orderId: number }>) => {
