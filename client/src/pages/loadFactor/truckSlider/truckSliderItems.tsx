@@ -3,11 +3,8 @@ import React, { useState, useEffect } from 'react';
 import TruckIcon from '@mui/icons-material/LocalShipping';
 import { ListItemButton, ListItem, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
 
-import { useAppDispatch } from '../../../store';
 import { ITruck } from '../../../interfaces/';
-
-import useTruck from '../contexts/TruckContext';
-
+import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
 interface Props {
   truck: ITruck;
 }
@@ -15,10 +12,7 @@ interface Props {
 export default function TruckSliderListItem(props: Props) {
   const { truck } = props;
 
-  const { selectedTruckIds, addSelectedTruckId, removeSelectedTruckId } = useTruck();
-
-  const dispatch = useAppDispatch();
-  // const { selectedTruckIds } = useAppSelector(SelectTruckMultiSelectState);
+  const { selectedTruckIds, removeTruckId, addTruckId } = loadAnalyzerContext();
 
   const [isChecked, setChecked] = useState(false);
 
@@ -30,13 +24,11 @@ export default function TruckSliderListItem(props: Props) {
 
   const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isChecked) {
-      // dispatch(RemoveTruckId(truck.id));
-      removeSelectedTruckId(truck.id);
+      removeTruckId(truck.id);
     } else {
-      addSelectedTruckId(truck.id);
-      // dispatch(AddTruckId(truck.id));
+      addTruckId(truck.id);
     }
-    console.log(selectedTruckIds,truck.id)
+    console.log(selectedTruckIds, truck.id);
     setChecked(!isChecked);
   };
 
@@ -48,15 +40,7 @@ export default function TruckSliderListItem(props: Props) {
         </ListItemIcon>
         <ListItemText primary={truck.vehicleIdentifier} secondary={`#${truck.vehicleIdentifier}-${truck.id}`} />
         <ListItemIcon>
-          <Checkbox
-            edge="end"
-            // checked={checked.indexOf(value) !== -1}
-            tabIndex={-1}
-            disableRipple
-            inputProps={{ 'aria-labelledby': 'labelId' }}
-            // onChange={handleOnChange}
-            checked={isChecked}
-          />
+          <Checkbox edge="end" tabIndex={-1} disableRipple inputProps={{ 'aria-labelledby': 'labelId' }} checked={isChecked} />
         </ListItemIcon>
       </ListItemButton>
     </ListItem>

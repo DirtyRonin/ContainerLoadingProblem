@@ -3,13 +3,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import NextPlanIcon from '@mui/icons-material/NextPlan';
-
-import { IOrder } from '../../../interfaces';
-import { AddOrderId, RemoveOrderId, SelectOrderMultiSelectState } from '../../../store/slices/order/OrderMultiSelectSlice';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import ListItem from '@mui/material/ListItem';
 import { Checkbox } from '@mui/material';
 
+import { IOrder } from '../../../interfaces';
+import loadAnalyzerContext,{} from '../contexts/LoadAnalyzerContext'
 interface Props {
   order: IOrder;
 }
@@ -17,8 +15,7 @@ interface Props {
 export default function OrderSliderItem(props: Props) {
   const { order } = props;
 
-  const dispatch = useAppDispatch();
-  const { selectedOrderIds } = useAppSelector(SelectOrderMultiSelectState);
+  const {selectedOrderIds,removeOrderId,addOrderId} = loadAnalyzerContext()
 
   const [isChecked, setChecked] = useState(false);
 
@@ -30,10 +27,11 @@ export default function OrderSliderItem(props: Props) {
 
   const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isChecked) {
-      dispatch(RemoveOrderId(order.id));
+      removeOrderId(order.id);
     } else {
-      dispatch(AddOrderId(order.id));
+      addOrderId(order.id);
     }
+    
     setChecked(!isChecked);
   };
 

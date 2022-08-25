@@ -40,6 +40,7 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|gif|ico)$/,
+        exclude: /node_modules/,
         use: ["file-loader?name=[name].[ext]"],
       },
       {
@@ -54,8 +55,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Container Loading Client",
       template: "./public/index.html",
-      filename: "index.html",
+      filename: "./index.html",
       favicon: "./public/favicon.ico",
+      manifest: "./public/manifest.json",
       hash: true, // This is useful for cache busting,
     }),
     new webpack.HotModuleReplacementPlugin(),

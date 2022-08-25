@@ -4,12 +4,12 @@ import { Grid } from '@mui/material';
 import TruckSlider from './truckSlider/truckSlider';
 import OrderSlider from './orderSlider/OrderSlider';
 import OrderSummary from './summaryTree/summaryTree';
-import { TruckProvider } from './contexts/TruckContext';
+import { LoadAnalyzerProvider } from './contexts/LoadAnalyzerContext';
 
 export default function LoadAnalysis() {
   return (
     <>
-      <TruckProvider>
+      <LoadAnalyzerProvider>
         <Grid container>
           <Grid container md={7}>
             <Grid item md={12}>
@@ -29,7 +29,7 @@ export default function LoadAnalysis() {
             </Grid>
           </Grid>
         </Grid>
-      </TruckProvider>
+      </LoadAnalyzerProvider>
     </>
   );
 }

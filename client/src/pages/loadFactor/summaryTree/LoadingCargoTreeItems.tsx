@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { TreeItem } from '@mui/lab';
 import { Checkbox, Typography } from '@mui/material';
 
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+// import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 
-import { SelectCargoState } from '../../../store/slices/cargo/CargoSlice';
-import { SelectSummaryState, AddSelectedSummary, RemoveSelectedSummary } from '../../../store/slices/summaryTree/summaryTreeSlice';
+// import { SelectCargoState } from '../../../store/slices/cargo/CargoSlice';
+// import { SelectSummaryState, AddSelectedSummary, RemoveSelectedSummary } from '../../../store/slices/summaryTree/summaryTreeSlice';
 
 import { ICargo, ILoadSummary } from '../../../interfaces';
 import { Cargo } from '../../../models';
 
+import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
 interface IProps {
   truckId: number;
   cargoId: number;
@@ -18,32 +19,35 @@ interface IProps {
 
 export default function LoadingCargoTreeItems(props: IProps) {
   const { truckId, cargoId, orderId } = props;
-  const dispatch = useAppDispatch();
-  const { cargos } = useAppSelector(SelectCargoState);
-  const { selectedloadSummaries, loadSummaries } = useAppSelector(SelectSummaryState);
+
+  const { selectedLoadSummaryIds, loadSummaries, addSelectedLoadSummaryIds, removeSelectedLoadSummaryIds } = loadAnalyzerContext();
+
+  // const dispatch = useAppDispatch();
+  // const { cargos } = useAppSelector(SelectCargoState);
+  // const { selectedloadSummaries, loadSummaries } = useAppSelector(SelectSummaryState);
 
   const [thisCargo, setCargo] = useState<ICargo>(Cargo.AsInitializeDefault());
   const [thisSummary, setSummary] = useState<ILoadSummary>({} as ILoadSummary);
 
   useEffect(() => {
-    const cargo = cargos.find((x) => x.id === cargoId);
-    if (cargo) setCargo(cargo);
+    // const cargo = cargos.find((x) => x.id === cargoId);
+    // if (cargo) setCargo(cargo);
 
     const selectedSummary = loadSummaries.find((x) => x.key === truckId)?.values.find((x) => x.cargo.id === cargoId);
     if (selectedSummary) setSummary(selectedSummary);
-  }, [cargos, loadSummaries]);
+  }, [loadSummaries]);
 
   const onCargoCheckedChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     if (checked) {
-      dispatch(AddSelectedSummary({ truckId, cargoId, orderId }));
+      addSelectedLoadSummaryIds({ truckId, cargoId, orderId });
       return;
     }
 
-    dispatch(RemoveSelectedSummary({ truckId, cargoId, orderId }));
+    removeSelectedLoadSummaryIds({ truckId, cargoId, orderId });
   };
 
   const isChecked = () => {
-    return selectedloadSummaries.find((x) => x.cargoId === cargoId && x.truckId === truckId) ? true : false;
+    return selectedLoadSummaryIds.find((x) => x.cargoId === cargoId && x.truckId === truckId) ? true : false;
   };
 
   const treeLabel = () => {

@@ -12,7 +12,7 @@ interface TruckState {
 }
 
 // Define the initial state using that type
-const initialState: TruckState = {
+export const initialState: TruckState = {
   trucks: [],
   loading: 'idle',
 };

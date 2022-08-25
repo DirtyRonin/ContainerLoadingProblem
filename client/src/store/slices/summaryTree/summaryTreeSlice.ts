@@ -6,12 +6,16 @@ import { KeyValueLoadSummary, SummaryDictionary } from '../../../models';
 
 // Define a type for the slice state
 interface SummaryState {
-  loadSummaries: KeyValueLoadSummary[];
-  selectedloadSummaries: { cargoId: number; truckId: number; orderId: number }[];
+  readonly selectedTruckIds: number[];
+  readonly selectedOrderIds: number[];
+  readonly loadSummaries: KeyValueLoadSummary[];
+  readonly selectedloadSummaries: { cargoId: number; truckId: number; orderId: number }[];
 }
 
 // Define the initial state using that type
 const initialState: SummaryState = {
+  selectedTruckIds: [],
+  selectedOrderIds: [],
   loadSummaries: [],
   selectedloadSummaries: [],
 };
@@ -26,15 +30,38 @@ export const summarySlice = createSlice({
       state.selectedloadSummaries.push(action.payload);
     },
     RemoveSelectedSummary: (state, action: PayloadAction<{ cargoId: number; truckId: number; orderId: number }>) => {
-      const index = state.selectedloadSummaries.findIndex(
-        (x) => x.cargoId === action.payload.cargoId && x.truckId === action.payload.truckId
-      );
+      const index = state.selectedloadSummaries.findIndex((x) => x.cargoId === action.payload.cargoId && x.truckId === action.payload.truckId);
       state.selectedloadSummaries.splice(index, 1);
+    },
+    AddTruckId: (state, action: PayloadAction<number>) => {
+      console.log(`Add selected truck id ${action.payload}`);
+      state.selectedTruckIds.push(action.payload);
+    },
+    RemoveTruckId: (state, action: PayloadAction<number>) => {
+      console.log(`Remove selected truck id ${action.payload}`);
+      const index = state.selectedTruckIds.indexOf(action.payload);
+      state.selectedTruckIds.splice(index, 1);
+    },
+    ClearTruckIds: (state) => {
+      state.selectedTruckIds = [];
+    },
+    AddOrderId: (state, action: PayloadAction<number>) => {
+      console.log(`Add selected order id ${action.payload}`);
+      state.selectedOrderIds.push(action.payload);
+    },
+    RemoveOrderId: (state, action: PayloadAction<number>) => {
+      console.log(`Remove selected order id ${action.payload}`);
+      const index = state.selectedOrderIds.indexOf(action.payload);
+      state.selectedOrderIds.splice(index, 1);
+    },
+    ClearOrderIds: (state) => {
+      state.selectedOrderIds = [];
     },
   },
 });
 
-export const { AddSelectedSummary, RemoveSelectedSummary, SetSummaries } = summarySlice.actions;
+export const { AddSelectedSummary, RemoveSelectedSummary, SetSummaries, AddTruckId, RemoveTruckId, ClearTruckIds, AddOrderId, RemoveOrderId, ClearOrderIds } =
+  summarySlice.actions;
 
 export const SelectSummaryState = (state: RootState) => state.summaryGlobal;
 

@@ -1,11 +1,17 @@
 import { ImmerReducer } from 'immer-reducer';
+import { ITruck } from '../../../interfaces';
+import { AsyncStatus } from '../../../models';
 
 export type stateProps = {
   readonly selectedTruckIds: number[];
+  readonly trucks: ITruck[];
+  readonly loading: AsyncStatus;
 }
 
 export const INITIAL_STATE: stateProps = {
   selectedTruckIds: [],
+  trucks: [],
+  loading: 'idle',
 };
 
 class TruckReducer extends ImmerReducer<stateProps> {
@@ -22,27 +28,23 @@ class TruckReducer extends ImmerReducer<stateProps> {
 
     this.draftState.selectedTruckIds.splice(index, 1);
   }
+
+  fetchAllTrucks_Pending(){
+    console.log(`Set fetch all trucks loading to pending`);
+    this.draftState.loading = 'pending'
+  }
+  fetchAllTrucks_Failed(){
+    console.log(`Set fetch all trucks loading to rejected`);
+    this.draftState.loading = 'failed'
+  }
+  fetchAllTrucks_Success(trucks:ITruck[]){
+    console.log(`Set fetch all trucks loading to succeeded`);
+    this.draftState.trucks= trucks
+    this.draftState.loading = 'succeeded'
+  }
+
+
+
 }
 
-
-
-// const truckReducer = (state: state, action: truckActions) => {
-//   produce(state, (draft) => {
-//     switch (action.type) {
-//       case 'AddTruck_Id':
-//         console.log(action);
-//         draft.selectedTruckIds.push(action.payload);
-//         break;
-//       case 'RemoveTruck_Id':
-//         console.log(action);
-//         const index = draft.selectedTruckIds.findIndex((x) => x === action.payload);
-//         if (index !== -1) draft.selectedTruckIds.splice(index, 1);
-//         break;
-//       default:
-//         return state;
-//       // throw new Error(`No action for ${(action as truckActions).type}`);
-//     }
-//   });
-// };
-
-export default TruckReducer;
+export default TruckReducer

@@ -1,99 +1,117 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
+import { createActionCreators, createReducerFunction } from 'immer-reducer';
+
 import TreeView from '@mui/lab/TreeView';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
 
-import { SelectOrderState } from '../../../store/slices/order/OrderSlice';
-import { SelectTruckState, FilterTrucksByIds } from '../../../store/slices/truck/TruckSlice';
-import { FetchAllCargo, SelectCargoState, FetchCargoByOrderIds } from '../../../store/slices/cargo/CargoSlice';
-import { SelectTruckMultiSelectState } from '../../../store/slices/truck/TruckMultiSelectSlice';
-import { SelectOrderMultiSelectState } from '../../../store/slices/order/OrderMultiSelectSlice';
-import { SelectSummaryState, SetSummaries } from '../../../store/slices/summaryTree/summaryTreeSlice';
-
-import { ICargo, ILoadSummary, IOrder, ITruck } from '../../../interfaces';
-import { useAppSelector, useAppDispatch } from '../../../store/hooks';
+import { ILoadSummary, ITruck } from '../../../interfaces';
 import { ContainerHelper } from '../../../utils/mathHelper';
 import { LoadAnalyzer } from '../LoadAnalyzer';
 
 import LoadingCargoTreeItem from './LoadingCargoTreeItems';
 
+import summaryTreeReducer, { INITIAL_STATE } from './summaryTreeReducer';
+
+import { CargoApi } from '../../../apis/cargoApi';
+import { TruckApi } from '../../../apis/trucksApi';
+
+import loadAnalyzerContext,{} from '../contexts/LoadAnalyzerContext'
+
 export default function OrderSummaryItem() {
-  const dispatch = useAppDispatch();
-  const { cargos, loading } = useAppSelector(SelectCargoState);
-  const { trucks } = useAppSelector(SelectTruckState);
-  const { orders } = useAppSelector(SelectOrderState);
-  const { selectedTruckIds } = useAppSelector(SelectTruckMultiSelectState);
-  const { selectedOrderIds } = useAppSelector(SelectOrderMultiSelectState);
-  const { loadSummaries, selectedloadSummaries } = useAppSelector(SelectSummaryState);
+  
+  const {selectedOrderIds,selectedTruckIds,selectedLoadSummaryIds,fetchAllLoadSummaries_Failed,fetchAllLoadSummaries_Pending,fetchAllLoadSummaries_Success,loadSummaries} = loadAnalyzerContext()
+  
+  const reducerFunction = createReducerFunction(summaryTreeReducer);
+  const ActionCreators = createActionCreators(summaryTreeReducer);
+
+
+  const [state, dispatch] = useReducer(reducerFunction, INITIAL_STATE);
+
+  // const { loadSummaries, selectedloadSummaries, selectedOrderIds, selectedTruckIds } = useAppSelector(SelectSummaryState);
 
   const containerHelper = new ContainerHelper();
   const loadAnalyzer = new LoadAnalyzer(containerHelper);
 
-  const [selectedCargos, setSelectedCargos] = useState<ICargo[]>([]);
-  const [selectedTrucks, setSelectedTrucks] = useState<ITruck[]>([]);
-  const [selectedOrders, setSelectedOrders] = useState<IOrder[]>([]);
+  useEffect(() => {
+    dispatch(ActionCreators.fetchAllCargos_Pending());
 
-  /** Set for Checked Cargo */
+    CargoApi.FilterCargoByOrderIds(selectedOrderIds)
+      .then((result) => dispatch(ActionCreators.fetchAllCargos_Success(result)))
+      .catch((e) => dispatch(ActionCreators.fetchAllCargos_Failed()));
+  }, [selectedOrderIds]);
 
   useEffect(() => {
-    if (loading !== 'idle') return;
+    dispatch(ActionCreators.fetchAllTrucks_Pending());
 
-    dispatch(FetchAllCargo());
-  }, []);
-
-  // useEffect(()=>{
-  //   dispatch(FetchCargoByOrderIds(selectedOrderIds));
-  // },[selectedOrderIds,dispatch])
+    TruckApi.FilterTruckByIds(selectedTruckIds)
+      .then((result) => dispatch(ActionCreators.fetchAllTrucks_Success(result)))
+      .catch((e) => dispatch(ActionCreators.fetchAllTrucks_Failed()));
+  }, [selectedTruckIds]);
 
   useEffect(() => {
-    const myTrucks = getTrucksByTruckIds();
-    const myOrders = getOrdersByOrderIds();
-    const myCargos = getCargosByOrderIds();
+    if (state.fetchCargoLoading !== 'succeeded') return;
+    if (state.cargos.length < 1) return;
 
-    setSelectedCargos(myCargos);
-    setSelectedTrucks(myTrucks);
-    setSelectedOrders(myOrders);
+    if (state.fetchTruckLoading !== 'succeeded') return;
+    if (state.trucks.length < 1) return;
 
-    if (myTrucks.length > 0 && myCargos.length > 0)
-      loadAnalyzer.AnalyzeLoadingForSummaries(myCargos, myTrucks).then((result) => {
-        dispatch(SetSummaries(result));
-      });
+    fetchAllLoadSummaries_Pending();
+
+    loadAnalyzer
+      .AnalyzeLoadingForSummaries(state.cargos, state.trucks)
+      .then((result) => fetchAllLoadSummaries_Success(result))
+      .catch((e) => fetchAllLoadSummaries_Failed());
+
+  }, [state.fetchCargoLoading, state.fetchTruckLoading]);
+
+  useEffect(() => {
+    // const myTrucks = getTrucksByTruckIds();
+    // const myOrders = getOrdersByOrderIds();
+    // const myCargos = getCargosByOrderIds();
+    // setSelectedCargos(myCargos);
+    // setSelectedTrucks(myTrucks);
+    // setSelectedOrders(myOrders);
+    // if (myTrucks.length > 0 && myCargos.length > 0)
+    //   loadAnalyzer.AnalyzeLoadingForSummaries(myCargos, myTrucks).then((result) => {
+    //     dispatch(SetSummaries(result));
+    //   });
   }, [selectedTruckIds, selectedOrderIds]);
 
-  const getTrucksByTruckIds = () =>
-    selectedTruckIds.reduce((prev, current) => {
-      const truck = trucks.find((x) => x.id === current);
-      if (truck) prev.push(truck);
+  // const getTrucksByTruckIds = () =>
+  //   selectedTruckIds.reduce((prev, current) => {
+  //     const truck = trucks.find((x) => x.id === current);
+  //     if (truck) prev.push(truck);
 
-      return prev;
-    }, [] as ITruck[]);
+  //     return prev;
+  //   }, [] as ITruck[]);
 
-  const getOrdersByOrderIds = () =>
-    selectedOrderIds.reduce((prev, current) => {
-      const order = orders.find((x) => x.id === current);
-      if (order) prev.push(order);
+  // const getOrdersByOrderIds = () =>
+  //   selectedOrderIds.reduce((prev, current) => {
+  //     const order = orders.find((x) => x.id === current);
+  //     if (order) prev.push(order);
 
-      return prev;
-    }, [] as IOrder[]);
+  //     return prev;
+  //   }, [] as IOrder[]);
 
-  const getCargosByOrderIds = () =>
-    selectedOrderIds.reduce((prev, current) => {
-      const cargo = cargos.filter((x) => x.orderId === current);
-      if (cargo) return prev.concat(cargo);
+  // const getCargosByOrderIds = () =>
+  //   selectedOrderIds.reduce((prev, current) => {
+  //     const cargo = cargos.filter((x) => x.orderId === current);
+  //     if (cargo) return prev.concat(cargo);
 
-      return prev;
-    }, [] as ICargo[]);
+  //     return prev;
+  //   }, [] as ICargo[]);
 
   const getOrderTreeItems = () =>
-    selectedOrders.map((order) => (
-      <TreeItem nodeId={`#${order.orderName}-${order.id}`} label={`#${order.orderName}-${order.id}`}>
-        {getCargoTreeItems(order.id)}
+  selectedOrderIds.map((orderId,index) => (
+      <TreeItem nodeId={`#index-${index}.orderId-${orderId}`} label={`#index-${index}.orderId-${orderId}`}>
+        {getCargoTreeItems(orderId)}
       </TreeItem>
     ));
 
   const getCargoTreeItems = (orderId: number) =>
-    cargos
+    state.cargos
       .filter((x) => x.orderId === orderId)
       .map((cargo) => (
         <TreeItem nodeId={`#${cargo.name}-${cargo.id}`} label={`#${cargo.name}-${cargo.id}`}>
@@ -104,7 +122,7 @@ export default function OrderSummaryItem() {
       ));
 
   const getTruckTreeItems = () =>
-    selectedTrucks.map((truck) => (
+    state.trucks.map((truck) => (
       <TreeItem nodeId={`#${truck.vehicleIdentifier}-${truck.id}`} label={`#${truck.vehicleIdentifier}-${truck.id} ${remainingSpaceMessage(truck)}`}>
         {selectedOrderIds.map((orderId) => getCargoTreeItemsCheckable(truck.id, orderId))}
       </TreeItem>
@@ -113,11 +131,11 @@ export default function OrderSummaryItem() {
   const remainingSpaceMessage = (truck: ITruck) => {
     const message = (loadingMeter: number) => `|| Available Loading Meter: ${loadingMeter} cm`;
 
-    const relatedCargoIds = selectedloadSummaries.filter((x) => x.truckId === truck.id).map((x) => x.cargoId);
+    const relatedCargoIds =selectedLoadSummaryIds.filter((x) => x.truckId === truck.id).map((x) => x.cargoId);
 
     if (relatedCargoIds.length === 0) return message(truck.length);
 
-    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries.find((x) => x.key === truck.id)?.values.filter((x) => x.cargo.id);
+    const relatedSelectedSummaries: ILoadSummary[] | undefined =loadSummaries.find((x) => x.key === truck.id)?.values.filter((x) => x.cargo.id);
     // const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries[truck.id]?.filter((x) => x.cargo.id);
 
     if (relatedSelectedSummaries === undefined || relatedSelectedSummaries.length === 0) return message(truck.length);
@@ -137,7 +155,7 @@ export default function OrderSummaryItem() {
   };
 
   const getCargoTreeItemsCheckable = (truckId: number, orderId: number) =>
-    cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId} />);
+    state.cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId} />);
 
   // LoadingCargoTreeItem
 
