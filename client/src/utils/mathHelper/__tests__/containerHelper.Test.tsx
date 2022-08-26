@@ -1,6 +1,6 @@
 import { ContainerHelper } from '../ContainerHelper';
 import { testHelper } from '../../testing/testHelper';
-import { ICargo, IContainer, IArea, IContainerHelper } from '../../../interfaces';
+import { ICargo, IContainer, IArea, IContainerHelper, ILoadSummary, initializeLoadSummary } from '../../../interfaces';
 import { Cargo, Container, Goods } from '../../../models';
 
 describe('Testing Math Helper', () => {
@@ -153,7 +153,7 @@ describe('Testing Math Helper', () => {
       });
 
       it("one piece of oversized height 'oversized_box_l120w120h1700' should be FALSE for a container of type 'Truck_l1360w240h270' .", () => {
-        _cargo =Cargo.WithGoods(0, 0, 0, _testAreas.oversized_area_l120w120h, 1, false, 1700);
+        _cargo = Cargo.WithGoods(0, 0, 0, _testAreas.oversized_area_l120w120h, 1, false, 1700);
 
         const result = _helper.IsFitting(_container, _cargo);
         expect(result).toEqual(false);
@@ -420,6 +420,30 @@ describe('Testing Math Helper', () => {
 
       const result = _helper.CompareByVolume(_containerA, _containerB, _multiplierA, _multiplierB);
       expect(result).toEqual(1);
+    });
+  });
+
+  describe('Testing CompareByLoadingMeter', () => {
+    let _summaryA: ILoadSummary;
+    let _summaryB: ILoadSummary;
+
+    afterAll(() => {
+      _summaryA = initializeLoadSummary();
+      _summaryB = initializeLoadSummary();
+    });
+
+    it('summary B with 60 should be on index 0 in array', () => {
+      const comb = [
+        { ...initializeLoadSummary(), loadingMeter: 50 },
+        { ...initializeLoadSummary(), loadingMeter: 60 },
+        { ...initializeLoadSummary(), loadingMeter: 55 },
+        { ...initializeLoadSummary(), loadingMeter: 55 },
+      ].sort(_helper.CompareByLoadingMeter);
+
+      expect(comb[0].loadingMeter).toEqual(60);
+      expect(comb[1].loadingMeter).toEqual(55);
+      expect(comb[2].loadingMeter).toEqual(55);
+      expect(comb[3].loadingMeter).toEqual(50);
     });
   });
 

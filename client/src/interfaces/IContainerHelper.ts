@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { ICargo, IContainer, IArea, IStacking } from './index';
+import { ICargo, IContainer, IArea, IStacking, ILoadSummary } from './index';
 
 export interface IContainerHelper {
   GetMinimumColumns(goodsPerRow: number, remainingGoods: number): number;
@@ -17,5 +17,6 @@ export interface IContainerHelper {
   CalculateGoodsPerRow(singleGoodsWidth: number, containerWidth: number): number;
 
   CompareByVolume(a: IContainer, b: IContainer, mulitplierA?: number, mulitplierB?: number): number;
+  CompareByLoadingMeter(a: ILoadSummary, b: ILoadSummary): number
   SortCargos(cargos: ICargo[]): _.Dictionary<ICargo[]>;
 }

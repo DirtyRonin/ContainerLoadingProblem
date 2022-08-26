@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { IArea, ICargo, IContainer, IContainerHelper, IStacking } from '../../interfaces/index';
+import { IArea, ICargo, IContainer, IContainerHelper, ILoadSummary, IStacking } from '../../interfaces/index';
 import { Stacking } from './Stacking';
 
 export class ContainerHelper implements IContainerHelper {
@@ -21,6 +21,13 @@ export class ContainerHelper implements IContainerHelper {
 
     if (volumeA < volumeB) return 1;
     if (volumeA > volumeB) return -1;
+
+    return 0;
+  };
+
+  public CompareByLoadingMeter = (a: ILoadSummary, b: ILoadSummary): number => {
+    if (a.loadingMeter < b.loadingMeter) return 1;
+    if (a.loadingMeter > b.loadingMeter) return -1;
 
     return 0;
   };
@@ -77,14 +84,11 @@ export class ContainerHelper implements IContainerHelper {
     const stackingFactor = Math.floor(containerHeight / height);
     const remainingHeight = containerHeight - stackingFactor * height;
 
-    return {stackingFactor, remainingHeight};
+    return { stackingFactor, remainingHeight };
   };
 
   public IsFitting = (container: IContainer, cargo: ICargo): boolean => {
-    const {
-      length, width ,
-      height,
-    } = cargo;
+    const { length, width, height } = cargo;
 
     if (!this.IsValidContainer(container)) return false;
     if (!this.IsValidCargo(cargo)) return false;
@@ -113,7 +117,6 @@ export class ContainerHelper implements IContainerHelper {
   };
 
   public IsValidCargo = (cargo: ICargo): boolean => {
-
     if (!this.IsValidContainer(cargo)) return false;
     if (cargo.quantity < 1) return false;
 
