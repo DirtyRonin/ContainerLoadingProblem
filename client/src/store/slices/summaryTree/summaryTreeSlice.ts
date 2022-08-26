@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../store';
-import { KeyValueLoadSummary, SummaryDictionary } from '../../../models';
+import { KeyValueLoadSummary } from '../../../models';
 
 // Define a type for the slice state
 interface SummaryState {
