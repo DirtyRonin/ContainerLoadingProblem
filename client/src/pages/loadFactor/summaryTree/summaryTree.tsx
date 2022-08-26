@@ -17,19 +17,23 @@ import summaryTreeReducer, { INITIAL_STATE } from './summaryTreeReducer';
 import { CargoApi } from '../../../apis/cargoApi';
 import { TruckApi } from '../../../apis/trucksApi';
 
-import loadAnalyzerContext,{} from '../contexts/LoadAnalyzerContext'
+import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
 
 export default function OrderSummaryItem() {
-  
-  const {selectedOrderIds,selectedTruckIds,selectedLoadSummaryIds,fetchAllLoadSummaries_Failed,fetchAllLoadSummaries_Pending,fetchAllLoadSummaries_Success,loadSummaries} = loadAnalyzerContext()
-  
+  const {
+    selectedOrderIds,
+    selectedTruckIds,
+    selectedLoadSummaryIds,
+    loadSummaries,
+    fetchAllLoadSummaries_Failed,
+    fetchAllLoadSummaries_Pending,
+    fetchAllLoadSummaries_Success,
+  } = loadAnalyzerContext();
+
   const reducerFunction = createReducerFunction(summaryTreeReducer);
   const ActionCreators = createActionCreators(summaryTreeReducer);
 
-
   const [state, dispatch] = useReducer(reducerFunction, INITIAL_STATE);
-
-  // const { loadSummaries, selectedloadSummaries, selectedOrderIds, selectedTruckIds } = useAppSelector(SelectSummaryState);
 
   const containerHelper = new ContainerHelper();
   const loadAnalyzer = new LoadAnalyzer(containerHelper);
@@ -61,50 +65,15 @@ export default function OrderSummaryItem() {
 
     loadAnalyzer
       .AnalyzeLoadingForSummaries(state.cargos, state.trucks)
-      .then((result) => fetchAllLoadSummaries_Success(result))
+      .then((result) => {
+        console.log(result)
+        fetchAllLoadSummaries_Success(result)
+      })
       .catch((e) => fetchAllLoadSummaries_Failed());
-
   }, [state.fetchCargoLoading, state.fetchTruckLoading]);
 
-  useEffect(() => {
-    // const myTrucks = getTrucksByTruckIds();
-    // const myOrders = getOrdersByOrderIds();
-    // const myCargos = getCargosByOrderIds();
-    // setSelectedCargos(myCargos);
-    // setSelectedTrucks(myTrucks);
-    // setSelectedOrders(myOrders);
-    // if (myTrucks.length > 0 && myCargos.length > 0)
-    //   loadAnalyzer.AnalyzeLoadingForSummaries(myCargos, myTrucks).then((result) => {
-    //     dispatch(SetSummaries(result));
-    //   });
-  }, [selectedTruckIds, selectedOrderIds]);
-
-  // const getTrucksByTruckIds = () =>
-  //   selectedTruckIds.reduce((prev, current) => {
-  //     const truck = trucks.find((x) => x.id === current);
-  //     if (truck) prev.push(truck);
-
-  //     return prev;
-  //   }, [] as ITruck[]);
-
-  // const getOrdersByOrderIds = () =>
-  //   selectedOrderIds.reduce((prev, current) => {
-  //     const order = orders.find((x) => x.id === current);
-  //     if (order) prev.push(order);
-
-  //     return prev;
-  //   }, [] as IOrder[]);
-
-  // const getCargosByOrderIds = () =>
-  //   selectedOrderIds.reduce((prev, current) => {
-  //     const cargo = cargos.filter((x) => x.orderId === current);
-  //     if (cargo) return prev.concat(cargo);
-
-  //     return prev;
-  //   }, [] as ICargo[]);
-
   const getOrderTreeItems = () =>
-  selectedOrderIds.map((orderId,index) => (
+    selectedOrderIds.map((orderId, index) => (
       <TreeItem nodeId={`#index-${index}.orderId-${orderId}`} label={`#index-${index}.orderId-${orderId}`}>
         {getCargoTreeItems(orderId)}
       </TreeItem>
@@ -131,18 +100,16 @@ export default function OrderSummaryItem() {
   const remainingSpaceMessage = (truck: ITruck) => {
     const message = (loadingMeter: number) => `|| Available Loading Meter: ${loadingMeter} cm`;
 
-    const relatedCargoIds =selectedLoadSummaryIds.filter((x) => x.truckId === truck.id).map((x) => x.cargoId);
+    const relatedCargoIds = selectedLoadSummaryIds.filter((x) => x.truckId === truck.id).map((x) => x.cargoId);
 
     if (relatedCargoIds.length === 0) return message(truck.length);
 
-    const relatedSelectedSummaries: ILoadSummary[] | undefined =loadSummaries.find((x) => x.key === truck.id)?.values.filter((x) => x.cargo.id);
-    // const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries[truck.id]?.filter((x) => x.cargo.id);
+    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries.find((x) => x.key === truck.id)?.values.filter((x) => x.cargo.id);
 
     if (relatedSelectedSummaries === undefined || relatedSelectedSummaries.length === 0) return message(truck.length);
 
     const remainingLoadingMeter = relatedCargoIds.reduce((prev, current) => {
       const relatedSummary = loadSummaries.find((x) => x.key === truck.id)?.values.find((x) => x.cargo.id === current)?.loadingMeter;
-      // const relatedSummary = loadSummaries[truck.id]?.find((x) => x.cargo.id === current)?.loadingMeter;
       if (!relatedSummary) return -1;
 
       prev -= relatedSummary;
@@ -156,10 +123,6 @@ export default function OrderSummaryItem() {
 
   const getCargoTreeItemsCheckable = (truckId: number, orderId: number) =>
     state.cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId} />);
-
-  // LoadingCargoTreeItem
-
-  // https://github.com/mui/material-ui/issues/17407
 
   return (
     <TreeView
@@ -176,8 +139,4 @@ export default function OrderSummaryItem() {
       </TreeItem>
     </TreeView>
   );
-}
-
-function getSummary(summaries: { [key: number]: ILoadSummary[] }, truckId: number, cargoId: number) {
-  return summaries[truckId]?.find((summary) => summary.cargo.id === cargoId);
 }
