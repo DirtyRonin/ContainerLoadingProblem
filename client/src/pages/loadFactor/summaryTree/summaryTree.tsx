@@ -6,9 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
 
-import { ILoadSummary, ITruck } from '../../../interfaces';
-import { ContainerHelper } from '../../../utils/mathHelper';
-import { LoadAnalyzer } from '../LoadAnalyzer';
+import { ILoadAnalyzer, ILoadSummary, ITruck } from '../../../interfaces';
 
 import LoadingCargoTreeItem from './LoadingCargoTreeItems';
 
@@ -18,6 +16,9 @@ import { CargoApi } from '../../../apis/cargoApi';
 import { TruckApi } from '../../../apis/trucksApi';
 
 import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
+
+import { myContainer } from '../../../inversify.config';
+import {TYPES} from '../../../utils/shared/registerSymbols'
 
 export default function OrderSummaryItem() {
   const {
@@ -35,8 +36,7 @@ export default function OrderSummaryItem() {
 
   const [state, dispatch] = useReducer(reducerFunction, INITIAL_STATE);
 
-  const containerHelper = new ContainerHelper();
-  const loadAnalyzer = new LoadAnalyzer(containerHelper);
+  const loadAnalyzer = myContainer.get<ILoadAnalyzer>(TYPES.LoadAnalyzer)
 
   useEffect(() => {
     dispatch(ActionCreators.fetchAllCargos_Pending());

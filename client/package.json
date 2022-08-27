@@ -2,7 +2,24 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react",
+      "@babel/preset-typescript"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ]
+    ]
+  },
   "dependencies": {
+    "@abraham/reflection": "^0.10.0",
+    "@babel/plugin-proposal-decorators": "^7.18.10",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
@@ -19,6 +36,7 @@
     "axios": "^0.27.2",
     "immer": "^9.0.15",
     "immer-reducer": "^0.7.13",
+    "inversify": "^6.0.1",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

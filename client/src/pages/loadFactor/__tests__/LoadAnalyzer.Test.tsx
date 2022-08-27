@@ -1,10 +1,11 @@
+import '@abraham/reflection'
 import { nameof } from 'ts-simple-nameof';
 
 import { Cargo } from '../../../models/index';
-import { LoadAnalyzer } from '../LoadAnalyzer';
 import { ILoadAnalyzer, ICargo, IContainer, IContainerHelper, ILoadSummary } from '../../../interfaces';
 import { testHelper } from '../../../utils/index';
-import { ContainerHelper } from '../../../utils/mathHelper/ContainerHelper';
+import { myContainer } from '../../../inversify.config';
+import { TYPES } from '../../../utils/shared/registerSymbols'
 
 describe('Testing Loading Meter Functions', () => {
   // TODO: Ladungen nach der Größe des Volumens Sortieren
@@ -26,8 +27,8 @@ describe('Testing Loading Meter Functions', () => {
   let _cargos: ICargo[];
 
   beforeAll(() => {
-    _mathHelper = new ContainerHelper();
-    _loadingMeter = new LoadAnalyzer(_mathHelper);
+    _loadingMeter = myContainer.get<ILoadAnalyzer>(TYPES.LoadAnalyzer)
+
   });
 
   afterAll(() => {
@@ -35,7 +36,6 @@ describe('Testing Loading Meter Functions', () => {
     _cargo = {} as ICargo;
     _containers = [];
     _cargos = [];
-    _mathHelper = {} as IContainerHelper;
     _loadingMeter = {} as ILoadAnalyzer;
   });
 

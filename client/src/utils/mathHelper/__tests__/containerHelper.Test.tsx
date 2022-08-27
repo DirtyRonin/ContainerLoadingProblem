@@ -1,3 +1,4 @@
+import '@abraham/reflection'
 import { ContainerHelper } from '../ContainerHelper';
 import { testHelper } from '../../testing/testHelper';
 import { ICargo, IContainer, IArea, IContainerHelper, ILoadSummary, initializeLoadSummary } from '../../../interfaces';

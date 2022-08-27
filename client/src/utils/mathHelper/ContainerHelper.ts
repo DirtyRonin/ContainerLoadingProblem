@@ -1,8 +1,11 @@
+import { injectable } from 'inversify';
+
 import _ from 'lodash';
 
 import { IArea, ICargo, IContainer, IContainerHelper, ILoadSummary, IStacking } from '../../interfaces/index';
 import { Stacking } from './Stacking';
 
+@injectable()
 export class ContainerHelper implements IContainerHelper {
   public AddContainersUp = (a: IContainer, b: IContainer) => {
     const truckA = { ...a };
