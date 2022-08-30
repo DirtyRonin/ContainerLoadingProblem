@@ -40,22 +40,16 @@ export class LoadAnalyzer implements ILoadAnalyzer {
       const newEntry: KeyValueLoadSummary = { key: sortedContainers[i].id, values: [] };
 
       for (let y = 0; y < cargos.length; y++) {
+        /** To make sure, that selected cargos are still available when they linked order is closed */
+        /** Cargos will no longer be added to every trucks when an order is selected */
+
         const isSelected = selectedLoadSummaries.find((selected) => cargos[y].id === selected.cargoId);
 
-        console.log("show 'IsSelected'", isSelected);
+        // if the cargo is linked to the current cargo
+        // and this is not the specific truck , stop here
+        if (isSelected !== undefined && isSelected.truckId !== sortedContainers[i].id) continue;
 
-        const result = isSelected !== undefined && isSelected.truckId !== sortedContainers[i].id;
-
-        console.log("show 'result'", result);
-
-        if (result) {
-          console.log("'continue'");
-
-          continue;
-        }
-        console.log("show 'props'", cargos[y], sortedContainers[i]);
         const loadSummary = await this.AnalyseSingleLoad(cargos[y], sortedContainers[i]);
-        console.log("show 'loadSummary'", loadSummary);
         newEntry.values.push(loadSummary);
       }
       loadSummaries.push(newEntry);

@@ -1,43 +1,21 @@
 import { ImmerReducer } from 'immer-reducer';
-import { ICargo, ITruck } from '../../../interfaces';
+import { ICargo, ILoadSummary, ITruck } from '../../../interfaces';
 import { AsyncStatus, KeyValueLoadSummary } from '../../../models';
 
 export type stateProps = {
   readonly cargos: ICargo[];
   readonly trucks: ITruck[];
-  
-  
+  readonly selectedLoadSummaries:ILoadSummary[]
   readonly fetchCargoLoading: AsyncStatus;
   readonly fetchTruckLoading: AsyncStatus;
-  
-  
-  // fetchAllCargos_Pending(): void;
-  // fetchAllCargos_Failed(): void;
-  // fetchAllCargos_Success(cargos: ICargo[]): void;
-  // fetchAllTrucks_Pending(): void;
-  // fetchAllTrucks_Failed(): void;
-  // fetchAllTrucks_Success(trucks: ITruck[]): void;
-  
-  
-  
 };
 
 export const INITIAL_STATE: stateProps = {
   cargos: [],
   trucks: [],
+  selectedLoadSummaries:[],
   fetchCargoLoading: 'idle',
   fetchTruckLoading: 'idle',
-  
-  
-  // fetchAllCargos_Pending: () => {},
-  // fetchAllCargos_Failed: () => {},
-  // fetchAllCargos_Success: (cargos: ICargo[]) => {},
-  // fetchAllTrucks_Pending: () => {},
-  // fetchAllTrucks_Failed: () => {},
-  // fetchAllTrucks_Success: (trucks: ITruck[]) => {},
-  
-  
-  
 };
 
 class SummaryTreeReducer extends ImmerReducer<stateProps> {
