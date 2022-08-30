@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from "../../store";
+import type { RootState } from '../../store';
 
 export interface ITruckListState {
   selectedTruckId: number;
@@ -11,11 +11,11 @@ const initialState: ITruckListState = {
   selectedTruckId: 0,
 };
 
-export const tuckListSlice = createSlice({
-  name: "truckList",
+export const truckListSlice = createSlice({
+  name: 'truckList',
   initialState,
   reducers: {
-    SelectTruckId: (state, action: PayloadAction<number>) => {
+    SelectTruckId: (state: ITruckListState, action: PayloadAction<number>) => {
       state.selectedTruckId = action.payload;
     },
     UnselectTruckId: (state) => {
@@ -24,8 +24,8 @@ export const tuckListSlice = createSlice({
   },
 });
 
-export const { SelectTruckId, UnselectTruckId } = tuckListSlice.actions;
+export const { SelectTruckId, UnselectTruckId } = truckListSlice.actions;
 
 export const SelectTruckListState = (state: RootState) => state.truckListGlobal;
 
-export default tuckListSlice.reducer;
+export default truckListSlice.reducer;
