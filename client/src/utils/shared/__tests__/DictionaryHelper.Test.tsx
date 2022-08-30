@@ -2,7 +2,7 @@ import '@abraham/reflection'
 import { IStacking, ICargo, IContainer, IContainerHelper, ITruck, ILoadAnalyzer } from '../../../interfaces';
 import { testHelper } from '../../';
 import { ContainerHelper } from '../../mathHelper';
-import { RemoveLoadSummariesByCargoId } from '../DictionaryHelper';
+import { FilterAvailableLoadSummariesByUnavailableCargoIds } from '../DictionaryHelper';
 import { myContainer } from '../../../inversify.config';
 import { TYPES } from '../registerSymbols';
 
@@ -46,14 +46,14 @@ describe('calculating stacking factor', () => {
 
       _cargoIds=[1,3]
 
-      const dic = await _loadingMeter.AnalyzeLoadingForSummaries(_cargos, _trucks);
-      const result = RemoveLoadSummariesByCargoId(_cargoIds,dic);
+      const dic = await _loadingMeter.AnalyzeLoadingForSummaries(_cargos, _trucks,[]);
+      const result = FilterAvailableLoadSummariesByUnavailableCargoIds(_cargoIds,dic);
       
       expect(result[0].values.length).toEqual(1)
-      expect(result[0].values[0].cargo.id).toEqual(2)
+      expect(result[0].values[0].cargoId).toEqual(2)
       
       expect(result[1].values.length).toEqual(1)
-      expect(result[1].values[0].cargo.id).toEqual(2)
+      expect(result[1].values[0].cargoId).toEqual(2)
     });
   });
 });
