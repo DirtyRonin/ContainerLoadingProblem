@@ -12,7 +12,7 @@ interface Props {
 export default function TruckSliderListItem(props: Props) {
   const { truck } = props;
 
-  const { selectedTruckIds, removeTruckId, addTruckId } = loadAnalyzerContext();
+  const { selectedTruckIds, selectedLoadSummaryIds, removeTruckId, addTruckId } = loadAnalyzerContext();
 
   const [isChecked, setChecked] = useState(false);
 
@@ -23,13 +23,16 @@ export default function TruckSliderListItem(props: Props) {
   const isTruckChecked = () => (selectedTruckIds.find((x) => x === truck.id) ? true : false);
 
   const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (selectedLoadSummaryIds.find((x) => x.truckId === truck.id) !== undefined) return;
+
+    setChecked(!isChecked);
+
     if (isChecked) {
       removeTruckId(truck.id);
-    } else {
-      addTruckId(truck.id);
+      return;
     }
-    console.log(selectedTruckIds, truck.id);
-    setChecked(!isChecked);
+
+    addTruckId(truck.id);
   };
 
   return (
