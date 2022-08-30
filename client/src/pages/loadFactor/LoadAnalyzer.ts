@@ -1,15 +1,21 @@
-import cloneDeep from 'lodash/cloneDeep';
 import { ICargo, ITruck, IContainer, IContainerHelper, ILoadAnalyzer, ILoadSummary } from '../../interfaces';
 import { KeyValueLoadSummary } from '../../models';
 import { LoadSummary } from './LoadSummary';
 
-export class LoadAnalyzer implements ILoadAnalyzer {
-  constructor(private _containerHelper: IContainerHelper) {}
+import { TYPES } from '../../utils/shared/registerSymbols';
+import { inject, injectable } from 'inversify';
+import { AsDeepCopy, SortGeneric } from '../../utils/shared/ImmutableHelper';
+import { ILoadSummaryIds } from '../../interfaces/ILoadSummaryIds';
 
-  public AnalyzeLoading = async (cargos: ICargo[], containers: IContainer[]): Promise<number> => {
+@injectable()
+export class LoadAnalyzer implements ILoadAnalyzer {
+  @inject(TYPES.ContainerHelper)
+  private _containerHelper: IContainerHelper; // inject with an constructure doesn't work
+
+  public AnalyzeLoading = async (cargos: ICargo[], trucks: ITruck[]): Promise<number> => {
     let loadSummaries = 0;
 
-    const sortedContainers = [...containers].sort((a, b) => this._containerHelper.CompareByVolume(a, b));
+    const sortedContainers = SortGeneric(trucks, this._containerHelper.CompareByVolume);
 
     // const sortedCargosDic = this._containerHelper.SortCargos([...cargos]);
 
@@ -17,26 +23,42 @@ export class LoadAnalyzer implements ILoadAnalyzer {
 
     for (let i = 0; i < sortedContainers.length; i++)
       for (let y = 0; y < cargos.length; y++) {
-        loadSummaries += (await this.AnalyseSingleLoad(cargos[y], containers[i])).loadingMeter;
+        loadSummaries += (await this.AnalyseSingleLoad(cargos[y], trucks[i])).loadingMeter;
       }
 
     return loadSummaries;
   };
 
-  public AnalyzeLoadingForSummaries = async (cargos: ICargo[], containers: ITruck[]): Promise<KeyValueLoadSummary[]> => {
-    const loadSummaries: KeyValueLoadSummary[]= [];
+  public AnalyzeLoadingForSummaries = async (cargos: ICargo[], trucks: ITruck[], selectedLoadSummaries: ILoadSummaryIds[]): Promise<KeyValueLoadSummary[]> => {
+    const loadSummaries: KeyValueLoadSummary[] = [];
 
-    const sortedContainers = [...containers].sort((a, b) => this._containerHelper.CompareByVolume(a, b));
+    const sortedContainers = SortGeneric(trucks, this._containerHelper.CompareByVolume);
 
     // const sortedCargosDic =  this._containerHelper.SortCargos([...cargos])
 
     for (let i = 0; i < sortedContainers.length; i++) {
-      const newEntry:KeyValueLoadSummary = {key:sortedContainers[i].id,values:[]}
+      const newEntry: KeyValueLoadSummary = { key: sortedContainers[i].id, values: [] };
 
       for (let y = 0; y < cargos.length; y++) {
-        newEntry.values.push(await this.AnalyseSingleLoad(cargos[y], sortedContainers[i]));
+        const isSelected = selectedLoadSummaries.find((selected) => cargos[y].id === selected.cargoId);
+
+        console.log("show 'IsSelected'", isSelected);
+
+        const result = isSelected !== undefined && isSelected.truckId !== sortedContainers[i].id;
+
+        console.log("show 'result'", result);
+
+        if (result) {
+          console.log("'continue'");
+
+          continue;
+        }
+        console.log("show 'props'", cargos[y], sortedContainers[i]);
+        const loadSummary = await this.AnalyseSingleLoad(cargos[y], sortedContainers[i]);
+        console.log("show 'loadSummary'", loadSummary);
+        newEntry.values.push(loadSummary);
       }
-      loadSummaries.push(newEntry)
+      loadSummaries.push(newEntry);
     }
 
     return loadSummaries;
@@ -47,21 +69,21 @@ export class LoadAnalyzer implements ILoadAnalyzer {
   // every column is the same ===> a single piece of goods (width, length, height)
   // row =loadingArea.Width / column.width => without a rest
   // row.length = column.length
-  public AnalyseSingleLoad = async (singleCargo: ICargo, container: IContainer): Promise<ILoadSummary> => {
+  public AnalyseSingleLoad = async (singleCargo: ICargo, truck: ITruck): Promise<ILoadSummary> => {
     // let's make this function async
     setTimeout(() => {}, 10);
 
-    return this.Build(this._containerHelper, singleCargo, container);
+    return this.Build(this._containerHelper, singleCargo, truck);
   };
 
   // *******************
-  public Build = (containerHelper: IContainerHelper, cargo: ICargo, container: IContainer): ILoadSummary => {
-    if (!containerHelper.IsValidContainer(container)) return LoadSummary.BuildInvalidLoadSummary();
+  public Build = (containerHelper: IContainerHelper, cargo: ICargo, truck: ITruck): ILoadSummary => {
+    if (!containerHelper.IsValidContainer(truck)) return LoadSummary.BuildInvalidLoadSummary();
     if (!containerHelper.IsValidCargo(cargo)) return LoadSummary.BuildInvalidLoadSummary();
 
-    const stacking = containerHelper.CalculateStackingFactor(cargo, container.height);
+    const stacking = containerHelper.CalculateStackingFactor(cargo, truck.height);
 
-    const goodsPerRow = containerHelper.CalculateGoodsPerRow(cargo.width, container.width);
+    const goodsPerRow = containerHelper.CalculateGoodsPerRow(cargo.width, truck.width);
 
     // amount of pieces of a full Row
     const goodsPerFullStackedRow = stacking.stackingFactor * goodsPerRow;
@@ -70,25 +92,20 @@ export class LoadAnalyzer implements ILoadAnalyzer {
 
     const fullStackedGoods = fullStackedRows * goodsPerFullStackedRow;
 
-    const loadingMeterBase = containerHelper.CalculateLoadingMeterBase(cargo, container);
+    const loadingMeterBase = containerHelper.CalculateLoadingMeterBase(cargo, truck);
 
     const loadingMeterFullStackedRows = containerHelper.CalculateLoadingMeter(loadingMeterBase, stacking.stackingFactor, fullStackedGoods);
 
     const remainingGoods = cargo.quantity - fullStackedRows * goodsPerFullStackedRow;
 
-    const loadingMeter = this._combineAllLoadingMeters(
-      remainingGoods,
-      loadingMeterFullStackedRows,
-      containerHelper,
-      loadingMeterBase,
-      goodsPerRow
-    );
+    const loadingMeter = this._combineAllLoadingMeters(remainingGoods, loadingMeterFullStackedRows, containerHelper, loadingMeterBase, goodsPerRow);
 
     // config https://www.goodloading.com/de/blog/beladung/wie-plane-ich-die-palettenplatzierung-im-fahrzeug/
 
-    const result:ILoadSummary = {
-      cargo:cloneDeep(cargo),
-      container,
+    const result: ILoadSummary = {
+      cargoId: cargo.id,
+      truckId: truck.id,
+      orderId: cargo.orderId,
       stacking,
       goodsPerRow,
       goodsPerFullStackedRow,
@@ -97,9 +114,9 @@ export class LoadAnalyzer implements ILoadAnalyzer {
       loadingMeter,
       loadingMeterBase,
       remainingGoods,
-      isValid:true
+      isValid: true,
     };
-    
+
     return result;
   };
 

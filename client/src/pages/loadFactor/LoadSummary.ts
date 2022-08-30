@@ -5,9 +5,10 @@ import { ILoadSummary,initializeLoadSummary } from '../../interfaces/ILoadSummar
 export class LoadSummary implements ILoadSummary {
   public constructor(
     /** */
-    readonly cargo: ICargo,
+    readonly cargoId: number,
     /** e.g. a truck*/
-    readonly container: IContainer,
+    readonly truckId: number,
+    readonly orderId: number,
     /** Data for stacking goods and handling height */
     readonly stacking: IStacking,
     /** Maximum of goods that can fit in a row next to each other  */
