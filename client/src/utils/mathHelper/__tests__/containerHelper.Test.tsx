@@ -1,8 +1,10 @@
 import '@abraham/reflection'
-import { ContainerHelper } from '../ContainerHelper';
+import { myContainer } from '../../../inversify.config';
+
 import { testHelper } from '../../testing/testHelper';
 import { ICargo, IContainer, IArea, IContainerHelper, ILoadSummary, initializeLoadSummary } from '../../../interfaces';
 import { Cargo, Container, Goods } from '../../../models';
+import { TYPES } from '../../shared/registerSymbols';
 
 describe('Testing Math Helper', () => {
   let _helper: IContainerHelper;
@@ -17,7 +19,7 @@ describe('Testing Math Helper', () => {
   let _area: IArea;
 
   beforeAll(() => {
-    _helper = new ContainerHelper();
+    _helper = myContainer.get<IContainerHelper>(TYPES.ContainerHelper);
   });
 
   afterAll(() => {

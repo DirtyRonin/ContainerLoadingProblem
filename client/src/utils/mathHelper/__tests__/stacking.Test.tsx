@@ -1,9 +1,10 @@
 import  '@abraham/reflection';
+import { myContainer } from '../../../inversify.config';
 
 import { Cargo } from '../../../models';
 import { IStacking, ICargo, IContainer, IContainerHelper } from '../../../interfaces';
 import { testHelper } from '../../';
-import { ContainerHelper } from '../index';
+import { TYPES } from '../../shared/registerSymbols';
 
 describe('calculating stacking factor', () => {
   const _testContainers = testHelper.testContainers;
@@ -13,7 +14,7 @@ describe('calculating stacking factor', () => {
   let _container: IContainer;
   let _cargo: ICargo;
 
-  const mathHelper: IContainerHelper = new ContainerHelper();
+  const mathHelper: IContainerHelper = myContainer.get<IContainerHelper>(TYPES.ContainerHelper);
 
   beforeEach(() => {
     _container = _testContainers.Truck_l1360w240h270;
