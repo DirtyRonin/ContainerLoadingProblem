@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import TreeItem from '@mui/lab/TreeItem';
 
-import { ILoadAnalyzer, ILoadSummary, ITruck } from '../../../interfaces';
+import { ICargo, ILoadAnalyzer, ILoadSummary, ITruck } from '../../../interfaces';
 
 import LoadingCargoTreeItem from './LoadingCargoTreeItems';
 
@@ -18,7 +18,10 @@ import { TruckApi } from '../../../apis/trucksApi';
 import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
 
 import { myContainer } from '../../../inversify.config';
-import {TYPES} from '../../../utils/shared/registerSymbols'
+import { TYPES } from '../../../utils/shared/registerSymbols';
+import { LoadingButton } from '@mui/lab';
+import { cargoListSlice } from '../../../store';
+import { ILoadSummaryIds } from '../../../interfaces/ILoadSummaryIds';
 
 export default function OrderSummaryItem() {
   const {
@@ -29,6 +32,7 @@ export default function OrderSummaryItem() {
     fetchAllLoadSummaries_Failed,
     fetchAllLoadSummaries_Pending,
     fetchAllLoadSummaries_Success,
+    AddSelectedLoadSummaries_Success,
   } = loadAnalyzerContext();
 
   const reducerFunction = createReducerFunction(summaryTreeReducer);
@@ -36,66 +40,98 @@ export default function OrderSummaryItem() {
 
   const [state, dispatch] = useReducer(reducerFunction, INITIAL_STATE);
 
-  const loadAnalyzer = myContainer.get<ILoadAnalyzer>(TYPES.LoadAnalyzer)
+  const loadAnalyzer = myContainer.get<ILoadAnalyzer>(TYPES.LoadAnalyzer);
 
   useEffect(() => {
     dispatch(ActionCreators.fetchAllCargos_Pending());
 
-    CargoApi.FilterCargoByOrderIds(selectedOrderIds)
-      .then((result) => dispatch(ActionCreators.fetchAllCargos_Success(result)))
+    const missingCargoIds = selectedLoadSummaryIds
+      .map((ids) => ids.orderId)
+      .filter((value, index, array) => array.indexOf(value) === index)
+      .reduce<number[]>((prev, current) => {
+        if (selectedOrderIds.includes(current)) return prev;
+
+        return prev.concat(
+          selectedLoadSummaryIds
+            .filter((x) => x.orderId === current)
+            .map((x) => x.cargoId)
+            .filter((value, index, array) => array.indexOf(value) === index)
+        );
+      }, []);
+
+    Promise.all([CargoApi.FilterCargoByOrderIds(selectedOrderIds), Promise.all(missingCargoIds.map((cargoId) => CargoApi.FetchCargoById(cargoId)))])
+      .then((results) => {
+        const combined = results.reduce<ICargo[]>((prev, current) => prev.concat(current), []);
+        dispatch(ActionCreators.fetchAllCargos_Success(combined));
+      })
       .catch((e) => dispatch(ActionCreators.fetchAllCargos_Failed()));
   }, [selectedOrderIds]);
 
   useEffect(() => {
     dispatch(ActionCreators.fetchAllTrucks_Pending());
 
-    TruckApi.FilterTruckByIds(selectedTruckIds)
+    const truckIds = selectedLoadSummaryIds
+      .map((ids) => ids.truckId) // get truck ids from selected summaries
+      .concat(selectedTruckIds) // combine with selected trucks
+      .filter((value, index, array) => array.indexOf(value) === index); // filter unique values
+
+    TruckApi.FilterTruckByIds(truckIds)
       .then((result) => dispatch(ActionCreators.fetchAllTrucks_Success(result)))
       .catch((e) => dispatch(ActionCreators.fetchAllTrucks_Failed()));
   }, [selectedTruckIds]);
 
   useEffect(() => {
-    if (state.fetchCargoLoading !== 'succeeded') return;
-    if (state.cargos.length < 1) return;
-
-    if (state.fetchTruckLoading !== 'succeeded') return;
-    if (state.trucks.length < 1) return;
-
-    fetchAllLoadSummaries_Pending();
+    if (!isReady()) return;
 
     loadAnalyzer
-      .AnalyzeLoadingForSummaries(state.cargos, state.trucks)
+      .AnalyzeLoadingForSummaries(state.cargos, state.trucks, selectedLoadSummaryIds)
       .then((result) => {
-        console.log(result)
-        fetchAllLoadSummaries_Success(result)
+        console.log(result);
+        fetchAllLoadSummaries_Success(result);
       })
-      .catch((e) => fetchAllLoadSummaries_Failed());
-  }, [state.fetchCargoLoading, state.fetchTruckLoading]);
+      .catch((e) => fetchAllLoadSummaries_Failed(e));
+  }, [state.cargos, state.trucks]);
 
-  const getOrderTreeItems = () =>
-    selectedOrderIds.map((orderId, index) => (
-      <TreeItem nodeId={`#index-${index}.orderId-${orderId}`} label={`#index-${index}.orderId-${orderId}`}>
-        {getCargoTreeItems(orderId)}
+  const isReady = (): boolean => {
+    if (state.fetchCargoLoading !== 'succeeded') return false;
+    if (state.cargos.length < 1) return false;
+
+    if (state.fetchTruckLoading !== 'succeeded') return false;
+    if (state.trucks.length < 1) return false;
+
+    return true;
+  };
+
+  const renderOrderTreeItems = () =>
+    state.cargos.map((cargo, index) => (
+      <TreeItem key={`#index-${index}.orderId-${cargo.orderId}`} nodeId={`#index-${index}.orderId-${cargo.orderId}`} label={`#index-${index}.orderId-${cargo.orderId}`}>
+        {renderCargoTreeItems(cargo.orderId)}
       </TreeItem>
     ));
 
-  const getCargoTreeItems = (orderId: number) =>
+  const renderCargoTreeItems = (orderId: number) =>
     state.cargos
       .filter((x) => x.orderId === orderId)
       .map((cargo) => (
-        <TreeItem nodeId={`#${cargo.name}-${cargo.id}`} label={`#${cargo.name}-${cargo.id}`}>
+        <TreeItem key={`#${cargo.name}-${cargo.id}`} nodeId={`#${cargo.name}-${cargo.id}`} label={`#${cargo.name}-${cargo.id}`}>
           <TreeItem nodeId={`#${cargo.name}-sizes-${cargo.id}`} label={`${cargo.length}l * ${cargo.width}w * ${cargo.height}h`}></TreeItem>
           <TreeItem nodeId={`#${cargo.name}-quantity-${cargo.id}`} label={`${cargo.quantity} X`}></TreeItem>
           <TreeItem nodeId={`#${cargo.name}-isStackable-${cargo.id}`} label={`Stackable: ${cargo.isStackable ? 'Yes' : 'No'}`}></TreeItem>
         </TreeItem>
       ));
 
-  const getTruckTreeItems = () =>
-    state.trucks.map((truck) => (
+  const renderTruckTreeItems = () => {
+    return state.trucks.map((truck) => (
       <TreeItem nodeId={`#${truck.vehicleIdentifier}-${truck.id}`} label={`#${truck.vehicleIdentifier}-${truck.id} ${remainingSpaceMessage(truck)}`}>
-        {selectedOrderIds.map((orderId) => getCargoTreeItemsCheckable(truck.id, orderId))}
+        {getUniqueOrderIdsByCargos().map((orderId) => renderCargoTreeItemsGroupedByOrderId(truck.id, orderId))}
       </TreeItem>
     ));
+  };
+
+  const getUniqueOrderIdsByCargos = (): number[] => state.cargos.map((cargo) => cargo.orderId).filter((value, index, array) => array.indexOf(value) === index);
+
+  const renderCargoTreeItemsGroupedByOrderId = (truckId: number, orderId: number) =>
+    state.cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem key={`LoadingCargoTreeItem-${truckId}-${orderId}-${cargo.id}`} truckId={truckId} cargoId={cargo.id} orderId={orderId} cargo={cargo} />);
 
   const remainingSpaceMessage = (truck: ITruck) => {
     const message = (loadingMeter: number) => `|| Available Loading Meter: ${loadingMeter} cm`;
@@ -104,12 +140,12 @@ export default function OrderSummaryItem() {
 
     if (relatedCargoIds.length === 0) return message(truck.length);
 
-    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries.find((x) => x.key === truck.id)?.values.filter((x) => x.cargo.id);
+    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries.value.find((x) => x.key === truck.id)?.values.filter((x) => x.cargoId);
 
     if (relatedSelectedSummaries === undefined || relatedSelectedSummaries.length === 0) return message(truck.length);
 
     const remainingLoadingMeter = relatedCargoIds.reduce((prev, current) => {
-      const relatedSummary = loadSummaries.find((x) => x.key === truck.id)?.values.find((x) => x.cargo.id === current)?.loadingMeter;
+      const relatedSummary = loadSummaries.value.find((x) => x.key === truck.id)?.values.find((x) => x.cargoId === current)?.loadingMeter;
       if (!relatedSummary) return -1;
 
       prev -= relatedSummary;
@@ -121,22 +157,38 @@ export default function OrderSummaryItem() {
     return `${message(Math.round(remainingLoadingMeter))} of ${truck.length} cm`;
   };
 
-  const getCargoTreeItemsCheckable = (truckId: number, orderId: number) =>
-    state.cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem truckId={truckId} cargoId={cargo.id} orderId={orderId} />);
+  const handleOnClick = () => {
+    fetchAllLoadSummaries_Pending();
+  };
+
+  const renderButton = () => (
+    <LoadingButton loading={loadSummaries.status === 'pending'} onClick={handleOnClick}>
+      Loading
+    </LoadingButton>
+  );
+
+  const renderTreeView = (): JSX.Element => {
+    return (
+      <TreeView
+        aria-label="file system navigator"
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpandIcon={<ChevronRightIcon />}
+        sx={{ height: 640, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+      >
+        <TreeItem nodeId="1" label="Trucks">
+          {renderTruckTreeItems()}
+        </TreeItem>
+        <TreeItem nodeId="2" label="Orders">
+          {renderOrderTreeItems()}
+        </TreeItem>
+      </TreeView>
+    );
+  };
 
   return (
-    <TreeView
-      aria-label="file system navigator"
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
-      sx={{ height: 640, flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
-    >
-      <TreeItem nodeId="1" label="Trucks">
-        {getTruckTreeItems()}
-      </TreeItem>
-      <TreeItem nodeId="2" label="Orders">
-        {getOrderTreeItems()}
-      </TreeItem>
-    </TreeView>
+    <>
+      {renderButton()}
+      {renderTreeView()}
+    </>
   );
 }
