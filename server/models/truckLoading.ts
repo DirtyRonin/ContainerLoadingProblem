@@ -1,9 +1,20 @@
-import { Column, Model, Table, HasMany, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Column, Model, Table, HasMany, ForeignKey, BelongsTo, DataType, Index } from 'sequelize-typescript';
 import { Cargo } from './cargo';
+import { Order } from './order';
+import { Route } from './route';
 import { Truck } from './truck';
 
 @Table
 export class TruckLoading extends Model {
+
+  @Index
+  @Column({
+    primaryKey: true,
+    type: DataType.INTEGER,
+    autoIncrement: true,
+  })
+  id!: number;
+
   @ForeignKey(() => Truck)
   @Column
   truckId!: number;
@@ -18,6 +29,12 @@ export class TruckLoading extends Model {
   @BelongsTo(() => Cargo)
   cargo!: Cargo;
 
+  @ForeignKey(() => Route)
   @Column
-  loadingMeter!: number;
+  routeId!: number;
+
+  @BelongsTo(() => Route)
+  route!: Route;
+
+  
 }

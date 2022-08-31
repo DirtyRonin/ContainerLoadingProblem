@@ -10,8 +10,6 @@ export class Cargo extends Model {
   @HasOne(() => TruckLoading)
   truckLoading!: TruckLoading;
 
-  
-
   @ForeignKey(() => Order)
   @Column({allowNull:false})
   orderId!: number;
