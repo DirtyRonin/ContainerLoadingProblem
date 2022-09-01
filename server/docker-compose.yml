@@ -1,42 +1,17 @@
 version: '3'
 services:
-  express:
-    build:
-      context: .
-      args:
-        NODE_ENV: development
-    volumes:
-      - ./:/app/server:ro
-      - /app/node_modules
-    container_name: loadingProblem_Express
-    ports:
-      - '3000:3000'
-    environment:
-      DB_PORT: 3306
-      DB_ROOT_PASSWORD: root
-      DB_DATABASE: truckloading
-      DB_HOST : database
-      DB_USERNAME: root
-      DB_PASSWORD: root
-    depends_on:
-      - database
-
-    command: bash -c 'while !</dev/tcp/database/3306; do sleep 1; done; npm run dev'
-      
   database:
-    image: mariadb
+    image: mongo
     container_name: loadingProblem_DB
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: truckloading
-      # MYSQL_ROOT_HOST : database
-      # MYSQL_USER: root
-      # MYSQL_PASSWORD: root
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
+      MONGO_INITDB_DATABASE: "${MONGO_INITDB_DATABASE}"
     volumes:
-      - maria-db:/data/db
+      - mongo-db:/data/db/mongodb
     ports:
-      - '3306:3306'
+      - '${DB_PORT}:${DB_PORT}'
   
 volumes:
-  maria-db:
+  mongo-db:

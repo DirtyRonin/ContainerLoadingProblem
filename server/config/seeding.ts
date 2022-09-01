@@ -1,14 +1,9 @@
-import { Cargo, Order, Truck, TruckLoading } from '../models';
+import { CargoSeq, OrderSeq, Truck, TruckLoading, Route } from '../models';
 import { sequelize } from './db';
 
 export default async function seeding(): Promise<void> {
-  const orderRepo = sequelize.getRepository(Order);
-  await orderRepo.bulkCreate([
-    { orderName: 'Erste Bestellung'},
-    { orderName: 'Zweite Bestellung'},
-    { orderName: 'Dritte Bestellung'},
-  ]);
-
+  const orderRepo = sequelize.getRepository(OrderSeq);
+  await orderRepo.bulkCreate([{ orderName: 'Erste Bestellung' }, { orderName: 'Zweite Bestellung' }, { orderName: 'Dritte Bestellung' }]);
 
   const trucksRepo = sequelize.getRepository(Truck);
   await trucksRepo.bulkCreate([
@@ -63,19 +58,26 @@ export default async function seeding(): Promise<void> {
       isReadonly: true,
     },
   ]);
-  
-  const cargoRepo = sequelize.getRepository(Cargo);
+
+  const cargoRepo = sequelize.getRepository(CargoSeq);
   await cargoRepo.bulkCreate([
-    { name: 'Auf 1/2 Europalette', width: 60, length: 40, weight: 30, quantity: 40, height: 80, isStackable: true ,orderId:1},
-    { name: 'Auf 1/4 Europalette', width: 80, length: 60, weight: 30, quantity: 10, height: 110, isStackable: true,orderId:2 },
-    { name: 'Auf Europalette', width: 120, length: 80, weight: 25, quantity: 10, height: 100, isStackable: true,orderId:2 },
-    { name: 'Auf Industriepalette', width: 120, length: 100, weight: 30, quantity: 10, height: 120, isStackable: true,orderId:2 },
+    { name: 'Auf 1/2 Europalette', width: 60, length: 40, weight: 30, quantity: 40, height: 80, isStackable: true, orderId: 1 },
+    { name: 'Auf 1/4 Europalette', width: 80, length: 60, weight: 30, quantity: 10, height: 110, isStackable: true, orderId: 2 },
+    { name: 'Auf Europalette', width: 120, length: 80, weight: 25, quantity: 10, height: 100, isStackable: true, orderId: 2 },
+    { name: 'Auf Industriepalette', width: 120, length: 100, weight: 30, quantity: 10, height: 120, isStackable: true, orderId: 2 },
   ]);
+
+  const routeRepo = sequelize.getRepository(Route);
+  await routeRepo.bulkCreate([
+    { from: 'A', to: 'B' },
+    { from: 'A', to: 'C' },
+    { from: 'A', to: 'D' },
+  ]);
+
   const truckLoadingRepo = sequelize.getRepository(TruckLoading);
   await truckLoadingRepo.bulkCreate([
-    { loadingMeter: 500, truckId:1,cargoId:1},
-    { loadingMeter: 500, truckId:1,cargoId:2},
-    { loadingMeter: 500, truckId:2,cargoId:3},
-    
+    { truckId: 1, cargoId: 1, routeId: 1 },
+    { truckId: 1, cargoId: 2, routeId: 1 },
+    { truckId: 2, cargoId: 3, routeId: 1 },
   ]);
 }

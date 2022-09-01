@@ -2,13 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { Repository, Sequelize } from "sequelize-typescript";
 const { Op } = require("sequelize");
 
-import { Truck } from "../models/truck";
 import { ITruckController } from "../interfaces";
+import { Model } from "mongoose";
+import { ITruck } from "../interfaces/ITruck";
 
 export class TruckController implements ITruckController {
   ;
 
-  constructor(private readonly truckRepository: Repository<Truck>,private readonly sequelize: Sequelize,) {  }
+  constructor(private readonly truckRepository: Model<ITruck, {}, {}, {}, any>) {  }
 
   public GetAll = async (
     req: Request,
@@ -16,7 +17,7 @@ export class TruckController implements ITruckController {
     next: NextFunction
   ) => {
     try {
-      const trucks = await this.truckRepository.findAll({include:this.sequelize.models['TruckLoading']});
+      const trucks = await this.truckRepository.find();
 
       return res.status(200).json(trucks);
     } catch (error) {
@@ -30,7 +31,7 @@ export class TruckController implements ITruckController {
     next: NextFunction
   ) => {
     try {
-      const truck = await this.truckRepository.findByPk(req.params.id);
+      const truck = await this.truckRepository.findById(req.params.id);
       if (!truck) return res.status(404).json("id not found");
 
       return res.status(200).json(truck);
@@ -42,11 +43,7 @@ export class TruckController implements ITruckController {
   public FilterByIds = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const ids:number[] = req.body.ids;
-      const cargos = await this.truckRepository.findAll({
-        where: {
-          id: {[Op.in] :  ids  },
-        },
-      });
+      const cargos = await this.truckRepository.find({ _id: { $in: ids } });
 
       return res.status(200).json(cargos);
     } catch (error) {
@@ -76,12 +73,10 @@ export class TruckController implements ITruckController {
   ) => {
     try {
       const { id } = req.body;
-      await this.truckRepository.update({ ...req.body }, { where: { id } });
-
-      const updatedTruck = await this.truckRepository.findByPk(id);
+      const updatedTruck = await this.truckRepository.findOneAndUpdate({ _id: id }, { $set: { ...req.body } });
       if (!updatedTruck) return res.status(404).json("id not found");
 
-      res.status(200).json(updatedTruck);
+      res.status(200).json(req.body);
     } catch (error) {
       next(error);
     }
@@ -95,13 +90,8 @@ export class TruckController implements ITruckController {
     try {
       const { id } = req.params;
 
-      const truck = await this.truckRepository.findByPk(id);
-      if (!truck) return res.status(404).json(-1);
-
-      await truck?.destroy();
-      const reloadTruck = await this.truckRepository.findByPk(id);
-
-      if (reloadTruck) return res.status(500).json(-1);
+      const result = await this.truckRepository.deleteOne({ _id: id });
+      if (result.deletedCount === 0) return res.status(404).json(-1);
 
       return res.status(200).json(id);
     } catch (error) {

@@ -1,6 +1,6 @@
 import { Column, Model, Table, HasMany, ForeignKey, BelongsTo, DataType, Index } from 'sequelize-typescript';
-import { Cargo } from './cargo';
-import { Order } from './order';
+import { CargoSeq } from './cargo';
+import { OrderSeq } from './order';
 import { Route } from './route';
 import { Truck } from './truck';
 
@@ -22,12 +22,12 @@ export class TruckLoading extends Model {
   @BelongsTo(() => Truck)
   truck!: Truck;
 
-  @ForeignKey(() => Cargo)
+  @ForeignKey(() => CargoSeq)
   @Column
   cargoId!: number;
 
-  @BelongsTo(() => Cargo)
-  cargo!: Cargo;
+  @BelongsTo(() => CargoSeq)
+  cargo!: CargoSeq;
 
   @ForeignKey(() => Route)
   @Column

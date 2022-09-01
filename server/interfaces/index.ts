@@ -1,3 +1,6 @@
 export * from './ITruckController'
 export * from './IOrderController'
 export * from './ICargoController'
+export * from './ICargo'
+export * from './IOrder'
+export * from './IEntity'

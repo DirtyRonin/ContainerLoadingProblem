@@ -1,10 +1,8 @@
 import { createServer } from 'http';
 
-import { sequelize } from './config/db';
+import { sequelize, connect } from './config/db';
 import seeding from './config/seeding';
 import { app } from './app';
-import { Cargo, Order, Truck } from './models';
-import { DataType } from 'sequelize-typescript';
 
 const port = process.env.PORT || 3000;
 
@@ -32,7 +30,9 @@ const forceSync = async () => {
   // await sequelize.sync();
   // await forceSync();
 
+  
   createServer(app).listen(port, () => {
+    connect()
     console.log(`server running on port ${port}`);
   });
 })();

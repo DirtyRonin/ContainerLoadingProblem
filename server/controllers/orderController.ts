@@ -1,27 +1,16 @@
-import { Request, Response, NextFunction } from "express";
-import { Repository, Sequelize } from "sequelize-typescript";
+import { Request, Response, NextFunction } from 'express';
+import { Model } from 'mongoose';
+import { Repository, Sequelize } from 'sequelize-typescript';
 
-import { IOrderController } from "../interfaces";
-import { Cargo, Order } from "../models";
+import { IOrder, IOrderController } from '../interfaces';
+import { CargoSeq, OrderSeq } from '../models';
 
 export class OrderController implements IOrderController {
-  
-  constructor(
-    private readonly orderRepository: Repository<Order>,
-    private readonly sequelize: Sequelize,
+  constructor(private readonly orderRepository: Model<IOrder, {}, {}, {}, any>) {}
 
-  ) {
-    // this.orderRepository = repo;
-    // private readonly sequelize: Sequelize;
-  }
-
-  public GetAll = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const orders = await this.orderRepository.findAll({include:[this.sequelize.models['Cargo']]});
+      const orders = await this.orderRepository.find();
 
       return res.status(200).json(orders);
     } catch (error) {
@@ -29,14 +18,10 @@ export class OrderController implements IOrderController {
     }
   };
 
-  public GetById = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public GetById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const order = await this.orderRepository.findByPk(req.params.id);
-      if (!order) return res.status(404).json("id not found");
+      const order = await this.orderRepository.findById(req.params.id);
+      if (!order) return res.status(404).json('id not found');
 
       return res.status(200).json(order);
     } catch (error) {
@@ -44,14 +29,10 @@ export class OrderController implements IOrderController {
     }
   };
 
-  public Create = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public Create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newOrder = await this.orderRepository.create(req.body);
-      if (!newOrder) return res.status(500).json("could not create order");
+      if (!newOrder) return res.status(500).json('could not create order');
 
       return res.status(201).json(newOrder);
     } catch (error) {
@@ -59,39 +40,26 @@ export class OrderController implements IOrderController {
     }
   };
 
-  public Update = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public Update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.body;
       await this.orderRepository.update({ ...req.body }, { where: { id } });
 
-      const updatedOrder = await this.orderRepository.findByPk(id);
-      if (!updatedOrder) return res.status(404).json("id not found");
+      const updatedOrder = await this.orderRepository.findOneAndUpdate({ _id: id }, { $set: { ...req.body } });
+      if (!updatedOrder) return res.status(404).json('id not found');
 
-      res.status(200).json(updatedOrder);
+      res.status(200).json(req.body);
     } catch (error) {
       next(error);
     }
   };
 
-  public Delete = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  public Delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
 
-      const order = await this.orderRepository.findByPk(id);
-      if (!order) return res.status(404).json(-1);
-
-      await order?.destroy();
-      const reloadOrder = await this.orderRepository.findByPk(id);
-
-      if (reloadOrder) return res.status(500).json(-1);
+      const result = await this.orderRepository.deleteOne({ _id: id });
+      if (result.deletedCount === 0) return res.status(404).json(-1);
 
       return res.status(200).json(id);
     } catch (error) {

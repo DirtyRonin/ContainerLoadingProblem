@@ -1,10 +1,22 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Cargo, Order, Truck, TruckLoading } from '../models';
+import { CargoSeq, OrderSeq, Truck, TruckLoading } from '../models';
 import { Route } from '../models/route';
-import { config } from './config';
+import config from './config';
 
+import mongoose from 'mongoose';
 const { DB_DATABASE, DB_ROOT_PASSWORD, DB_USER, DB_PORT, DB_HOST } = config;
-console.log(config);
+
+export const connect = () => {
+
+const connectionString=`mongodb://${DB_USER}:${DB_ROOT_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}?authSource=admin`
+
+console.log('connectionString',connectionString)
+
+  mongoose.connect(connectionString).then(
+    x => console.log("mongo connected")
+  ).catch(x => console.log("not connected to mongo",x));
+};
+
 export const sequelize = new Sequelize({
   database: DB_DATABASE,
   username: DB_USER,
@@ -13,5 +25,5 @@ export const sequelize = new Sequelize({
   port: +DB_PORT,
   dialect: 'mariadb',
   repositoryMode: true,
-  models: [Truck, Order, Cargo, TruckLoading, Route],
+  models: [Truck, OrderSeq, CargoSeq, TruckLoading, Route],
 });

@@ -1,7 +1,19 @@
+import { Schema } from 'mongoose';
 import { Column, Model, Table, HasMany, BelongsToMany } from 'sequelize-typescript';
-import { Cargo } from '.';
+import { CargoSeq } from '.';
+import { ITruck } from '../interfaces/ITruck';
 import { Route } from './route';
 import { TruckLoading } from './truckLoading';
+
+export const truckSchema = new Schema<ITruck>({
+  vehicleIdentifier: { type: String, required: true },
+  loadingTime: { type: Number, required: true },
+  dischargeTime: { type: Number, required: true },
+  height: { type: Number, required: true },
+  width: { type: Number, required: true },
+  length: { type: Number, required: true },
+  maxWeight: { type: Number, required: true },
+});
 
 @Table
 export class Truck extends Model {
@@ -13,14 +25,12 @@ export class Truck extends Model {
   @Column length!: number;
   @Column maxWeight!: number;
 
+  @BelongsToMany(() => Route, () => TruckLoading)
+  routes!: Route[];
 
-  @BelongsToMany(()=> Route, ()=> TruckLoading)
-  routes!:Route[]
+  @BelongsToMany(() => CargoSeq, () => TruckLoading)
+  cargos!: CargoSeq[];
 
-  @BelongsToMany(() => Cargo, () => TruckLoading)
-  cargos!: Cargo[];
-
-  @HasMany(()=> TruckLoading)
-  truckLoadings!:TruckLoading[]
-  
+  @HasMany(() => TruckLoading)
+  truckLoadings!: TruckLoading[];
 }

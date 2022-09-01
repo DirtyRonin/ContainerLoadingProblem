@@ -1,21 +1,32 @@
-import { HasOne,BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript';
-import {  } from 'sequelize/types';
-import { Order } from './order';
+import { Schema } from 'mongoose';
+import { HasOne, BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import {} from 'sequelize/types';
+import { OrderSeq } from './order';
 import { TruckLoading } from './truckLoading';
+import { ICargo } from '../interfaces';
 
+export const cargoSchema = new Schema<ICargo>({
+  name: { type: String, required: true },
+  width: { type: Number, required: true },
+  length: { type: Number, required: true },
+  weight: { type: Number, required: true },
+  quantity: { type: Number, required: true },
+  height: { type: Number, required: true },
+  isStackable: { type: Boolean, required: true },
+});
 
 
 @Table
-export class Cargo extends Model {
+export class CargoSeq extends Model {
   @HasOne(() => TruckLoading)
   truckLoading!: TruckLoading;
 
-  @ForeignKey(() => Order)
-  @Column({allowNull:false})
+  @ForeignKey(() => OrderSeq)
+  @Column({ allowNull: false })
   orderId!: number;
 
-  @BelongsTo(() => Order)
-  order!: Order;
+  @BelongsTo(() => OrderSeq)
+  order!: OrderSeq;
 
   @Column
   name!: string;
