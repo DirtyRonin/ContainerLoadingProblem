@@ -29,7 +29,7 @@ const DeleteTruck = async (id: string): Promise<string> => {
   return result.data;
 };
 const FilterTruckByIds = async (ids: string[]): Promise<ITruck[]> => {
-  const result = await api().put(`${filterTrucksByIds}`, { ids });
+  const result = await api().put(`${apiName}/${filterTrucksByIds}`, { ids });
   return result.data;
 };
 
