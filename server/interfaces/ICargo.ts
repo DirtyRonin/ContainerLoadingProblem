@@ -3,6 +3,7 @@ import { IEntity } from '.';
 
 export interface ICargo extends IEntity {
   orderId:Types.ObjectId
+  truckLoadingId:Types.ObjectId
   name: string;
   width: number;
   length: number;

@@ -1,11 +1,12 @@
 import { model, Model } from 'mongoose';
 import { IOrder, ITruck, ICargo } from '../interfaces';
-import { RecordOfSchemas, truckSchema, orderSchema, cargoSchema } from '../models';
+import { truckSchema, orderSchema, cargoSchema } from '../models';
+import { CARGO_CONST, ORDER_CONST, TRUCK_CONST } from './consts';
 
 export default async function seeding(): Promise<void> {
-  const truckModel: Model<ITruck, {}, {}, {}, any> = model<ITruck>(RecordOfSchemas.Truck, truckSchema);
-  const orderModel: Model<IOrder, {}, {}, {}, any> = model<IOrder>(RecordOfSchemas.Order, orderSchema);
-  const cargoModel: Model<ICargo, {}, {}, {}, any> = model<ICargo>(RecordOfSchemas.Cargo, cargoSchema);
+  const truckModel: Model<ITruck, {}, {}, {}, any> = model<ITruck>(TRUCK_CONST, truckSchema);
+  const orderModel: Model<IOrder, {}, {}, {}, any> = model<IOrder>(ORDER_CONST, orderSchema);
+  const cargoModel: Model<ICargo, {}, {}, {}, any> = model<ICargo>(CARGO_CONST, cargoSchema);
 
   await Promise.all([cargoModel.collection.drop(), orderModel.collection.drop(), truckModel.collection.drop()]);
 

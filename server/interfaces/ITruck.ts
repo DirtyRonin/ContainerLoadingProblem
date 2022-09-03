@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { IEntity } from "./IEntity";
 
 export interface ITruck extends IEntity{
@@ -8,4 +9,5 @@ export interface ITruck extends IEntity{
   width: number;
   length: number;
   maxWeight: number;
+  routes:[Types.ObjectId]
 }

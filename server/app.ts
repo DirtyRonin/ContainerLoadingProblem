@@ -8,17 +8,18 @@ import { json } from 'body-parser';
 const cors = require('cors');
 
 import { cargoRouter, truckRouter, orderRouter } from './routes';
-import { cargoSchema, orderSchema, truckSchema, RecordOfSchemas } from './models';
+import { cargoSchema, orderSchema, truckSchema } from './models';
 import { CargoController, TruckController, OrderController } from './controllers';
 import { ICargo, IOrder, ITruck } from './interfaces';
+import { CARGO_CONST, ORDER_CONST, TRUCK_CONST } from './config/consts';
 
-const truckRepository: Model<ITruck, {}, {}, {}, any> = model<ITruck>(RecordOfSchemas.Truck, truckSchema);
+const truckRepository: Model<ITruck, {}, {}, {}, any> = model<ITruck>(TRUCK_CONST, truckSchema);
 const truckController = new TruckController(truckRepository);
 
-const orderRepository: Model<IOrder, {}, {}, {}, any> = model<IOrder>(RecordOfSchemas.Order, orderSchema);
+const orderRepository: Model<IOrder, {}, {}, {}, any> = model<IOrder>(ORDER_CONST, orderSchema);
 const orderController = new OrderController(orderRepository);
 
-const cargoRepository: Model<ICargo, {}, {}, {}, any> = model<ICargo>(RecordOfSchemas.Cargo, cargoSchema);
+const cargoRepository: Model<ICargo, {}, {}, {}, any> = model<ICargo>(CARGO_CONST, cargoSchema);
 const cargoController = new CargoController(cargoRepository, orderRepository);
 
 export const app = express();

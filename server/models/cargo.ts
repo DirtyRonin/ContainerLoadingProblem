@@ -1,28 +1,26 @@
-import { model, Schema, Types } from 'mongoose';
-import { HasOne, BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript';
+import { model, Schema } from 'mongoose';
 
-import {} from 'sequelize/types';
-import { orderSchema, OrderSeq } from './order';
-import { TruckLoading } from './truckLoading';
+import { orderSchema } from './order';
 import { ICargo, IOrder } from '../interfaces';
-import { RecordOfSchemas } from './recordOfSchemas';
+import { ORDER_CONST } from '../config/consts';
 
-export const cargoSchema = new Schema<ICargo>(
-  {
-    name: { type: String, required: true },
-    width: { type: Number, required: true },
-    length: { type: Number, required: true },
-    weight: { type: Number, required: true },
-    quantity: { type: Number, required: true },
-    height: { type: Number, required: true },
-    isStackable: { type: Boolean, required: true },
-    orderId: { type: Schema.Types.ObjectId, ref: 'Order' },
-  }
-);
+export const cargoSchema = new Schema<ICargo>({
+  name: { type: String, required: true },
+  width: { type: Number, required: true },
+  length: { type: Number, required: true },
+  weight: { type: Number, required: true },
+  quantity: { type: Number, required: true },
+  height: { type: Number, required: true },
+  isStackable: { type: Boolean, required: true },
+  orderId: { type: Schema.Types.ObjectId, ref: ORDER_CONST },
+});
 
+/** saving object id on both sides, because in the app cargos will be fetched through 
+ * the order.cargos and this._id as well and where need to be always the orderID available 
+ * for grouping*/
 cargoSchema.post('save', function (doc) {
   console.log(`add cargo 'id ${doc._id}' to order '${doc.orderId}'`);
-  const orderModel = model<IOrder>(RecordOfSchemas.Order, orderSchema);
+  const orderModel = model<IOrder>(ORDER_CONST, orderSchema);
   orderModel.findById(doc.orderId).then((order) => {
     if (!order) return;
 
@@ -33,7 +31,7 @@ cargoSchema.post('save', function (doc) {
 
 cargoSchema.post('deleteOne', function (doc) {
   console.log(`remove cargo id '${doc._id}' from order '${doc.orderId}'`);
-  const orderModel = model<IOrder>(RecordOfSchemas.Order, orderSchema);
+  const orderModel = model<IOrder>(ORDER_CONST, orderSchema);
   orderModel.findById(doc.orderId).then((order) => {
     if (!order) return;
 
@@ -43,31 +41,3 @@ cargoSchema.post('deleteOne', function (doc) {
     order.save();
   });
 });
-
-@Table
-export class CargoSeq extends Model {
-  @HasOne(() => TruckLoading)
-  truckLoading!: TruckLoading;
-
-  @ForeignKey(() => OrderSeq)
-  @Column({ allowNull: false })
-  orderId!: number;
-
-  @BelongsTo(() => OrderSeq)
-  order!: OrderSeq;
-
-  @Column
-  name!: string;
-  @Column
-  width!: number;
-  @Column
-  length!: number;
-  @Column
-  weight!: number;
-  @Column
-  quantity!: number;
-  @Column
-  height!: number;
-  @Column
-  isStackable!: boolean;
-}

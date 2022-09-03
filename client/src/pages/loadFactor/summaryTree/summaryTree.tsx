@@ -104,7 +104,7 @@ export default function OrderSummaryItem() {
 
   const renderOrderTreeItems = () =>
     state.cargos.map((cargo, index) => (
-      <TreeItem key={`#index-${index}.orderId-${cargo.orderId}`} nodeId={`#index-${index}.orderId-${cargo.orderId}`} label={`#index-${index}.orderId-${cargo.orderId}`}>
+      <TreeItem key={`${cargo._id}`} nodeId={`${cargo._id}`} label={`${cargo._id}`}>
         {renderCargoTreeItems(cargo.orderId)}
       </TreeItem>
     ));

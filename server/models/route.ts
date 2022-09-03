@@ -1,21 +1,10 @@
-import { BelongsToMany, Column, HasMany, Model, Table } from 'sequelize-typescript';
-import { CargoSeq } from './cargo';
-import { Truck } from './truck';
-import { TruckLoading } from './truckLoading';
+import { Schema } from 'mongoose';
+import { CARGO_CONST } from '../config/consts';
+import { IRoute } from '../interfaces/IRoute';
 
-@Table
-export class Route extends Model {
-  @BelongsToMany(() => Truck, () => TruckLoading)
-  trucks!: Truck[];
 
-  @BelongsToMany(() => CargoSeq, () => TruckLoading)
-  cargos!: CargoSeq[];
-
-  @HasMany(() => TruckLoading)
-  truckLoadings!: TruckLoading[];
-
-  @Column
-  from!:string
-  @Column
-  to!:string
-}
+export const routeSchema = new Schema<IRoute>({
+  from: { type: String, required: true },
+  to: { type: String, required: true },
+  cargos:[{ type: Schema.Types.ObjectId, ref: CARGO_CONST }]
+});
