@@ -20,19 +20,19 @@ export default function TruckSliderListItem(props: Props) {
     setChecked(isTruckChecked());
   }, []);
 
-  const isTruckChecked = () => (selectedTruckIds.find((x) => x === truck.id) ? true : false);
+  const isTruckChecked = () => (selectedTruckIds.find((x) => x === truck._id) ? true : false);
 
   const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (selectedLoadSummaryIds.find((x) => x.truckId === truck.id) !== undefined) return;
+    if (selectedLoadSummaryIds.find((x) => x.truckId === truck._id) !== undefined) return;
 
     setChecked(!isChecked);
 
     if (isChecked) {
-      removeTruckId(truck.id);
+      removeTruckId(truck._id);
       return;
     }
 
-    addTruckId(truck.id);
+    addTruckId(truck._id);
   };
 
   return (
@@ -41,7 +41,7 @@ export default function TruckSliderListItem(props: Props) {
         <ListItemIcon>
           <TruckIcon />
         </ListItemIcon>
-        <ListItemText primary={truck.vehicleIdentifier} secondary={`#${truck.vehicleIdentifier}-${truck.id}`} />
+        <ListItemText primary={truck.vehicleIdentifier} secondary={`#${truck.vehicleIdentifier}-${truck._id}`} />
         <ListItemIcon>
           <Checkbox edge="end" tabIndex={-1} disableRipple inputProps={{ 'aria-labelledby': 'labelId' }} checked={isChecked} />
         </ListItemIcon>

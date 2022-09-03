@@ -1,7 +1,7 @@
 export interface ILoadSummaryIds {
-  cargoId: number;
-  truckId: number;
-  orderId: number;
+  cargoId: string;
+  truckId: string;
+  orderId: string;
 }
 
 export const FindLoadSummaryIds = <T extends ILoadSummaryIds>(values: T[], b: T): T | undefined =>

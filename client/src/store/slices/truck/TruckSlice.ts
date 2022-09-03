@@ -20,11 +20,11 @@ export const initialState: TruckState = {
 export const FetchAllTrucks = createAsyncThunk('trucks/fetchAllStatus', async () => {
   return await TruckApi.FetchTrucks();
 });
-export const FilterTrucksByIds = createAsyncThunk('trucks/filterByIds', async (ids: number[]) => {
+export const FilterTrucksByIds = createAsyncThunk('trucks/filterByIds', async (ids: string[]) => {
   return await TruckApi.FilterTruckByIds(ids);
 });
 
-export const DeleteTruck = createAsyncThunk('trucks/RemoveStatus', async (id: number, thunkAPI) => await TruckApi.DeleteTruck(id));
+export const DeleteTruck = createAsyncThunk('trucks/RemoveStatus', async (id: string, thunkAPI) => await TruckApi.DeleteTruck(id));
 
 export const UpdateTruck = createAsyncThunk('trucks/UpdateStatus', async (truck: ITruck, thunkAPI) => await TruckApi.UpdateTruck(truck));
 
@@ -56,7 +56,7 @@ export const truckSlice = createSlice({
         state.loading = 'failed';
       })
       .addCase(DeleteTruck.fulfilled, (state, action) => {
-        const index = state.trucks.findIndex((x) => x.id === +action.payload);
+        const index = state.trucks.findIndex((x) => x._id === action.payload);
         state.trucks.splice(index, 1);
 
         state.loading = 'succeeded';
@@ -69,7 +69,7 @@ export const truckSlice = createSlice({
         state.loading = 'failed';
       })
       .addCase(UpdateTruck.fulfilled, (state, action) => {
-        const index = state.trucks.findIndex((x) => x.id === action.payload.id);
+        const index = state.trucks.findIndex((x) => x._id === action.payload._id);
         state.trucks[index] = action.payload;
         state.loading = 'succeeded';
       })

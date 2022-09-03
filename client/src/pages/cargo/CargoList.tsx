@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 
-import { useAppDispatch, useAppSelector, SelectCargoState, SelectOrderListState, FetchCargoByOrderId,UnselectCargo } from '../../store';
+import { useAppDispatch, useAppSelector, SelectCargoState, SelectOrderListState, UnselectCargoId, FetchCargoByOrderId } from '../../store';
 import CustomList from '../../components/ui/CostumList';
 import ListItem from './CargoListItem';
 import { Cargo } from '../../models';
 import { ICargo } from '../../interfaces';
+import { IsStringEmpty } from '../../utils/shared';
 
 export default function CargoList() {
   const dispatch = useAppDispatch();
@@ -12,9 +13,10 @@ export default function CargoList() {
   const { cargos, loading } = useAppSelector(SelectCargoState);
 
   useEffect(() => {
-    dispatch(UnselectCargo())
-    dispatch(FetchCargoByOrderId(selectedOrderId));
+    dispatch(UnselectCargoId());
+    if (IsStringEmpty(selectedOrderId)) return;
 
+    dispatch(FetchCargoByOrderId(selectedOrderId));
   }, [selectedOrderId]);
 
   const newCargos: ICargo[] = [Cargo.AsInitializeDefault(), ...cargos];

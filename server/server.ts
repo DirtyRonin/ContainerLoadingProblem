@@ -1,6 +1,6 @@
 import { createServer } from 'http';
 
-import { sequelize, connect } from './config/db';
+import { connect } from './config/db';
 import seeding from './config/seeding';
 import { app } from './app';
 
@@ -11,28 +11,21 @@ app.get('/alive/', (req, res) => {
   console.log('see me ran');
 });
 
-const forceSync = async () => {
-  await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
-  await sequelize.sync({ force: true });
-
-  await sequelize.query('SET FOREIGN_KEY_CHECKS = 1'); // setting the flag back for security
-  await seeding();
+const forceSync = () => {
+   seeding()
+    .then((result) => console.log('successfully seeded'))
+    .catch((e) => console.log('failed seeding ', e.message));
 };
 
 (async () => {
-  // try {
-  //   await sequelize.authenticate();
-  //   console.log("Connection has been established successfully.");
-  // } catch (error) {
-  //   console.error("Unable to connect to the database:", error);
-  // }
-
-  // await sequelize.sync();
-  // await forceSync();
-
+  
   
   createServer(app).listen(port, () => {
-    connect()
+    connect().then((x) => {
+      console.log('mongo connected')
+      // forceSync()
+    })
+    .catch((x) => console.log('not connected to mongo', x));
     console.log(`server running on port ${port}`);
   });
 })();

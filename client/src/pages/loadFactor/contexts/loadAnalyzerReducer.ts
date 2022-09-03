@@ -8,16 +8,16 @@ import { IAsyncRequest, initialAsyncRequest } from '../../../interfaces/IAsyncRe
 import { GetValueById } from '../../../utils/shared/DictionaryHelper';
 
 export type stateProps = {
-  readonly selectedTruckIds: number[];
-  readonly selectedOrderIds: number[];
+  readonly selectedTruckIds: string[];
+  readonly selectedOrderIds: string[];
   readonly selectedLoadSummaryIds: ILoadSummaryIds[];
   readonly loadSummaries: IAsyncRequest<KeyValueLoadSummary[]>;
   readonly addLoadSummaryLoading: AsyncStatus;
 
-  addOrderId(orderId: number): void;
-  removeOrderId(orderId: number): void;
-  addTruckId(truckId: number): void;
-  removeTruckId(truckId: number): void;
+  addOrderId(orderId: string): void;
+  removeOrderId(orderId: string): void;
+  addTruckId(truckId: string): void;
+  removeTruckId(truckId: string): void;
   addSelectedLoadSummaryIds(summary: ILoadSummaryIds): void;
   removeSelectedLoadSummaryIds(summary: ILoadSummaryIds): void;
   fetchAllLoadSummaries_Pending(): void;
@@ -34,10 +34,10 @@ export const INITIAL_STATE: stateProps = {
   addLoadSummaryLoading: 'idle',
   addSelectedLoadSummaryIds: (summary: ILoadSummaryIds) => {},
   removeSelectedLoadSummaryIds: (summary: ILoadSummaryIds) => {},
-  addOrderId: (orderId: number) => {},
-  removeOrderId: (orderId: number) => {},
-  addTruckId: (truckId: number) => {},
-  removeTruckId: (truckId: number) => {},
+  addOrderId: (orderId: string) => {},
+  removeOrderId: (orderId: string) => {},
+  addTruckId: (truckId: string) => {},
+  removeTruckId: (truckId: string) => {},
   fetchAllLoadSummaries_Pending: () => {},
   fetchAllLoadSummaries_Failed: (e: Error) => {},
   fetchAllLoadSummaries_Success: (loadSummaries: KeyValueLoadSummary[]) => {},
@@ -46,22 +46,22 @@ export const INITIAL_STATE: stateProps = {
 
 class LoadAnalyzerReducer extends ImmerReducer<stateProps> {
   // selected truck id
-  addTruckId(truckId: number) {
+  addTruckId(truckId: string) {
     console.log(`adding truck id on an selected truck`);
     this.draftState.selectedTruckIds.push(truckId);
   }
-  removeTruckId(truckId: number) {
+  removeTruckId(truckId: string) {
     console.log(`removing truck id on an selected truck`);
     const index = this.draftState.selectedTruckIds.indexOf(truckId);
     this.draftState.selectedTruckIds.splice(index, 1);
   }
 
   // selected order id
-  addOrderId(orderId: number) {
+  addOrderId(orderId: string) {
     console.log(`adding order id on an selected order`);
     this.draftState.selectedOrderIds.push(orderId);
   }
-  removeOrderId(orderId: number) {
+  removeOrderId(orderId: string) {
     console.log(`removing order id on an selected order`);
     const index = this.draftState.selectedOrderIds.indexOf(orderId);
     this.draftState.selectedOrderIds.splice(index, 1);
@@ -138,9 +138,9 @@ class LoadAnalyzerReducer extends ImmerReducer<stateProps> {
     const truckGroups = _.groupBy(selectedLoadSummaries, (selected) => selected.truckId);
 
     Object.keys(truckGroups).forEach((key) => {
-      const tryGetSummaries = GetValueById(+key, this.draftState.loadSummaries.value);
+      const tryGetSummaries = GetValueById(key, this.draftState.loadSummaries.value);
 
-      if (tryGetSummaries === undefined) this.draftState.loadSummaries.value.push({ key: +key, values: truckGroups[+key] });
+      if (tryGetSummaries === undefined) this.draftState.loadSummaries.value.push({ key: key, values: truckGroups[+key] });
       else truckGroups[+key].forEach((summary) => tryGetSummaries.values.push(summary));
     });
   }

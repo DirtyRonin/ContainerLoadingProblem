@@ -24,13 +24,13 @@ export const GoodsListItem = (props: Props) => {
   const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => dispatch(SelectSingleGoods(singleGoods));
 
   const handleOnDelete = () => {
-    dispatch(DeleteGoods(singleGoods.id));
+    dispatch(DeleteGoods(singleGoods._id));
   };
 
-  const isSelected = () => singleGoods.id === selectedSingleGoods.id;
+  const isSelected = () => singleGoods._id === selectedSingleGoods.id;
 
   const isRemovable = () => {
-    const {id,isReadonly} = singleGoods
+    const {_id: id,isReadonly} = singleGoods
     const status = GetEditStatus(id,isReadonly)
 
     return status === 'Update' ? true : false;

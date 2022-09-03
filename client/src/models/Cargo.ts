@@ -3,9 +3,8 @@ import { Goods } from '.';
 
 export class Cargo implements ICargo {
   constructor(
-    public id: number,
-    public truckId: number | null,
-    public orderId: number,
+    public _id: string,
+    public orderId: string,
     public name: string,
     public width: number,
     public length: number,
@@ -17,16 +16,15 @@ export class Cargo implements ICargo {
 
   public static AsInitializeDefault = (singleGoods?: IGoods) => {
     const {name,width,length} = singleGoods ?? Goods.AsInitializeDefault('Empty');
-    return new Cargo(0,null,0,name,width,length,0,0,false,0);
+    return new Cargo('','',name,width,length,0,0,false,0);
   };
-  public static WithGoods = (id: number,
-    truckId: number | null,
-    orderId: number,
+  public static WithGoods = (id: string,
+    orderId:string,
     singleGoods: IGoods | null,
     quantity: number,
     isStackable: boolean,
     height: number,) => {
     const {name,width,length} = singleGoods ?? Goods.AsInitializeDefault('Empty');
-    return new Cargo(id,truckId,orderId,name,width,length,0,quantity,isStackable,height);
+    return new Cargo(id,orderId,name,width,length,0,quantity,isStackable,height);
   };
 }

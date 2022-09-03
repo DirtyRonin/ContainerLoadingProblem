@@ -6,10 +6,10 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ICargo } from '../../interfaces';
 
-import { useAppDispatch, useAppSelector, SelectCargo, SelectCargoListState, DeleteCargo } from '../../store';
+import { useAppDispatch, useAppSelector, SelectCargoId, SelectCargoListState, DeleteCargo } from '../../store';
 import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
-import { GetEditStatus } from '../../utils/shared';
+import { GetEditStatus, IsStringEmpty } from '../../utils/shared';
 
 interface Props {
   cargo: ICargo;
@@ -19,18 +19,20 @@ export default function CargoListItem(props: Props) {
   const { cargo } = props;
 
   const dispatch = useAppDispatch();
-  const { selectedCargo } = useAppSelector(SelectCargoListState);
+  const { selectedCargoId} = useAppSelector(SelectCargoListState);
 
-  const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => dispatch(SelectCargo(cargo));
-
-  const handleOnDelete = () => {
-    dispatch(DeleteCargo(cargo.id));
+  const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    dispatch(SelectCargoId(cargo._id));
   };
 
-  const isSelected = () => cargo.id === selectedCargo.id;
+  const handleOnDelete = () => {
+    dispatch(DeleteCargo(cargo._id));
+  };
+
+  const isSelected = () => cargo._id === selectedCargoId;
 
   const isRemovable = () => {
-    const { id } = cargo;
+    const { _id: id } = cargo;
     const status = GetEditStatus(id);
 
     return status === 'Update' ? true : false;

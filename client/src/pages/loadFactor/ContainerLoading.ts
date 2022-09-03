@@ -17,14 +17,14 @@ class ContainerLoading implements IContainerLoading {
 
     const _sortedTrucksDesc = SortTrucks(trucks, this._containerHelper.CompareByVolume);
 
-    const unavailableCargoIds: number[] = [];
+    const unavailableCargoIds: string[] = [];
 
     for (let index = 0; index < _sortedTrucksDesc.length; index++) {
       const availableLoadSummaries = FilterAvailableLoadSummariesByUnavailableCargoIds(unavailableCargoIds, summaries);
 
       const currentTruck = _sortedTrucksDesc[index];
 
-      const keyValuePair = GetValueById(currentTruck.id, availableLoadSummaries);
+      const keyValuePair = GetValueById(currentTruck._id, availableLoadSummaries);
       if (!keyValuePair) throw new Error('Truck id is missing in summaries while splitting cargos on trucks');
 
       const loadingResults = this.SplitCargosOnTruck(currentTruck, keyValuePair.values);

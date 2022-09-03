@@ -2,9 +2,9 @@ import { IStacking, initializeStacking } from '.';
 import { ILoadSummaryIds } from './ILoadSummaryIds';
 
 export interface ILoadSummary extends ILoadSummaryIds {
-  cargoId: number;
-  truckId: number;
-  orderId: number;
+  cargoId: string;
+  truckId: string;
+  orderId: string;
   stacking: IStacking;
   goodsPerRow: number;
   goodsPerFullStackedRow: number;
@@ -17,9 +17,9 @@ export interface ILoadSummary extends ILoadSummaryIds {
 }
 
 export const initializeLoadSummary = (): ILoadSummary => ({
-  cargoId: 0,
-  truckId: 0,
-  orderId: 0,
+  cargoId: '',
+  truckId: '',
+  orderId: '',
   stacking: initializeStacking(),
   goodsPerRow: 0,
   goodsPerFullStackedRow: 0,

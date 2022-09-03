@@ -26,7 +26,7 @@ const initialState: GoodsState = {
   
   export const DeleteGoods = createAsyncThunk(
     "goods/RemoveStatus",
-    async (id: number, thunkAPI) => await GoodsApi.DeleteGood(id)
+    async (id: string, thunkAPI) => await GoodsApi.DeleteGood(id)
   );
   
   export const UpdateGoods = createAsyncThunk(
@@ -65,7 +65,7 @@ const initialState: GoodsState = {
           state.loading = "failed";
         })
         .addCase(DeleteGoods.fulfilled, (state, action) => {
-          const index = state.goods.findIndex((x) => x.id === +action.payload);
+          const index = state.goods.findIndex((x) => x._id === action.payload);
           state.goods.splice(index, 1);
           
           state.loading = "succeeded";
@@ -79,7 +79,7 @@ const initialState: GoodsState = {
         })
         .addCase(UpdateGoods.fulfilled, (state, action) => {
   
-          const index = state.goods.findIndex((x) => x.id === action.payload.id);
+          const index = state.goods.findIndex((x) => x._id === action.payload._id);
           state.goods[index] = action.payload
           state.loading = "succeeded";
         })
@@ -99,6 +99,6 @@ const initialState: GoodsState = {
   
   export const {} = goodSlice.actions;
   
-  export const SelectGoodsState = (state: RootState) => state.goodsGlobal;
+  // export const SelectGoodsState = (state: RootState) => state.goodsGlobal;
   
   export default goodSlice.reducer;

@@ -7,9 +7,9 @@ import { ICargo, ILoadSummary, initializeCargo } from '../../../interfaces';
 import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
 import { GetValueById } from '../../../utils/shared/DictionaryHelper';
 interface IProps {
-  truckId: number;
-  cargoId: number;
-  orderId: number;
+  truckId: string;
+  cargoId: string;
+  orderId: string;
   cargo: ICargo;
 }
 
@@ -18,7 +18,7 @@ export default function LoadingCargoTreeItems(props: IProps) {
 
   const { selectedLoadSummaryIds, loadSummaries, addSelectedLoadSummaryIds, removeSelectedLoadSummaryIds } = loadAnalyzerContext();
 
-  const [thisCargo, setCargo] = useState<ICargo>(initializeCargo());
+  const [thisCargo, setCargo] = useState<ICargo>(initializeCargo({}));
   const [thisSummary, setSummary] = useState<ILoadSummary | null>(null);
   const [isDisabled, setDisabled] = useState<boolean>(true);
 
@@ -74,7 +74,7 @@ export default function LoadingCargoTreeItems(props: IProps) {
     return (
       <>
         <Checkbox onChange={onCargoCheckedChange} checked={isChecked()} disabled={isDisabled} />
-        <Typography variant="caption">{`#${thisCargo.name}-${thisCargo.id}`}</Typography>
+        <Typography variant="caption">{`#${thisCargo.name}-${thisCargo._id}`}</Typography>
         <br />
         {hasSummary() ? <></> : <Typography variant="caption">{`Required Loading Meter: ${Math.round(thisSummary!.loadingMeter)} cm`}</Typography>}
       </>
@@ -83,7 +83,7 @@ export default function LoadingCargoTreeItems(props: IProps) {
 
   return (
     <>
-      <TreeItem nodeId={`#${thisCargo.name}-${thisCargo.id}`} label={treeLabel()} />
+      <TreeItem nodeId={`#${thisCargo.name}-${thisCargo._id}`} label={treeLabel()} />
     </>
   );
 }

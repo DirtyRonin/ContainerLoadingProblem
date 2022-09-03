@@ -18,14 +18,14 @@ const initialState: CargoState = {
 export const FetchAllCargo = createAsyncThunk('cargos/fetchAllStatus', async () => {
   return await CargoApi.FetchCargo();
 });
-export const FetchCargoByOrderId = createAsyncThunk('cargos/filterByOrderIdStatus', async (oderId:number) => {
+export const FetchCargoByOrderId = createAsyncThunk('cargos/filterByOrderIdStatus', async (oderId:string) => {
   return await CargoApi.FilterCargoByOrderId(oderId);
 });
-export const FetchCargoByOrderIds = createAsyncThunk('cargos/filterByOrderIdsStatus', async (oderIds:number[]) => {
+export const FetchCargoByOrderIds = createAsyncThunk('cargos/filterByOrderIdsStatus', async (oderIds:string[]) => {
   return await CargoApi.FilterCargoByOrderIds(oderIds);
 });
 
-export const DeleteCargo = createAsyncThunk('cargos/RemoveStatus', async (id: number, thunkAPI) => await CargoApi.DeleteCargo(id));
+export const DeleteCargo = createAsyncThunk('cargos/RemoveStatus', async (id: string, thunkAPI) => await CargoApi.DeleteCargo(id));
 
 export const UpdateCargo = createAsyncThunk('cargos/UpdateStatus', async (cargo: ICargo, thunkAPI) => await CargoApi.UpdateCargo(cargo));
 
@@ -58,7 +58,7 @@ export const cargoSlice = createSlice({
         state.loading = 'failed';
       })
       .addCase(DeleteCargo.fulfilled, (state, action) => {
-        const index = state.cargos.findIndex((x) => x.id === +action.payload);
+        const index = state.cargos.findIndex((x) => x._id === action.payload);
         state.cargos.splice(index, 1);
 
         state.loading = 'succeeded';
@@ -71,7 +71,7 @@ export const cargoSlice = createSlice({
         state.loading = 'failed';
       })
       .addCase(UpdateCargo.fulfilled, (state, action) => {
-        const index = state.cargos.findIndex((x) => x.id === action.payload.id);
+        const index = state.cargos.findIndex((x) => x._id === action.payload._id);
         state.cargos[index] = action.payload;
         state.loading = 'succeeded';
       })

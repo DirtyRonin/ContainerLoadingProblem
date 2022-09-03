@@ -1,10 +1,10 @@
 import { ILoadSummary } from "../interfaces"
 
 export type KeyValueLoadSummary = {
-    key:number
+    key:string
     values : ILoadSummary[]
 }
 
 // export type SummaryDictionary = {
-//     [key:number] : ILoadSummary[]
+//     [key:string] : ILoadSummary[]
 // }

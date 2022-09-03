@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import { Checkbox } from '@mui/material';
 
 import { IOrder } from '../../../interfaces';
-import loadAnalyzerContext,{} from '../contexts/LoadAnalyzerContext'
+import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
 interface Props {
   order: IOrder;
 }
@@ -15,7 +15,7 @@ interface Props {
 export default function OrderSliderItem(props: Props) {
   const { order } = props;
 
-  const {selectedOrderIds,removeOrderId,addOrderId} = loadAnalyzerContext()
+  const { selectedOrderIds, removeOrderId, addOrderId } = loadAnalyzerContext();
 
   const [isChecked, setChecked] = useState(false);
 
@@ -23,15 +23,15 @@ export default function OrderSliderItem(props: Props) {
     setChecked(isOrderChecked());
   }, []);
 
-  const isOrderChecked = () => (selectedOrderIds.find((x) => x === order.id) ? true : false);
+  const isOrderChecked = () => (selectedOrderIds.find((x) => x === order._id) ? true : false);
 
   const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isChecked) {
-      removeOrderId(order.id);
+      removeOrderId(order._id);
     } else {
-      addOrderId(order.id);
+      addOrderId(order._id);
     }
-    
+
     setChecked(!isChecked);
   };
 

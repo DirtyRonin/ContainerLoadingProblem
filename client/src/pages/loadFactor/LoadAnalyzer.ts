@@ -37,17 +37,17 @@ export class LoadAnalyzer implements ILoadAnalyzer {
     // const sortedCargosDic =  this._containerHelper.SortCargos([...cargos])
 
     for (let i = 0; i < sortedContainers.length; i++) {
-      const newEntry: KeyValueLoadSummary = { key: sortedContainers[i].id, values: [] };
+      const newEntry: KeyValueLoadSummary = { key: sortedContainers[i]._id, values: [] };
 
       for (let y = 0; y < cargos.length; y++) {
         /** To make sure, that selected cargos are still available when they linked order is closed */
         /** Cargos will no longer be added to every trucks when an order is selected */
 
-        const isSelected = selectedLoadSummaries.find((selected) => cargos[y].id === selected.cargoId);
+        const isSelected = selectedLoadSummaries.find((selected) => cargos[y]._id === selected.cargoId);
 
         // if the cargo is linked to the current cargo
         // and this is not the specific truck , stop here
-        if (isSelected !== undefined && isSelected.truckId !== sortedContainers[i].id) continue;
+        if (isSelected !== undefined && isSelected.truckId !== sortedContainers[i]._id) continue;
 
         const loadSummary = await this.AnalyseSingleLoad(cargos[y], sortedContainers[i]);
         newEntry.values.push(loadSummary);
@@ -97,8 +97,8 @@ export class LoadAnalyzer implements ILoadAnalyzer {
     // config https://www.goodloading.com/de/blog/beladung/wie-plane-ich-die-palettenplatzierung-im-fahrzeug/
 
     const result: ILoadSummary = {
-      cargoId: cargo.id,
-      truckId: truck.id,
+      cargoId: cargo._id,
+      truckId: truck._id,
       orderId: cargo.orderId,
       stacking,
       goodsPerRow,

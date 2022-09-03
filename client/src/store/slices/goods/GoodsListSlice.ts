@@ -35,6 +35,6 @@ export const goodsListSlice = createSlice({
 
 export const { SelectSingleGoods, UnselectSingleGoods } = goodsListSlice.actions;
 
-export const SelectGoodsListState = (state: RootState) => state.goodsListGlobal;
+// export const SelectGoodsListState = (state: RootState) => state.goodsListGlobal;
 
 export default goodsListSlice.reducer;

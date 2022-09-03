@@ -1,12 +1,64 @@
-import { CargoSeq, OrderSeq, Truck, TruckLoading, Route } from '../models';
-import { sequelize } from './db';
+import { model, Model } from 'mongoose';
+import { IOrder, ITruck, ICargo } from '../interfaces';
+import { RecordOfSchemas, truckSchema, orderSchema, cargoSchema } from '../models';
 
 export default async function seeding(): Promise<void> {
-  const orderRepo = sequelize.getRepository(OrderSeq);
-  await orderRepo.bulkCreate([{ orderName: 'Erste Bestellung' }, { orderName: 'Zweite Bestellung' }, { orderName: 'Dritte Bestellung' }]);
+  const truckModel: Model<ITruck, {}, {}, {}, any> = model<ITruck>(RecordOfSchemas.Truck, truckSchema);
+  const orderModel: Model<IOrder, {}, {}, {}, any> = model<IOrder>(RecordOfSchemas.Order, orderSchema);
+  const cargoModel: Model<ICargo, {}, {}, {}, any> = model<ICargo>(RecordOfSchemas.Cargo, cargoSchema);
 
-  const trucksRepo = sequelize.getRepository(Truck);
-  await trucksRepo.bulkCreate([
+  await Promise.all([cargoModel.collection.drop(), orderModel.collection.drop(), truckModel.collection.drop()]);
+
+  const orders = await Promise.all([
+    new orderModel({ orderName: 'Erste Bestellung', cargos: [] }).save(),
+    new orderModel({ orderName: 'Zweite Bestellung', cargos: [] }).save(),
+    new orderModel({ orderName: 'Dritte Bestellung', cargos: [] }).save(),
+  ]);
+
+  await Promise.all([
+    new cargoModel({
+      name: 'Auf 1/2 Europalette',
+      width: 60,
+      length: 40,
+      weight: 30,
+      quantity: 40,
+      height: 80,
+      isStackable: true,
+      orderId: orders[0]._id,
+    }).save(),
+    new cargoModel({
+      name: 'Auf 1/4 Europalette',
+      width: 80,
+      length: 60,
+      weight: 30,
+      quantity: 10,
+      height: 110,
+      isStackable: true,
+      orderId: orders[1]._id,
+    }).save(),
+    new cargoModel({
+      name: 'Auf Europalette',
+      width: 120,
+      length: 80,
+      weight: 25,
+      quantity: 10,
+      height: 100,
+      isStackable: true,
+      orderId: orders[1]._id,
+    }).save(),
+    new cargoModel({
+      name: 'Auf Industriepalette',
+      width: 120,
+      length: 100,
+      weight: 30,
+      quantity: 10,
+      height: 120,
+      isStackable: true,
+      orderId: orders[1]._id,
+    }).save(),
+  ]);
+
+  await truckModel.insertMany([
     {
       vehicleIdentifier: 'Transporter 5 EP',
       loadingTime: 1000,
@@ -57,27 +109,5 @@ export default async function seeding(): Promise<void> {
       maxWeight: 25000,
       isReadonly: true,
     },
-  ]);
-
-  const cargoRepo = sequelize.getRepository(CargoSeq);
-  await cargoRepo.bulkCreate([
-    { name: 'Auf 1/2 Europalette', width: 60, length: 40, weight: 30, quantity: 40, height: 80, isStackable: true, orderId: 1 },
-    { name: 'Auf 1/4 Europalette', width: 80, length: 60, weight: 30, quantity: 10, height: 110, isStackable: true, orderId: 2 },
-    { name: 'Auf Europalette', width: 120, length: 80, weight: 25, quantity: 10, height: 100, isStackable: true, orderId: 2 },
-    { name: 'Auf Industriepalette', width: 120, length: 100, weight: 30, quantity: 10, height: 120, isStackable: true, orderId: 2 },
-  ]);
-
-  const routeRepo = sequelize.getRepository(Route);
-  await routeRepo.bulkCreate([
-    { from: 'A', to: 'B' },
-    { from: 'A', to: 'C' },
-    { from: 'A', to: 'D' },
-  ]);
-
-  const truckLoadingRepo = sequelize.getRepository(TruckLoading);
-  await truckLoadingRepo.bulkCreate([
-    { truckId: 1, cargoId: 1, routeId: 1 },
-    { truckId: 1, cargoId: 2, routeId: 1 },
-    { truckId: 2, cargoId: 3, routeId: 1 },
   ]);
 }

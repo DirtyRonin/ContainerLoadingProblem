@@ -1,21 +1,19 @@
-import { IContainer, IEntity,initializeContainer } from '.';
+import { IContainer, IEntity, initializeContainer } from '.';
 
 export interface ICargo extends IEntity, IContainer {
-  truckId: number | null;
-  orderId: number;
+  orderId:string
   name: string;
   weight: number;
   quantity: number;
   isStackable: boolean;
 }
 
-export const initializeCargo = (name = ''): ICargo => ({
-  id: 0,
-  truckId: null,
-  orderId: 0,
+export const initializeCargo = ({ name = 'New Cargo', orderId = '' }): ICargo => ({
+  _id: '',
+  orderId,
   name,
   weight: 0,
   quantity: 0,
   isStackable: false,
-...initializeContainer()
+  ...initializeContainer(),
 });

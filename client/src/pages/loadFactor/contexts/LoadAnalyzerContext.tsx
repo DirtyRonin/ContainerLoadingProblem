@@ -34,10 +34,10 @@ export const LoadAnalyzerProvider = ({ children }: props) => {
       dispatch(ActionCreators.AddSelectedLoadSummaries_Success(selectedLoadSummaries)),
     addSelectedLoadSummaryIds: (summary: ILoadSummaryIds) => dispatch(ActionCreators.addSelectedLoadSummaryIds(summary)),//newFunction(dispatch, summary),
     removeSelectedLoadSummaryIds: (summary: ILoadSummaryIds) => dispatch(ActionCreators.removeSelectedLoadSummaryIds(summary)),
-    addOrderId: (orderId: number) => dispatch(ActionCreators.addOrderId(orderId)),
-    removeOrderId: (orderId: number) => dispatch(ActionCreators.removeOrderId(orderId)),
-    addTruckId: (truckId: number) => dispatch(ActionCreators.addTruckId(truckId)),
-    removeTruckId: (truckId: number) => dispatch(ActionCreators.removeTruckId(truckId)),
+    addOrderId: (orderId: string) => dispatch(ActionCreators.addOrderId(orderId)),
+    removeOrderId: (orderId: string) => dispatch(ActionCreators.removeOrderId(orderId)),
+    addTruckId: (truckId: string) => dispatch(ActionCreators.addTruckId(truckId)),
+    removeTruckId: (truckId: string) => dispatch(ActionCreators.removeTruckId(truckId)),
   };
 
   return <LoadAnalyzerContext.Provider value={value}>{children}</LoadAnalyzerContext.Provider>;

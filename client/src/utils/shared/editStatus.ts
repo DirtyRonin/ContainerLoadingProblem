@@ -1,8 +1,10 @@
+import { IsStringEmpty } from "./common"
+
 export type EditStatus = 'Update' | 'Create' | 'Readonly'
 
-export function GetEditStatus(id:number, isReadonly = false):EditStatus {
+export function GetEditStatus(id:string, isReadonly = false):EditStatus {
     if(isReadonly) return 'Readonly'
-    if(id < 1) return 'Create'
+    if(IsStringEmpty(id)) return 'Create'
 
     return 'Update'
 }

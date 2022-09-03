@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { Model } from 'mongoose';
-import { Repository, Sequelize } from 'sequelize-typescript';
+import { nameof } from 'ts-simple-nameof';
 
 import { IOrder, IOrderController } from '../interfaces';
-import { CargoSeq, OrderSeq } from '../models';
 
 export class OrderController implements IOrderController {
   constructor(private readonly orderRepository: Model<IOrder, {}, {}, {}, any>) {}
@@ -20,8 +19,9 @@ export class OrderController implements IOrderController {
 
   public GetById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const order = await this.orderRepository.findById(req.params.id);
-      if (!order) return res.status(404).json('id not found');
+      const { id } = req.params;
+      const order = await this.orderRepository.findById(id).populate(nameof<IOrder>((x) => x.cargos));
+      if (!order) return res.status(404).json('_id not found');
 
       return res.status(200).json(order);
     } catch (error) {
@@ -42,13 +42,16 @@ export class OrderController implements IOrderController {
 
   public Update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.body;
-      await this.orderRepository.update({ ...req.body }, { where: { id } });
+      const { _id } = req.body;
+      const order = await this.orderRepository.findById( _id )
+      if (!order) return res.status(404).json('_id not found');
 
-      const updatedOrder = await this.orderRepository.findOneAndUpdate({ _id: id }, { $set: { ...req.body } });
-      if (!updatedOrder) return res.status(404).json('id not found');
+      order.orderName = req.body[nameof<IOrder>(x => x.orderName)]
+      const result = await order.save()
+      
+      if (!result) return res.status(404).json('failed updating');
 
-      res.status(200).json(req.body);
+      res.status(200).json(order);
     } catch (error) {
       next(error);
     }

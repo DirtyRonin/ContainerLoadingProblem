@@ -6,10 +6,10 @@ import { KeyValueLoadSummary } from '../../../models';
 
 // Define a type for the slice state
 interface SummaryState {
-  readonly selectedTruckIds: number[];
-  readonly selectedOrderIds: number[];
+  readonly selectedTruckIds: string[];
+  readonly selectedOrderIds: string[];
   readonly loadSummaries: KeyValueLoadSummary[];
-  readonly selectedloadSummaries: { cargoId: number; truckId: number; orderId: number }[];
+  readonly selectedloadSummaries: { cargoId: string; truckId: string; orderId: string }[];
 }
 
 // Define the initial state using that type
@@ -26,18 +26,18 @@ export const summarySlice = createSlice({
     SetSummaries: (state, action: PayloadAction<KeyValueLoadSummary[]>) => {
       state.loadSummaries = action.payload;
     },
-    AddSelectedSummary: (state, action: PayloadAction<{ cargoId: number; truckId: number; orderId: number }>) => {
+    AddSelectedSummary: (state, action: PayloadAction<{ cargoId: string; truckId: string; orderId: string }>) => {
       state.selectedloadSummaries.push(action.payload);
     },
-    RemoveSelectedSummary: (state, action: PayloadAction<{ cargoId: number; truckId: number; orderId: number }>) => {
+    RemoveSelectedSummary: (state, action: PayloadAction<{ cargoId: string; truckId: string; orderId: string }>) => {
       const index = state.selectedloadSummaries.findIndex((x) => x.cargoId === action.payload.cargoId && x.truckId === action.payload.truckId);
       state.selectedloadSummaries.splice(index, 1);
     },
-    AddTruckId: (state, action: PayloadAction<number>) => {
+    AddTruckId: (state, action: PayloadAction<string>) => {
       console.log(`Add selected truck id ${action.payload}`);
       state.selectedTruckIds.push(action.payload);
     },
-    RemoveTruckId: (state, action: PayloadAction<number>) => {
+    RemoveTruckId: (state, action: PayloadAction<string>) => {
       console.log(`Remove selected truck id ${action.payload}`);
       const index = state.selectedTruckIds.indexOf(action.payload);
       state.selectedTruckIds.splice(index, 1);
@@ -45,11 +45,11 @@ export const summarySlice = createSlice({
     ClearTruckIds: (state) => {
       state.selectedTruckIds = [];
     },
-    AddOrderId: (state, action: PayloadAction<number>) => {
+    AddOrderId: (state, action: PayloadAction<string>) => {
       console.log(`Add selected order id ${action.payload}`);
       state.selectedOrderIds.push(action.payload);
     },
-    RemoveOrderId: (state, action: PayloadAction<number>) => {
+    RemoveOrderId: (state, action: PayloadAction<string>) => {
       console.log(`Remove selected order id ${action.payload}`);
       const index = state.selectedOrderIds.indexOf(action.payload);
       state.selectedOrderIds.splice(index, 1);

@@ -4,22 +4,22 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../store';
 
 export interface ITruckListState {
-  selectedTruckId: number;
+  selectedTruckId: string;
 }
 
 const initialState: ITruckListState = {
-  selectedTruckId: 0,
+  selectedTruckId: '',
 };
 
 export const truckListSlice = createSlice({
   name: 'truckList',
   initialState,
   reducers: {
-    SelectTruckId: (state: ITruckListState, action: PayloadAction<number>) => {
+    SelectTruckId: (state: ITruckListState, action: PayloadAction<string>) => {
       state.selectedTruckId = action.payload;
     },
     UnselectTruckId: (state) => {
-      state.selectedTruckId = 0;
+      state.selectedTruckId = '';
     },
   },
 });

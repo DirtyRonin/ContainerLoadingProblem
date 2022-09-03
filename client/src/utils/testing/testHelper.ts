@@ -20,22 +20,20 @@ type cargoProps = {
   quantity?: number | undefined;
   isStackable?: boolean | undefined;
   height?: number | undefined;
-  id?: number | undefined;
-  truckId?: number | null | undefined;
+  id?: string | undefined;
 };
 
 const testCargos = {
-  AsInitializeDefault: Cargo.WithGoods(0, 0, 0, Goods.AsInitializeDefault(), 0, false, 0),
+  AsInitializeDefault: Cargo.WithGoods('1', '1', Goods.AsInitializeDefault(), 0, false, 0),
   // area_l100w120: Cargo.WithGoods(0, 0, 0, Goods.WithValues(100, 120), 1, false, 80),
-  area_l100w120: () => customCargo({ quantity: 1, isStackable: false, length: 100, width: 120, height: 80, id: 1, truckId: 1 }),
-  '1/2euro': ({ quantity = 0, isStackable = false, height = 0, id = 1, truckId = null }: cargoProps) =>
-    customCargo({ quantity, isStackable, length: 40, width: 60, height, id, truckId }),
-  '1/4euro': ({ quantity = 0, isStackable = false, height = 0, id = 1, truckId = null }: cargoProps) =>
-    customCargo({ quantity, isStackable, length: 60, width: 75, height, id, truckId }),
-  euro: ({ quantity = 0, isStackable = false, height = 0, id = 1, truckId = null }: cargoProps) =>
-    customCargo({ quantity, isStackable, length: 80, width: 120, height, id, truckId }),
-  indu: ({ quantity = 0, isStackable = false, height = 0, id = 1, truckId = null }: cargoProps) =>
-    customCargo({ quantity, isStackable, length: 100, width: 120, height, id, truckId }),
+  area_l100w120: () => customCargo({ quantity: 1, isStackable: false, length: 100, width: 120, height: 80, id: '1' }),
+  '1/2euro': ({ quantity = 0, isStackable = false, height = 0, id = '1' }: cargoProps) =>
+    customCargo({ quantity, isStackable, length: 40, width: 60, height, id }),
+  '1/4euro': ({ quantity = 0, isStackable = false, height = 0, id = '1' }: cargoProps) =>
+    customCargo({ quantity, isStackable, length: 60, width: 75, height, id }),
+  euro: ({ quantity = 0, isStackable = false, height = 0, id = '1' }: cargoProps) => customCargo({ quantity, isStackable, length: 80, width: 120, height, id }),
+  indu: ({ quantity = 0, isStackable = false, height = 0, id = '1' }: cargoProps) =>
+    customCargo({ quantity, isStackable, length: 100, width: 120, height, id }),
 };
 
 const customCargo = ({
@@ -45,18 +43,15 @@ const customCargo = ({
   length,
   width,
   id,
-  truckId,
 }: {
   quantity: number;
   isStackable: boolean;
   height: number;
   length: number;
   width: number;
-  id: number;
-  truckId: number | null;
+  id: string;
 }): ICargo => ({
-  truckId,
-  orderId: 0,
+  orderId: '0',
   name: '',
   weight: 0,
   quantity,
@@ -64,17 +59,17 @@ const customCargo = ({
   height,
   length,
   width,
-  id,
+  _id: id,
 });
 
 const testTrucks = {
-  smallTruck_L420xW180xH170: (id = 1) => customTruck({ length: 420, width: 180, height: 170, id }),
-  smallTruck_L500xW240xH200: (id = 1) => customTruck({ length: 500, width: 240, height: 200, id }),
-  middleTruck_L620xW245xH240: (id = 1) => customTruck({ length: 620, width: 245, height: 240, id }),
-  greatTruck_L1360xW240xH270: (id = 1) => customTruck({ length: 1360, width: 240, height: 270, id }),
+  smallTruck_L420xW180xH170: (id = '1') => customTruck({ length: 420, width: 180, height: 170, id }),
+  smallTruck_L500xW240xH200: (id = '1') => customTruck({ length: 500, width: 240, height: 200, id }),
+  middleTruck_L620xW245xH240: (id = '1') => customTruck({ length: 620, width: 245, height: 240, id }),
+  greatTruck_L1360xW240xH270: (id = '1') => customTruck({ length: 1360, width: 240, height: 270, id }),
 };
 
-const customTruck = ({ height, length, width, id }: { height: number; length: number; width: number; id: number }) => ({
+const customTruck = ({ height, length, width, id }: { height: number; length: number; width: number; id: string }) => ({
   vehicleIdentifier: 'first',
   maxWeight: 0,
   loadingTime: 0,
@@ -82,7 +77,7 @@ const customTruck = ({ height, length, width, id }: { height: number; length: nu
   height,
   length,
   width,
-  id,
+  _id: id,
 });
 
 export const testHelper = {
@@ -100,11 +95,11 @@ type textCase1 = {
 };
 
 export const testCase1: textCase1 = {
-  trucks: [{ ...testTrucks.smallTruck_L420xW180xH170(1) }, { ...testTrucks.middleTruck_L620xW245xH240(2) }],
+  trucks: [{ ...testTrucks.smallTruck_L420xW180xH170('1') }, { ...testTrucks.middleTruck_L620xW245xH240('2') }],
   cargos: [
-    testCargos.euro({ quantity: 10, isStackable: true, height: 60, id: 1 }),
-    testCargos.indu({ quantity: 10, isStackable: true, height: 60, id: 2 }),
-    testCargos.euro({ quantity: 33, isStackable: true, height: 30, id: 3 }),
+    testCargos.euro({ quantity: 10, isStackable: true, height: 60, id: '1' }),
+    testCargos.indu({ quantity: 10, isStackable: true, height: 60, id: '2' }),
+    testCargos.euro({ quantity: 33, isStackable: true, height: 30, id: '3' }),
   ],
   /** aligned method */
   fn: () => {
@@ -115,12 +110,12 @@ export const testCase1: textCase1 = {
   },
   expected: [
     {
-      key: 2,
+      key: '2',
       values: [
         {
-          cargoId: 1,
-          orderId: 0,
-          truckId: 2,
+          cargoId: '1',
+          orderId: '0',
+          truckId: '2',
           stacking: { stackingFactor: 4, remainingHeight: 0 },
           goodsPerRow: 2,
           goodsPerFullStackedRow: 8,
@@ -132,9 +127,9 @@ export const testCase1: textCase1 = {
           isValid: true,
         },
         {
-          cargoId: 2,
-          orderId: 0,
-          truckId: 2,
+          cargoId: '2',
+          orderId: '0',
+          truckId: '2',
           stacking: { stackingFactor: 4, remainingHeight: 0 },
           goodsPerRow: 2,
           goodsPerFullStackedRow: 8,
@@ -146,9 +141,9 @@ export const testCase1: textCase1 = {
           isValid: true,
         },
         {
-          cargoId: 3,
-          orderId: 0,
-          truckId: 2,
+          cargoId: '3',
+          orderId: '0',
+          truckId: '2',
           stacking: { stackingFactor: 8, remainingHeight: 0 },
           goodsPerRow: 2,
           goodsPerFullStackedRow: 16,
@@ -162,12 +157,12 @@ export const testCase1: textCase1 = {
       ],
     },
     {
-      key: 1,
+      key: '1',
       values: [
         {
-          cargoId: 1,
-          orderId: 0,
-          truckId: 1,
+          cargoId: '1',
+          orderId: '0',
+          truckId: '1',
           stacking: { stackingFactor: 2, remainingHeight: 50 },
           goodsPerRow: 1,
           goodsPerFullStackedRow: 2,
@@ -179,9 +174,9 @@ export const testCase1: textCase1 = {
           isValid: true,
         },
         {
-          cargoId: 2,
-          orderId: 0,
-          truckId: 1,
+          cargoId: '2',
+          orderId: '0',
+          truckId: '1',
           stacking: { stackingFactor: 2, remainingHeight: 50 },
           goodsPerRow: 1,
           goodsPerFullStackedRow: 2,
@@ -193,9 +188,9 @@ export const testCase1: textCase1 = {
           isValid: true,
         },
         {
-          cargoId: 3,
-          orderId: 0,
-          truckId: 1,
+          cargoId: '3',
+          orderId: '0',
+          truckId: '1',
           stacking: { stackingFactor: 5, remainingHeight: 20 },
           goodsPerRow: 1,
           goodsPerFullStackedRow: 5,

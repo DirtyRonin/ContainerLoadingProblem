@@ -14,12 +14,12 @@ export default function DashboardTruckListItem(props: Props) {
   const { truck } = props;
 
   return props !== undefined ? (
-    <React.Fragment key={`dashboardListItem-truckId-${truck.id}`}>
+    <React.Fragment key={`dashboardListItem-truckId-${truck._id}`}>
       <ListItem dense={true}>
         <ListItemIcon>
           <TruckIcon />
         </ListItemIcon>
-        <ListItemText primary={truck.vehicleIdentifier} secondary={`#${truck.vehicleIdentifier}-${truck.id}`} />
+        <ListItemText primary={truck.vehicleIdentifier} secondary={`#${truck.vehicleIdentifier}-${truck._id}`} />
       </ListItem>
     </React.Fragment>
   ) : (

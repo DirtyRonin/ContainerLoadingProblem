@@ -21,17 +21,17 @@ export default function TruckListItem(props: Props) {
   const dispatch = useAppDispatch();
   const { selectedTruckId } = useAppSelector(SelectTruckListState);
 
-  const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => dispatch(SelectTruckId(truck.id));
+  const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => dispatch(SelectTruckId(truck._id));
 
   const handleOnDelete = () => {
-    dispatch(DeleteTruck(truck.id));
+    dispatch(DeleteTruck(truck._id));
   };
 
-  const isSelected = () => selectedTruckId === truck.id;
+  const isSelected = () => selectedTruckId === truck._id;
 
   return (
     <ListItem
-      key={`truckId-${truck.id}`}
+      key={`truckId-${truck._id}`}
       dense={true}
       secondaryAction={
         <IconButton edge="end" aria-label="delete" onClick={handleOnDelete}>

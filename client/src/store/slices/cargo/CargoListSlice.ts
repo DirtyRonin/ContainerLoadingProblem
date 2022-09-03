@@ -3,35 +3,34 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../store';
 import { DeleteCargo } from './CargoSlice';
-import { ICargo,initializeCargo } from '../../../interfaces';
 
 interface ICargoListState {
-  selectedCargo: ICargo;
+  selectedCargoId: string;
 }
 
 const initialState: ICargoListState = {
-  selectedCargo: initializeCargo()
+  selectedCargoId: '',
 };
 
 export const cargoListSlice = createSlice({
   name: 'cargoList',
   initialState,
   reducers: {
-    SelectCargo: (state, action: PayloadAction<ICargo>) => {
-      state.selectedCargo = action.payload;
+    SelectCargoId: (state, action: PayloadAction<string>) => {
+      state.selectedCargoId = action.payload;
     },
-    UnselectCargo: (state) => {
-      state.selectedCargo = initialState.selectedCargo;
+    UnselectCargoId: (state) => {
+      state.selectedCargoId = initialState.selectedCargoId;
     },
   },
   extraReducers(builder) {
     builder.addCase(DeleteCargo.fulfilled, (state, action) => {
-      state.selectedCargo = initialState.selectedCargo;
+      state.selectedCargoId = initialState.selectedCargoId;
     });
   },
 });
 
-export const { SelectCargo, UnselectCargo } = cargoListSlice.actions;
+export const { SelectCargoId, UnselectCargoId } = cargoListSlice.actions;
 
 export const SelectCargoListState = (state: RootState) => state.cargoListGlobal;
 

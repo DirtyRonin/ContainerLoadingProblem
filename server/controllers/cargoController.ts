@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
+import { Model, Types } from 'mongoose';
+import { nameof } from 'ts-simple-nameof';
 
-import { ICargo, ICargoController } from '../interfaces';
-import { Model } from 'mongoose';
-
+import { ICargo, ICargoController, IOrder } from '../interfaces';
 export class CargoController implements ICargoController {
-  constructor(private readonly cargoRepository: Model<ICargo, {}, {}, {}, any>) {}
+  constructor(private readonly cargoRepository: Model<ICargo, {}, {}, {}, any>, private readonly orderRepository: Model<IOrder, {}, {}, {}, any>) {}
 
   public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -19,10 +19,9 @@ export class CargoController implements ICargoController {
   public FilterByOrderId = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { orderId } = req.params;
-      // const cargos = await this.cargoRepository.findAll({ where: { orderId } });
-      const cargos = await this.cargoRepository.find();
-
-      return res.status(200).json(cargos);
+      const orders = await this.orderRepository.findById({ _id: orderId }).populate(nameof<IOrder>((x) => x.cargos));
+      if (!orders) return res.status(404).json('_id not found');
+      return res.status(200).json(orders.cargos);
     } catch (error) {
       next(error);
     }
@@ -31,10 +30,9 @@ export class CargoController implements ICargoController {
   public FilterByOrderIds = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const orderIds: number[] = req.body.orderIds;
-      console.log(orderIds);
-      const cargos = await this.cargoRepository.find();
-
-      return res.status(200).json(cargos);
+      const orders = await this.orderRepository.find({ _id: { $in: orderIds } }).populate(nameof<IOrder>((x) => x.cargos));
+      if (!orders) return res.status(404).json('_ids not found');
+      return res.status(200).json(orders.reduce<[Types.ObjectId][]>((prev, current) => prev.concat(current.cargos), []));
     } catch (error) {
       next(error);
     }
@@ -42,8 +40,9 @@ export class CargoController implements ICargoController {
 
   public GetById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const cargo = await this.cargoRepository.findById(req.params.id);
-      if (!cargo) return res.status(404).json('id not found');
+      const { id } = req.params;
+      const cargo = await this.cargoRepository.findById(id);
+      if (!cargo) return res.status(404).json('_id not found');
 
       return res.status(200).json(cargo);
     } catch (error) {
@@ -64,9 +63,9 @@ export class CargoController implements ICargoController {
 
   public Update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.body;
-      const cargo = await this.cargoRepository.findOneAndUpdate({ _id: id }, { $set: { ...req.body } });
-      if (!cargo) return res.status(404).json('id not found');
+      const { _id } = req.body;
+      const cargo = await this.cargoRepository.findOneAndUpdate({ _id: _id }, { $set: { ...req.body } });
+      if (!cargo) return res.status(404).json('_id not found');
 
       res.status(200).json(req.body);
     } catch (error) {

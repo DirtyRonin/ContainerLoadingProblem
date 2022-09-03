@@ -1,7 +1,7 @@
-import { IOrder } from '../interfaces';
+import { ICargo, IOrder } from '../interfaces';
 
 export class Order implements IOrder {
-  constructor(public id: number, public orderName: string) {}
+  constructor(public _id: string, public orderName: string,public cargos: ICargo[]) {}
 
-  public static AsInitializeDefault = (orderName = '') => new Order(0, orderName);
+  public static AsInitializeDefault = (orderName = '') => new Order('', orderName,[]);
 }

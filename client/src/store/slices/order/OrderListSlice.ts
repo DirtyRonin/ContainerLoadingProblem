@@ -4,22 +4,22 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../..";
 
 interface IOrderListState {
-  selectedOrderId: number;
+  selectedOrderId: string;
 }
 
 const initialState: IOrderListState = {
-  selectedOrderId: 0,
+  selectedOrderId: '',
 };
 
 export const orderListSlice = createSlice({
   name: "orderList",
   initialState,
   reducers: {
-    SelectOrderId: (state, action: PayloadAction<number>) => {
+    SelectOrderId: (state, action: PayloadAction<string>) => {
       state.selectedOrderId = action.payload;
     },
     UnselectOrderId: (state) => {
-      state.selectedOrderId = 0;
+      state.selectedOrderId = '';
     },
   },
 });

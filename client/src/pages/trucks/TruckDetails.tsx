@@ -1,102 +1,53 @@
-import React, { useMemo, useEffect, useState } from "react";
-import Box from "@mui/material/Box";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import LoadingButton from "@mui/lab/LoadingButton";
+import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import { Truck } from "../../models/Truck";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { SelectTruckListState,SelectTruckState, UpdateTruck, CreateTruck } from "../../store/slices/truck";
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { SelectTruckListState, SelectTruckState, UpdateTruck, CreateTruck } from '../../store/slices/truck';
+import { IsStringEmpty } from '../../utils/shared';
+import { defaultTruck } from '../../interfaces';
 
 export default function TruckDetails() {
   const dispatch = useAppDispatch();
   const { loading, trucks } = useAppSelector(SelectTruckState);
   const { selectedTruckId } = useAppSelector(SelectTruckListState);
 
-  const [vehicleIdentifier, setVehicleIdentifier] = useState("");
-  const [height, setHeight] = useState(100);
-  const [width, setWidth] = useState(100);
-  const [length, setLength] = useState(100);
-  const [maxWeight, setMaxWeight] = useState(100);
-  const [loadingTime, setLoadingTime] = useState(100);
-  const [dischargeTime, setDischargeTime] = useState(100);
-
-  const memoizedSelectedTruck = useMemo(
-    () =>
-      trucks.find((truck) => truck.id === selectedTruckId) ??
-      Truck.As15er("Create New As15er"),
-    [selectedTruckId, trucks]
-  );
+  const [truck, setTruck] = useState(defaultTruck());
 
   useEffect(() => {
-    const truck = memoizedSelectedTruck;
-
-    setVehicleIdentifier(truck.vehicleIdentifier);
-    setHeight(truck.height);
-    setWidth(truck.width);
-    setLength(truck.length);
-    setMaxWeight(truck.maxWeight);
-    setLoadingTime(truck.loadingTime);
-    setDischargeTime(truck.dischargeTime);
-  }, [memoizedSelectedTruck]);
-
-  const handleChangeIdentifier = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    event.preventDefault();
-
-    if (event.target.value) setVehicleIdentifier(event.target.value);
-  };
-  const handleChangeHeight = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setHeight(+event.target.value);
-  };
-  const handleChangeWidth = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setWidth(+event.target.value);
-  };
-  const handleChangeLength = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setLength(+event.target.value);
-  };
-  const handleChangeMaxWeight = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    event.preventDefault();
-    setMaxWeight(+event.target.value);
-  };
-  const handleChangeLoadingTime = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    event.preventDefault();
-    setLoadingTime(+event.target.value);
-  };
-  const handleChangeDischargeTime = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    event.preventDefault();
-    setDischargeTime(+event.target.value);
-  };
-
-  const IsUpdate = (id: number) => (id < 1 ? false : true);
-
-  const handleClickSubmit = () => {
-    const newTruck = new Truck(
-      selectedTruckId,
-      vehicleIdentifier,
-      height,
-      width,
-      length,
-      maxWeight,
-      loadingTime,
-      dischargeTime
-    );
-
-    if (IsUpdate(selectedTruckId)) {
-      dispatch(UpdateTruck(newTruck));
+    if (IsStringEmpty(selectedTruckId)) {
+      setTruck(defaultTruck())
       return;
     }
-    dispatch(CreateTruck(newTruck));
+
+    const foundTruck = trucks.find((x) => x._id === selectedTruckId);
+
+    if (foundTruck === undefined) {
+      setTruck(defaultTruck())
+      return;
+    }
+
+    setTruck(foundTruck);
+  }, [selectedTruckId, trucks]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+
+     setTruck((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  };
+  
+
+  const IsUpdate = (id: string) => !IsStringEmpty(id);
+
+  const handleClickSubmit = () => {
+
+    if (IsUpdate(selectedTruckId)) {
+      dispatch(UpdateTruck(truck));
+      return;
+    }
+    dispatch(CreateTruck(truck));
   };
 
   return (
@@ -106,9 +57,9 @@ export default function TruckDetails() {
         sx={{
           ml: 3,
           mt: 3,
-          width: "25ch",
+          width: '25ch',
           maxHeight: 400,
-          border: "1px black solid",
+          border: '1px black solid',
         }}
         noValidate
         autoComplete="off"
@@ -116,8 +67,9 @@ export default function TruckDetails() {
         <div>
           <TextField
             required
-            value={vehicleIdentifier}
-            onChange={handleChangeIdentifier}
+            value={truck.vehicleIdentifier}
+            name={'vehicleIdentifier'}
+            onChange={handleChange}
             id="truck_vehicleIdentifier"
             label="Vehicle Identifier"
             placeholder="Vehicle Identifier"
@@ -128,8 +80,9 @@ export default function TruckDetails() {
         <div>
           <TextField
             required
-            value={height}
-            onChange={handleChangeHeight}
+            value={truck.height}
+            name={'height'}
+            onChange={handleChange}
             id="truck_height"
             label="Height"
             defaultValue={100}
@@ -143,8 +96,9 @@ export default function TruckDetails() {
         <div>
           <TextField
             required
-            value={width}
-            onChange={handleChangeWidth}
+            value={truck.width}
+            name={'width'}
+            onChange={handleChange}
             id="truck_width"
             label="Width"
             defaultValue={100}
@@ -158,8 +112,9 @@ export default function TruckDetails() {
         <div>
           <TextField
             required
-            value={length}
-            onChange={handleChangeLength}
+            value={truck.length}
+            name={'length'}
+            onChange={handleChange}
             id="truck_length"
             label="Length"
             defaultValue={100}
@@ -173,8 +128,9 @@ export default function TruckDetails() {
         <div>
           <TextField
             required
-            value={maxWeight}
-            onChange={handleChangeMaxWeight}
+            value={truck.maxWeight}
+            name={'maxWeight'}
+            onChange={handleChange}
             id="truck_maxWeight"
             label="Max Weight"
             defaultValue={100}
@@ -188,8 +144,9 @@ export default function TruckDetails() {
         <div>
           <TextField
             required
-            value={loadingTime}
-            onChange={handleChangeLoadingTime}
+            value={truck.loadingTime}
+            name={'loadingTime'}
+            onChange={handleChange}
             id="truck_loadingTime"
             label="Loading Time"
             defaultValue={100}
@@ -203,8 +160,9 @@ export default function TruckDetails() {
         <div>
           <TextField
             required
-            value={dischargeTime}
-            onChange={handleChangeDischargeTime}
+            value={truck.dischargeTime}
+            name={'dischargeTime'}
+            onChange={handleChange}
             id="truck_dischargeTime"
             label="Discharge Time"
             defaultValue={100}
@@ -216,14 +174,11 @@ export default function TruckDetails() {
           />
         </div>
         <div>
-          <LoadingButton
-            loading={loading === "pending"}
-            onClick={handleClickSubmit}
-          >
-            {IsUpdate(selectedTruckId) ? "update" : "add"}
+          <LoadingButton loading={loading === 'pending'} onClick={handleClickSubmit}>
+            {IsUpdate(selectedTruckId) ? 'update' : 'add'}
           </LoadingButton>
         </div>
       </Box>
     </>
   );
-};
+}

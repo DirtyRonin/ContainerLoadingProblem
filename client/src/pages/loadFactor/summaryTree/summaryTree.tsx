@@ -48,7 +48,7 @@ export default function OrderSummaryItem() {
     const missingCargoIds = selectedLoadSummaryIds
       .map((ids) => ids.orderId)
       .filter((value, index, array) => array.indexOf(value) === index)
-      .reduce<number[]>((prev, current) => {
+      .reduce<string[]>((prev, current) => {
         if (selectedOrderIds.includes(current)) return prev;
 
         return prev.concat(
@@ -109,43 +109,43 @@ export default function OrderSummaryItem() {
       </TreeItem>
     ));
 
-  const renderCargoTreeItems = (orderId: number) =>
+  const renderCargoTreeItems = (orderId: string) =>
     state.cargos
       .filter((x) => x.orderId === orderId)
       .map((cargo) => (
-        <TreeItem key={`#${cargo.name}-${cargo.id}`} nodeId={`#${cargo.name}-${cargo.id}`} label={`#${cargo.name}-${cargo.id}`}>
-          <TreeItem nodeId={`#${cargo.name}-sizes-${cargo.id}`} label={`${cargo.length}l * ${cargo.width}w * ${cargo.height}h`}></TreeItem>
-          <TreeItem nodeId={`#${cargo.name}-quantity-${cargo.id}`} label={`${cargo.quantity} X`}></TreeItem>
-          <TreeItem nodeId={`#${cargo.name}-isStackable-${cargo.id}`} label={`Stackable: ${cargo.isStackable ? 'Yes' : 'No'}`}></TreeItem>
+        <TreeItem key={`#${cargo.name}-${cargo._id}`} nodeId={`#${cargo.name}-${cargo._id}`} label={`#${cargo.name}-${cargo._id}`}>
+          <TreeItem nodeId={`#${cargo.name}-sizes-${cargo._id}`} label={`${cargo.length}l * ${cargo.width}w * ${cargo.height}h`}></TreeItem>
+          <TreeItem nodeId={`#${cargo.name}-quantity-${cargo._id}`} label={`${cargo.quantity} X`}></TreeItem>
+          <TreeItem nodeId={`#${cargo.name}-isStackable-${cargo._id}`} label={`Stackable: ${cargo.isStackable ? 'Yes' : 'No'}`}></TreeItem>
         </TreeItem>
       ));
 
   const renderTruckTreeItems = () => {
     return state.trucks.map((truck) => (
-      <TreeItem nodeId={`#${truck.vehicleIdentifier}-${truck.id}`} label={`#${truck.vehicleIdentifier}-${truck.id} ${remainingSpaceMessage(truck)}`}>
-        {getUniqueOrderIdsByCargos().map((orderId) => renderCargoTreeItemsGroupedByOrderId(truck.id, orderId))}
+      <TreeItem nodeId={`#${truck.vehicleIdentifier}-${truck._id}`} label={`#${truck.vehicleIdentifier}-${truck._id} ${remainingSpaceMessage(truck)}`}>
+        {getUniqueOrderIdsByCargos().map((orderId) => renderCargoTreeItemsGroupedByOrderId(truck._id, orderId))}
       </TreeItem>
     ));
   };
 
-  const getUniqueOrderIdsByCargos = (): number[] => state.cargos.map((cargo) => cargo.orderId).filter((value, index, array) => array.indexOf(value) === index);
+  const getUniqueOrderIdsByCargos = (): string[] => state.cargos.map((cargo) => cargo.orderId).filter((value, index, array) => array.indexOf(value) === index);
 
-  const renderCargoTreeItemsGroupedByOrderId = (truckId: number, orderId: number) =>
-    state.cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem key={`LoadingCargoTreeItem-${truckId}-${orderId}-${cargo.id}`} truckId={truckId} cargoId={cargo.id} orderId={orderId} cargo={cargo} />);
+  const renderCargoTreeItemsGroupedByOrderId = (truckId: string, orderId: string) =>
+    state.cargos.filter((x) => x.orderId === orderId).map((cargo) => <LoadingCargoTreeItem key={`LoadingCargoTreeItem-${truckId}-${orderId}-${cargo._id}`} truckId={truckId} cargoId={cargo._id} orderId={orderId} cargo={cargo} />);
 
   const remainingSpaceMessage = (truck: ITruck) => {
     const message = (loadingMeter: number) => `|| Available Loading Meter: ${loadingMeter} cm`;
 
-    const relatedCargoIds = selectedLoadSummaryIds.filter((x) => x.truckId === truck.id).map((x) => x.cargoId);
+    const relatedCargoIds = selectedLoadSummaryIds.filter((x) => x.truckId === truck._id).map((x) => x.cargoId);
 
     if (relatedCargoIds.length === 0) return message(truck.length);
 
-    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries.value.find((x) => x.key === truck.id)?.values.filter((x) => x.cargoId);
+    const relatedSelectedSummaries: ILoadSummary[] | undefined = loadSummaries.value.find((x) => x.key === truck._id)?.values.filter((x) => x.cargoId);
 
     if (relatedSelectedSummaries === undefined || relatedSelectedSummaries.length === 0) return message(truck.length);
 
     const remainingLoadingMeter = relatedCargoIds.reduce((prev, current) => {
-      const relatedSummary = loadSummaries.value.find((x) => x.key === truck.id)?.values.find((x) => x.cargoId === current)?.loadingMeter;
+      const relatedSummary = loadSummaries.value.find((x) => x.key === truck._id)?.values.find((x) => x.cargoId === current)?.loadingMeter;
       if (!relatedSummary) return -1;
 
       prev -= relatedSummary;
