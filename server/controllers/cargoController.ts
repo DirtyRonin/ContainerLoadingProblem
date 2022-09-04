@@ -20,23 +20,25 @@ export class CargoController implements ICargoController {
     }
   };
 
-  public FilterByOrderId = async (req: Request, res: Response, next: NextFunction) => {
+  public FilterByOrderIds = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { orderId } = req.params;
-      const orders = await this.orderRepository.findById({ _id: orderId }).populate(ORDER_CARGOS_CONST);
-      if (!orders) return res.status(404).json('_id not found');
-      return res.status(200).json(orders.cargos);
+      const orderIds: number[] = req.body.orderIds;
+      const cargos = await this.cargoRepository.find({ orderId: { $in: orderIds } });
+
+      if (!cargos) return res.status(404).json('_ids not found');
+      return res.status(200).json(cargos);
     } catch (error) {
       next(error);
     }
   };
 
-  public FilterByOrderIds = async (req: Request, res: Response, next: NextFunction) => {
+  public FilterIdsByOrderIds = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const orderIds: number[] = req.body.orderIds;
-      const orders = await this.orderRepository.find({ _id: { $in: orderIds } }).populate(ORDER_CARGOS_CONST);
-      if (!orders) return res.status(404).json('_ids not found');
-      return res.status(200).json(orders.reduce<[Types.ObjectId][]>((prev, current) => prev.concat(current.cargos), []));
+      const cargoIds = await this.cargoRepository.find({ orderId: { $in: orderIds } }).select('_id orderId');
+
+      if (!cargoIds) return res.status(404).json('_ids not found');
+      return res.status(200).json(cargoIds.map((x) => ({ cargoId: x._id, orderId: x.orderId })));
     } catch (error) {
       next(error);
     }

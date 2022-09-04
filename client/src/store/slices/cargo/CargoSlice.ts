@@ -19,10 +19,10 @@ export const FetchAllCargo = createAsyncThunk('cargos/fetchAllStatus', async () 
   return await CargoApi.FetchCargo();
 });
 export const FetchCargoByOrderId = createAsyncThunk('cargos/filterByOrderIdStatus', async (oderId:string) => {
-  return await CargoApi.FilterCargoByOrderId(oderId);
+  return await CargoApi.FilterCargosIdByOrderIds(oderId);
 });
 export const FetchCargoByOrderIds = createAsyncThunk('cargos/filterByOrderIdsStatus', async (oderIds:string[]) => {
-  return await CargoApi.FilterCargoByOrderIds(oderIds);
+  return await CargoApi.FilterCargosByOrderIds(oderIds);
 });
 
 export const DeleteCargo = createAsyncThunk('cargos/RemoveStatus', async (id: string, thunkAPI) => await CargoApi.DeleteCargo(id));

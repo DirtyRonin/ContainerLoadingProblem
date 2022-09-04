@@ -1,10 +1,10 @@
-import { ICargo } from '../interfaces';
+import { ICargo, ICargoSummary } from '../interfaces';
 import { RemoveObjectProperty } from '../utils/shared';
 import api from './baseApi';
 
 const apiName = 'cargos';
-const filteredByOrderId = 'filterCargoByOrderId';
-const filterCargoByOrderIds = 'filterCargoByOrderIds';
+const filterCargosByOrderIds = 'filterCargoByOrderId';
+const filterCargoIdsByOrderIds = 'FilterByOrderIds';
 
 const FetchCargo = async (): Promise<ICargo[]> => {
   const result = await api().get(apiName);
@@ -28,19 +28,19 @@ const DeleteCargo = async (id: string): Promise<string> => {
   const result = await api().delete(`${apiName}/${id}`);
   return result.data;
 };
-const FilterCargoByOrderId = async (id: string): Promise<ICargo[]> => {
-  const result = await api().get(`${apiName}/${filteredByOrderId}/${id}`);
+const FilterCargosIdByOrderIds = async (orderIds: string[]): Promise<ICargoSummary[]> => {
+  const result = await api().put(`${apiName}/${filterCargoIdsByOrderIds}`, { orderIds });
   return result.data;
 };
-const FilterCargoByOrderIds = async (orderIds: string[]): Promise<ICargo[]> => {
-  const result = await api().put(`${apiName}/${filterCargoByOrderIds}`, { orderIds });
+const FilterCargosByOrderIds = async (orderIds: string[]): Promise<ICargo[]> => {
+  const result = await api().put(`${apiName}/${filterCargosByOrderIds}`, { orderIds });
   return result.data;
 };
 
 export const CargoApi = {
   FetchCargo,
-  FilterCargoByOrderId,
-  FilterCargoByOrderIds,
+  FilterCargosIdByOrderIds,
+  FilterCargosByOrderIds,
   FetchCargoById,
   CreateCargo,
   UpdateCargo,
