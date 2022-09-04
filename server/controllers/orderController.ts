@@ -1,15 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import { Model } from 'mongoose';
 import { nameof } from 'ts-simple-nameof';
+import { ORDER_CARGOS_CONST } from '../config/consts';
 
-import { IOrder, IOrderController } from '../interfaces';
+import { ICargo, IOrder, IOrderController } from '../interfaces';
 
 export class OrderController implements IOrderController {
-  constructor(private readonly orderRepository: Model<IOrder, {}, {}, {}, any>) {}
+  constructor(private readonly orderRepository: Model<IOrder, {}, {}, {}, any>, private readonly cargoRepository: Model<ICargo, {}, {}, {}, any>) {}
 
   public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const orders = await this.orderRepository.find();
+      const orders = await this.orderRepository.find().populate(ORDER_CARGOS_CONST);
 
       return res.status(200).json(orders);
     } catch (error) {
@@ -20,7 +21,7 @@ export class OrderController implements IOrderController {
   public GetById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const order = await this.orderRepository.findById(id).populate(nameof<IOrder>((x) => x.cargos));
+      const order = await this.orderRepository.findById(id).populate(ORDER_CARGOS_CONST);
       if (!order) return res.status(404).json('_id not found');
 
       return res.status(200).json(order);
@@ -43,12 +44,12 @@ export class OrderController implements IOrderController {
   public Update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { _id } = req.body;
-      const order = await this.orderRepository.findById( _id )
+      const order = await this.orderRepository.findById(_id);
       if (!order) return res.status(404).json('_id not found');
 
-      order.orderName = req.body[nameof<IOrder>(x => x.orderName)]
-      const result = await order.save()
-      
+      order.orderName = req.body[nameof<IOrder>((x) => x.orderName)];
+      const result = await order.save();
+
       if (!result) return res.status(404).json('failed updating');
 
       res.status(200).json(order);
@@ -63,6 +64,8 @@ export class OrderController implements IOrderController {
 
       const result = await this.orderRepository.deleteOne({ _id: id });
       if (result.deletedCount === 0) return res.status(404).json(-1);
+      await this.cargoRepository.deleteMany({ orderId: id });
+      
 
       return res.status(200).json(id);
     } catch (error) {

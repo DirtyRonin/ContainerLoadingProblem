@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { ITruckController } from '../interfaces';
+import { ITruckController, ITruckLoading } from '../interfaces';
 import { Model } from 'mongoose';
 import { ITruck } from '../interfaces/ITruck';
 
 export class TruckController implements ITruckController {
-  constructor(private readonly truckRepository: Model<ITruck, {}, {}, {}, any>) {}
+  constructor(
+    private readonly truckRepository: Model<ITruck, {}, {}, {}, any>,
+    private readonly truckLoadingRepository: Model<ITruckLoading, {}, {}, {}, any>
+  ) {}
 
   public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -58,6 +61,8 @@ export class TruckController implements ITruckController {
 
       const result = await this.truckRepository.deleteOne({ _id: id });
       if (result.deletedCount === 0) return res.status(404).json(-1);
+
+      await this.truckLoadingRepository.deleteMany({ truckId: id });
 
       return res.status(200).json(id);
     } catch (error) {

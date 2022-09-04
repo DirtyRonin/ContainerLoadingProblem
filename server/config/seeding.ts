@@ -1,22 +1,32 @@
 import { model, Model } from 'mongoose';
-import { IOrder, ITruck, ICargo } from '../interfaces';
-import { truckSchema, orderSchema, cargoSchema } from '../models';
-import { CARGO_CONST, ORDER_CONST, TRUCK_CONST } from './consts';
+import { IOrder, ITruck, ICargo, ITruckLoading } from '../interfaces';
+import { IRoute } from '../interfaces/IRoute';
+import { truckSchema, orderSchema, cargoSchema, routeSchema } from '../models';
+import { truckLoadingSchema } from '../models/truckLoading';
+import { CARGO_CONST, ORDER_CONST, ROUTE_CONST, TRUCKLOADING_CONST, TRUCK_CONST } from './consts';
 
 export default async function seeding(): Promise<void> {
   const truckModel: Model<ITruck, {}, {}, {}, any> = model<ITruck>(TRUCK_CONST, truckSchema);
   const orderModel: Model<IOrder, {}, {}, {}, any> = model<IOrder>(ORDER_CONST, orderSchema);
   const cargoModel: Model<ICargo, {}, {}, {}, any> = model<ICargo>(CARGO_CONST, cargoSchema);
-
-  await Promise.all([cargoModel.collection.drop(), orderModel.collection.drop(), truckModel.collection.drop()]);
-
-  const orders = await Promise.all([
-    new orderModel({ orderName: 'Erste Bestellung', cargos: [] }).save(),
-    new orderModel({ orderName: 'Zweite Bestellung', cargos: [] }).save(),
-    new orderModel({ orderName: 'Dritte Bestellung', cargos: [] }).save(),
-  ]);
+  const truckLoadingModel: Model<ITruckLoading, {}, {}, {}, any> = model<ITruckLoading>(TRUCKLOADING_CONST, truckLoadingSchema);
+  const routeModel: Model<IRoute, {}, {}, {}, any> = model<IRoute>(ROUTE_CONST, routeSchema);
 
   await Promise.all([
+    cargoModel.collection.drop(),
+    orderModel.collection.drop(),
+    truckModel.collection.drop(),
+    truckLoadingModel.collection.drop(),
+    routeModel.collection.drop(),
+  ]);
+
+  const orders = await Promise.all([
+    new orderModel({ orderName: 'Erste Bestellung' }).save(),
+    new orderModel({ orderName: 'Zweite Bestellung' }).save(),
+    new orderModel({ orderName: 'Dritte Bestellung' }).save(),
+  ]);
+
+  const cargos = await Promise.all([
     new cargoModel({
       name: 'Auf 1/2 Europalette',
       width: 60,
@@ -59,8 +69,8 @@ export default async function seeding(): Promise<void> {
     }).save(),
   ]);
 
-  await truckModel.insertMany([
-    {
+  const trucks = await Promise.all([
+    new truckModel({
       vehicleIdentifier: 'Transporter 5 EP',
       loadingTime: 1000,
       dischargeTime: 500,
@@ -68,9 +78,8 @@ export default async function seeding(): Promise<void> {
       width: 180,
       length: 420,
       maxWeight: 1500,
-      isReadonly: true,
-    },
-    {
+    }).save(),
+    new truckModel({
       vehicleIdentifier: 'Transporter 1,5T',
       loadingTime: 1000,
       dischargeTime: 500,
@@ -78,9 +87,8 @@ export default async function seeding(): Promise<void> {
       width: 220,
       length: 490,
       maxWeight: 1500,
-      isReadonly: true,
-    },
-    {
+    }).save(),
+    new truckModel({
       vehicleIdentifier: 'Solo LKW 5T',
       loadingTime: 1000,
       dischargeTime: 500,
@@ -88,9 +96,8 @@ export default async function seeding(): Promise<void> {
       width: 245,
       length: 620,
       maxWeight: 5000,
-      isReadonly: true,
-    },
-    {
+    }).save(),
+    new truckModel({
       vehicleIdentifier: 'Solo LKW 6T',
       loadingTime: 1000,
       dischargeTime: 500,
@@ -98,9 +105,8 @@ export default async function seeding(): Promise<void> {
       width: 245,
       length: 720,
       maxWeight: 6000,
-      isReadonly: true,
-    },
-    {
+    }).save(),
+    new truckModel({
       vehicleIdentifier: 'Standard Sattelauflieger',
       loadingTime: 1000,
       dischargeTime: 500,
@@ -108,7 +114,21 @@ export default async function seeding(): Promise<void> {
       width: 245,
       length: 1360,
       maxWeight: 25000,
-      isReadonly: true,
-    },
+    }).save(),
+  ]);
+
+  const routes = await Promise.all([
+    new routeModel({
+      from: 'A',
+      to: 'B',
+    }).save(),
+  ]);
+
+  const truckLoadings = await Promise.all([
+    new truckLoadingModel({
+      cargoId: cargos[0]._id,
+      truckId: trucks[0]._id,
+      routeId: routes[0]._id,
+    }).save(),
   ]);
 }

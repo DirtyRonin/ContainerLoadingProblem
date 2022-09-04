@@ -1,5 +1,4 @@
 import { Schema } from 'mongoose';
-import { ROUTE_CONST } from '../config/consts';
 import { ITruck } from '../interfaces/ITruck';
 
 export const truckSchema = new Schema<ITruck>({
@@ -10,5 +9,4 @@ export const truckSchema = new Schema<ITruck>({
   width: { type: Number, required: true },
   length: { type: Number, required: true },
   maxWeight: { type: Number, required: true },
-  routes: [{ type: Schema.Types.ObjectId, ref: ROUTE_CONST }],
 });

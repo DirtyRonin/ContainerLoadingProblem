@@ -1,3 +1,5 @@
 export * from './truckRoute'
 export * from './orderRoute'
 export * from './cargoRoute'
+export * from './routeRoute'
+export * from './truckLoadingRoute'

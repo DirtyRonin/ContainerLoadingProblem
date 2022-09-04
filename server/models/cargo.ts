@@ -15,29 +15,25 @@ export const cargoSchema = new Schema<ICargo>({
   orderId: { type: Schema.Types.ObjectId, ref: ORDER_CONST },
 });
 
-/** saving object id on both sides, because in the app cargos will be fetched through 
- * the order.cargos and this._id as well and where need to be always the orderID available 
- * for grouping*/
-cargoSchema.post('save', function (doc) {
-  console.log(`add cargo 'id ${doc._id}' to order '${doc.orderId}'`);
-  const orderModel = model<IOrder>(ORDER_CONST, orderSchema);
-  orderModel.findById(doc.orderId).then((order) => {
-    if (!order) return;
+// /** saving object id on both sides, because in the app cargos will be fetched through 
+//  * the order.cargos and this._id as well and where need to be always the orderID available 
+//  * for grouping*/
+// cargoSchema.post('save', function (doc) {
+//   console.log(`add cargo 'id ${doc._id}' to order '${doc.orderId}'`);
+//   const orderModel = model<IOrder>(ORDER_CONST, orderSchema);
+//   orderModel.findById(doc.orderId).then((order) => {
+//     if (!order) return;
 
-    order.cargos.push(doc._id);
-    order.save();
-  });
-});
+//     order.cargos.push(doc._id);
+//     order.save();
+//   });
+// });
 
-cargoSchema.post('deleteOne', function (doc) {
-  console.log(`remove cargo id '${doc._id}' from order '${doc.orderId}'`);
-  const orderModel = model<IOrder>(ORDER_CONST, orderSchema);
-  orderModel.findById(doc.orderId).then((order) => {
-    if (!order) return;
+// cargoSchema.pre('deleteOne', function (next) {
 
-    const index = order.cargos.findIndex((x) => x === doc._id);
-    order.cargos.splice(index, 1);
-
-    order.save();
-  });
-});
+//   const keys = Object.keys(this);
+//   const values = Object.values(this);
+//   for (let index = 0; index < keys.length; index++) console.log(`'${keys[index]}' - '${values[index]}'`);
+  
+// next()
+// });

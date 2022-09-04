@@ -1,10 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { Model, Types } from 'mongoose';
-import { nameof } from 'ts-simple-nameof';
+import { ORDER_CARGOS_CONST } from '../config/consts';
 
-import { ICargo, ICargoController, IOrder } from '../interfaces';
+import { ICargo, ICargoController, IOrder, ITruckLoading } from '../interfaces';
 export class CargoController implements ICargoController {
-  constructor(private readonly cargoRepository: Model<ICargo, {}, {}, {}, any>, private readonly orderRepository: Model<IOrder, {}, {}, {}, any>) {}
+  constructor(
+    private readonly cargoRepository: Model<ICargo, {}, {}, {}, any>,
+    private readonly orderRepository: Model<IOrder, {}, {}, {}, any>,
+    private readonly truckLoadingRepository: Model<ITruckLoading, {}, {}, {}, any>
+  ) {}
 
   public GetAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -19,7 +23,7 @@ export class CargoController implements ICargoController {
   public FilterByOrderId = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { orderId } = req.params;
-      const orders = await this.orderRepository.findById({ _id: orderId }).populate(nameof<IOrder>((x) => x.cargos));
+      const orders = await this.orderRepository.findById({ _id: orderId }).populate(ORDER_CARGOS_CONST);
       if (!orders) return res.status(404).json('_id not found');
       return res.status(200).json(orders.cargos);
     } catch (error) {
@@ -30,7 +34,7 @@ export class CargoController implements ICargoController {
   public FilterByOrderIds = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const orderIds: number[] = req.body.orderIds;
-      const orders = await this.orderRepository.find({ _id: { $in: orderIds } }).populate(nameof<IOrder>((x) => x.cargos));
+      const orders = await this.orderRepository.find({ _id: { $in: orderIds } }).populate(ORDER_CARGOS_CONST);
       if (!orders) return res.status(404).json('_ids not found');
       return res.status(200).json(orders.reduce<[Types.ObjectId][]>((prev, current) => prev.concat(current.cargos), []));
     } catch (error) {
@@ -79,6 +83,8 @@ export class CargoController implements ICargoController {
 
       const result = await this.cargoRepository.deleteOne({ _id: id });
       if (result.deletedCount === 0) return res.status(404).json(-1);
+
+      await this.truckLoadingRepository.deleteMany({ cargoId: id });
 
       return res.status(200).json(id);
     } catch (error) {

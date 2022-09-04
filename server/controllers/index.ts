@@ -1,3 +1,5 @@
 export * from './truckController'
 export * from './orderController'
 export * from './cargoController'
+export * from './routeController'
+export * from './truckLoadingController'
