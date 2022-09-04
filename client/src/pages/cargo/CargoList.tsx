@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useAppDispatch, useAppSelector, SelectCargoState, SelectOrderListState, UnselectCargoId, FetchCargoByOrderId } from '../../store';
+import { useAppDispatch, useAppSelector, SelectCargoState, SelectOrderListState, UnselectCargoId, FetchCargoByOrderIds } from '../../store';
 import CustomList from '../../components/ui/CostumList';
 import ListItem from './CargoListItem';
 import { Cargo } from '../../models';
@@ -16,7 +16,7 @@ export default function CargoList() {
     dispatch(UnselectCargoId());
     if (IsStringEmpty(selectedOrderId)) return;
 
-    dispatch(FetchCargoByOrderId(selectedOrderId));
+    dispatch(FetchCargoByOrderIds([selectedOrderId]));
   }, [selectedOrderId]);
 
   const newCargos: ICargo[] = [Cargo.AsInitializeDefault(), ...cargos];

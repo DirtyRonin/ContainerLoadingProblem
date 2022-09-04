@@ -18,9 +18,9 @@ const initialState: CargoState = {
 export const FetchAllCargo = createAsyncThunk('cargos/fetchAllStatus', async () => {
   return await CargoApi.FetchCargo();
 });
-export const FetchCargoByOrderId = createAsyncThunk('cargos/filterByOrderIdStatus', async (oderId:string) => {
-  return await CargoApi.FilterCargosIdByOrderIds(oderId);
-});
+// export const FetchCargoIdsWithOrderId = createAsyncThunk('cargos/filterByOrderIdStatus', async (oderId:string) => {
+//   return await CargoApi.FilterCargosIdByOrderIds([oderId]);
+// });
 export const FetchCargoByOrderIds = createAsyncThunk('cargos/filterByOrderIdsStatus', async (oderIds:string[]) => {
   return await CargoApi.FilterCargosByOrderIds(oderIds);
 });
@@ -86,18 +86,18 @@ export const cargoSlice = createSlice({
         state.cargos.push(action.payload);
         state.loading = 'succeeded';
       })
-      //Fetch all by OrderId
-      .addCase(FetchCargoByOrderId.pending, (state) => {
-        state.loading = 'pending';
-      })
-      .addCase(FetchCargoByOrderId.rejected, (state) => {
-        state.loading = 'failed';
-      })
-      .addCase(FetchCargoByOrderId.fulfilled, (state, action) => {
-        state.cargos = action.payload;
-        state.loading = 'succeeded';
-      })
-      //Fetch all by OrderIds
+      // //Fetch cargo ids and order Ids
+      // .addCase(FetchCargoIdsWithOrderId.pending, (state) => {
+      //   state.loading = 'pending';
+      // })
+      // .addCase(FetchCargoIdsWithOrderId.rejected, (state) => {
+      //   state.loading = 'failed';
+      // })
+      // .addCase(FetchCargoIdsWithOrderId.fulfilled, (state, action) => {
+      //   state.cargos = action.payload;
+      //   state.loading = 'succeeded';
+      // })
+      //Fetch cargos by order ids
       .addCase(FetchCargoByOrderIds.pending, (state) => {
         state.loading = 'pending';
       })

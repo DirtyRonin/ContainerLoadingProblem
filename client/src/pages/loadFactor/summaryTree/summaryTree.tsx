@@ -20,8 +20,6 @@ import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
 import { myContainer } from '../../../inversify.config';
 import { TYPES } from '../../../utils/shared/registerSymbols';
 import { LoadingButton } from '@mui/lab';
-import { cargoListSlice } from '../../../store';
-import { ILoadSummaryIds } from '../../../interfaces/ILoadSummaryIds';
 
 export default function OrderSummaryItem() {
   const {
@@ -59,7 +57,7 @@ export default function OrderSummaryItem() {
         );
       }, []);
 
-    Promise.all([CargoApi.FilterCargoByOrderIds(selectedOrderIds), Promise.all(missingCargoIds.map((cargoId) => CargoApi.FetchCargoById(cargoId)))])
+    Promise.all([CargoApi.FilterCargosByOrderIds(selectedOrderIds), Promise.all(missingCargoIds.map((cargoId) => CargoApi.FetchCargoById(cargoId)))])
       .then((results) => {
         const combined = results.reduce<ICargo[]>((prev, current) => prev.concat(current), []);
         dispatch(ActionCreators.fetchAllCargos_Success(combined));

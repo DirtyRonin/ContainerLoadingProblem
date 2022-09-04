@@ -22,7 +22,7 @@ export class CargoController implements ICargoController {
 
   public FilterByOrderIds = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const orderIds: number[] = req.body.orderIds;
+      const orderIds: string[] = req.body.orderIds;
       const cargos = await this.cargoRepository.find({ orderId: { $in: orderIds } });
 
       if (!cargos) return res.status(404).json('_ids not found');
@@ -34,7 +34,7 @@ export class CargoController implements ICargoController {
 
   public FilterIdsByOrderIds = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const orderIds: number[] = req.body.orderIds;
+      const orderIds: string[] = req.body.orderIds;
       const cargoIds = await this.cargoRepository.find({ orderId: { $in: orderIds } }).select('_id orderId');
 
       if (!cargoIds) return res.status(404).json('_ids not found');

@@ -3,8 +3,8 @@ import { RemoveObjectProperty } from '../utils/shared';
 import api from './baseApi';
 
 const apiName = 'cargos';
-const filterCargosByOrderIds = 'filterCargoByOrderId';
-const filterCargoIdsByOrderIds = 'FilterByOrderIds';
+const filterCargosByOrderIds = 'FilterByOrderIds';
+const filterCargoIdsByOrderIds = 'FilterIdsByOrderIds';
 
 const FetchCargo = async (): Promise<ICargo[]> => {
   const result = await api().get(apiName);
