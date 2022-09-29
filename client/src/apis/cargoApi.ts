@@ -1,4 +1,4 @@
-import { ICargo, ICargoSummary } from '../interfaces';
+import { ICargo, ICargoSummary, IPopulatedCargo } from '../interfaces';
 import { RemoveObjectProperty } from '../utils/shared';
 import api from './baseApi';
 
@@ -10,7 +10,7 @@ const FetchCargo = async (): Promise<ICargo[]> => {
   const result = await api().get(apiName);
   return result.data;
 };
-const FetchCargoById = async (id: string): Promise<ICargo> => {
+const FetchCargoById = async (id: string): Promise<IPopulatedCargo> => {
   const result = await api().get(`${apiName}/${id}`);
   return result.data;
 };
@@ -32,7 +32,7 @@ const FilterCargosIdByOrderIds = async (orderIds: string[]): Promise<ICargoSumma
   const result = await api().put(`${apiName}/${filterCargoIdsByOrderIds}`, { orderIds });
   return result.data;
 };
-const FilterCargosByOrderIds = async (orderIds: string[]): Promise<ICargo[]> => {
+const FilterCargosByOrderIds = async (orderIds: string[]): Promise<IPopulatedCargo[]> => {
   const result = await api().put(`${apiName}/${filterCargosByOrderIds}`, { orderIds });
   return result.data;
 };

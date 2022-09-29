@@ -129,6 +129,7 @@ export default async function seeding(): Promise<void> {
       cargoId: cargos[0]._id,
       truckId: trucks[0]._id,
       routeId: routes[0]._id,
+      orderId: cargos[0].orderId,
     }).save(),
   ]);
 }

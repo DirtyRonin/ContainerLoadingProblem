@@ -23,7 +23,7 @@ const forceSync = () => {
   createServer(app).listen(port, () => {
     connect().then((x) => {
       console.log('mongo connected')
-      // forceSync()
+      //  forceSync()
     })
     .catch((x) => console.log('not connected to mongo', x));
     console.log(`server running on port ${port}`);

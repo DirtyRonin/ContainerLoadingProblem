@@ -2,88 +2,133 @@ import React, { useState, useEffect } from 'react';
 import { TreeItem } from '@mui/lab';
 import { Checkbox, Typography } from '@mui/material';
 
-import { ICargo, ILoadSummary, initializeCargo } from '../../../interfaces';
+import { ICargo, ILoadSummary, initializeCargo, initializePopulatedCargo, IPopulatedCargo } from '../../../interfaces';
 
-import loadAnalyzerContext from '../contexts/LoadAnalyzerContext';
 import { GetValueById } from '../../../utils/shared/DictionaryHelper';
+
+import { addSelectedLoadSummaryIds, removeSelectedLoadSummaryIds, SelectLoadAnalyzerState } from '../slice/LoadAnalyzerSlice';
+import { useAppDispatch, useAppSelector } from '../../../store';
+import { ILoadSummaryIds } from '../../../interfaces/ILoadSummaryIds';
 interface IProps {
-  truckId: string;
-  cargoId: string;
-  orderId: string;
-  cargo: ICargo;
+  loadSummaryIds: ILoadSummaryIds;
+  cargo: IPopulatedCargo;
+}
+
+interface IState {
+  /** current domain */
+  cargo: IPopulatedCargo;
+  /** loading meter calculation
+   * @return Is false when no load summary is not valid
+   */
+  summary: ILoadSummary | false;
+  /** is assigned in db */
+  isCargoAssignedInCloud: boolean;
+  /** is assigned in local instance
+   * If isCargoAssignedInCloud is true, this can never be false */
+  isCargoAssigned: boolean;
 }
 
 export default function LoadingCargoTreeItems(props: IProps) {
-  const { truckId, cargoId, orderId, cargo } = props;
+  const { loadSummaryIds, cargo } = props;
 
-  const { selectedLoadSummaryIds, loadSummaries, addSelectedLoadSummaryIds, removeSelectedLoadSummaryIds } = loadAnalyzerContext();
+  const dispatchGlobal = useAppDispatch();
+  const { selectedLoadSummaryIds, loadSummaries, selectedRouteId } = useAppSelector(SelectLoadAnalyzerState);
 
-  const [thisCargo, setCargo] = useState<ICargo>(initializeCargo({}));
-  const [thisSummary, setSummary] = useState<ILoadSummary | null>(null);
-  const [isDisabled, setDisabled] = useState<boolean>(true);
+  // const {  addSelectedLoadSummaryIds, removeSelectedLoadSummaryIds } = loadAnalyzerContext();
 
+  // const [thisCargo, setCargo] = useState<IPopulatedCargo>(initializePopulatedCargo());
+  // const [thisSummary, setSummary] = useState<ILoadSummary | false>(false);
+  // const [isDisabled, setDisabled] = useState<boolean>(true);
+
+  const [state, dispatchLocal] = useState<IState>({
+    cargo: initializePopulatedCargo(),
+    summary: false,
+    isCargoAssignedInCloud: false,
+    isCargoAssigned: false,
+  });
+
+  /** on init */
   useEffect(() => {
-    setCargo(cargo);
+    
+   
+
+    const isAssigned = IsCargoAssigned(cargo, loadSummaryIds);
+
+    dispatchLocal((prev) => ({
+      ...prev,
+      cargo,
+      isCargoAssignedInCloud: isAssigned,
+      isCargoAssigned: isAssigned,
+    }));
   }, []);
 
   useEffect(() => {
-    // const cargo = cargos.find((x) => x.id === cargoId);
-    // if (cargo) setCargo(cargo);
-
-    const loadSummariesByTruckId = GetValueById(truckId, loadSummaries.value);
+    const loadSummariesByTruckId = GetValueById(loadSummaryIds.truckId, loadSummaries.value);
 
     if (loadSummariesByTruckId === undefined) {
-      setSummary(null);
+      dispatchLocal((prev) => ({ ...prev, summary: false }));
       return;
     }
 
-    const summary = loadSummariesByTruckId.values.find((x) => x.cargoId === cargoId);
+    const summary = loadSummariesByTruckId.values.find((x) => x.cargoId === loadSummaryIds.cargoId);
     if (summary === undefined) {
-      setSummary(null);
+      dispatchLocal((prev) => ({ ...prev, summary: false }));
       return;
     }
-    setSummary(summary);
+
+    dispatchLocal((prev) => ({ ...prev, summary }));
   }, [loadSummaries]);
 
+  /**
+   * Check whenever a tree node is selected the if this cargo is assigned to a truck
+   * update the status of the other opened nodes*/
   useEffect(() => {
-    const isThisCargoSelected = selectedLoadSummaryIds.find((x) => x.cargoId === cargoId);
+    /** if true, the cargo is assigned (in the db) */
+    if (IsCargoAssigned(cargo,loadSummaryIds)) return;
 
+    const isThisCargoSelected = selectedLoadSummaryIds.find((x) => x.cargoId === loadSummaryIds.cargoId);
     if (isThisCargoSelected === undefined) {
-      setDisabled(false);
+      dispatchLocal((prev) => ({ ...prev, isCargoAssigned: false }));
       return;
     }
-    if (isThisCargoSelected.truckId === truckId) {
-      setDisabled(false);
+    if (isThisCargoSelected.truckId === loadSummaryIds.truckId) {
+      dispatchLocal((prev) => ({ ...prev, isCargoAssigned: false }));
       return;
     }
-    setDisabled(true);
+
+    dispatchLocal((prev) => ({ ...prev, isCargoAssigned: true }));
   }, [selectedLoadSummaryIds]);
 
   const onCargoCheckedChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    if (checked) addSelectedLoadSummaryIds({ truckId, cargoId, orderId });
-    else removeSelectedLoadSummaryIds({ truckId, cargoId, orderId });
+    if (checked) dispatchGlobal(addSelectedLoadSummaryIds(loadSummaryIds));
+    else dispatchGlobal(removeSelectedLoadSummaryIds(loadSummaryIds));
   };
 
-  const hasSummary = () => thisSummary === null;
+   /** Is true when cargo is assigned to a truck and a route */
+   const IsCargoAssigned = (cargo: IPopulatedCargo, summaryIds: ILoadSummaryIds) => {
+    if (cargo.truckLoadings.length !== 1) return false;
 
-  const isChecked = () => {
-    return selectedLoadSummaryIds.find((x) => x.cargoId === cargoId && x.truckId === truckId) ? true : false;
+    if (cargo.truckLoadings[0]._id === summaryIds._id) return false;
+
+    return true;
   };
+
+  const isChecked = () => (selectedLoadSummaryIds.find((x) => x.cargoId === loadSummaryIds.cargoId && x.truckId === loadSummaryIds.truckId) ? true : false);
 
   const treeLabel = () => {
     return (
       <>
-        <Checkbox onChange={onCargoCheckedChange} checked={isChecked()} disabled={isDisabled} />
-        <Typography variant="caption">{`#${thisCargo.name}-${thisCargo._id}`}</Typography>
+        <Checkbox onChange={onCargoCheckedChange} checked={isChecked()} disabled={state.isCargoAssigned} />
+        <Typography variant="caption">{`#${state.cargo.name}-${state.cargo._id}`}</Typography>
         <br />
-        {hasSummary() ? <></> : <Typography variant="caption">{`Required Loading Meter: ${Math.round(thisSummary!.loadingMeter)} cm`}</Typography>}
+        {!state.summary ? <></> : <Typography variant="caption">{`Required Loading Meter: ${Math.round(state.summary.loadingMeter)} cm`}</Typography>}
       </>
     );
   };
 
   return (
     <>
-      <TreeItem nodeId={`#${thisCargo.name}-${thisCargo._id}`} label={treeLabel()} />
+      <TreeItem nodeId={`#${state.cargo.name}-${state.cargo._id}`} label={treeLabel()} />
     </>
   );
 }

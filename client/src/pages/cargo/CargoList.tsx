@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useAppDispatch, useAppSelector, SelectCargoState, SelectOrderListState, UnselectCargoId, FetchCargoByOrderIds } from '../../store';
+import { useAppDispatch, useAppSelector, SelectCargoState, SelectOrderListState, UnselectCargoId, FetchCargoByOrderIds, ClearCargos } from '../../store';
 import CustomList from '../../components/ui/CostumList';
 import ListItem from './CargoListItem';
 import { Cargo } from '../../models';
@@ -13,8 +13,13 @@ export default function CargoList() {
   const { cargos, loading } = useAppSelector(SelectCargoState);
 
   useEffect(() => {
+    // unselecting removes visual effect as well
     dispatch(UnselectCargoId());
-    if (IsStringEmpty(selectedOrderId)) return;
+    if (IsStringEmpty(selectedOrderId)) {
+      // clears cargo list 
+      dispatch(ClearCargos());
+      return;
+    }
 
     dispatch(FetchCargoByOrderIds([selectedOrderId]));
   }, [selectedOrderId]);

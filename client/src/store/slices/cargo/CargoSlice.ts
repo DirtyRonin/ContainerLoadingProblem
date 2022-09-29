@@ -21,7 +21,7 @@ export const FetchAllCargo = createAsyncThunk('cargos/fetchAllStatus', async () 
 // export const FetchCargoIdsWithOrderId = createAsyncThunk('cargos/filterByOrderIdStatus', async (oderId:string) => {
 //   return await CargoApi.FilterCargosIdByOrderIds([oderId]);
 // });
-export const FetchCargoByOrderIds = createAsyncThunk('cargos/filterByOrderIdsStatus', async (oderIds:string[]) => {
+export const FetchCargoByOrderIds = createAsyncThunk('cargos/filterByOrderIdsStatus', async (oderIds: string[]) => {
   return await CargoApi.FilterCargosByOrderIds(oderIds);
 });
 
@@ -35,7 +35,11 @@ export const cargoSlice = createSlice({
   name: 'cargos',
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
-  reducers: {},
+  reducers: {
+    ClearCargos: (state) => {
+      state.cargos = [];
+    },
+  },
   extraReducers(builder) {
     builder
       //Fetch all
@@ -49,7 +53,7 @@ export const cargoSlice = createSlice({
         state.cargos = action.payload;
         state.loading = 'succeeded';
       })
-      
+
       //Remove
       .addCase(DeleteCargo.pending, (state) => {
         state.loading = 'pending';
@@ -107,11 +111,11 @@ export const cargoSlice = createSlice({
       .addCase(FetchCargoByOrderIds.fulfilled, (state, action) => {
         state.cargos = action.payload;
         state.loading = 'succeeded';
-      })
+      });
   },
 });
 
-export const {} = cargoSlice.actions;
+export const { ClearCargos } = cargoSlice.actions;
 
 export const SelectCargoState = (state: RootState) => state.cargosGlobal;
 

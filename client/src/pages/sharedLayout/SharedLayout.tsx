@@ -9,13 +9,14 @@ export default function Home() {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{heiht: '100vh'}} >
         <AppBar />
         <Box
           sx={{
             bgcolor: '#cfe8fc',
-            height: '100vh',
+            height: 'calc(100vh - 70px)',
             border: '1px solid black',
+            overflow: 'auto',
           }}
         >
           <Outlet />

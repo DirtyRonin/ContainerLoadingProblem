@@ -18,3 +18,9 @@ export const TRUCKLOADING_CONST: string = 'TruckLoading';
 export const TRUCKLOADING_ROUTEID_CONST: string = nameof<ITruckLoading>((x) => x.routeId);
 export const TRUCKLOADING_CARGOID_CONST: string = nameof<ITruckLoading>((x) => x.cargoId);
 export const TRUCKLOADING_TRUCKID_CONST: string = nameof<ITruckLoading>((x) => x.truckId);
+export const TRUCKLOADING_ORDERID_CONST: string = nameof<ITruckLoading>((x) => x.orderId);
+
+export const FIELDS_CARGOS_CONST: string = 'cargos';
+export const FIELDS_TRUCKS_CONST: string = 'trucks';
+export const FIELDS_ORDERS_CONST: string = 'orders';
+export const FIELDS_TRUCKLOADING_CONST: string = 'truckLoadings';

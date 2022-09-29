@@ -17,6 +17,7 @@ export interface ILoadSummary extends ILoadSummaryIds {
 }
 
 export const initializeLoadSummary = (): ILoadSummary => ({
+  _id:'',
   cargoId: '',
   truckId: '',
   orderId: '',

@@ -8,6 +8,7 @@ const Dashboard =lazy(()=> import('./pages/dashboard'));
 const Trucks =lazy(()=> import('./pages/trucks'));
 const LoadAnalysis =lazy(()=> import('./pages/loadFactor'));
 const Order =lazy(()=> import('./pages/order'));
+const RouteComponent =lazy(()=> import('./pages/route/Route'));
 
 
 
@@ -20,8 +21,9 @@ export default function App() {
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Dashboard />} />
           <Route path={RecordOfPages.Trucks} element={<Trucks />} />
-          <Route path={RecordOfPages.Analyzer} element={<LoadAnalysis />} />
+          <Route path={RecordOfPages.Routes} element={<RouteComponent />} />
           <Route path={RecordOfPages.Order} element={<Order />} />
+          <Route path={RecordOfPages.Analyzer} element={<LoadAnalysis />} />
         </Route>
       </Routes>
     </Suspense>

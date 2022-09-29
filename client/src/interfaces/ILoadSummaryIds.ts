@@ -1,6 +1,7 @@
-import { ICargoSummary } from "./ICargoSummary";
+import { ICargoSummary } from './ICargoSummary';
+import { IEntity } from './IEntity';
 
-export interface ILoadSummaryIds extends ICargoSummary{
+export interface ILoadSummaryIds extends ICargoSummary, IEntity {
   truckId: string;
 }
 

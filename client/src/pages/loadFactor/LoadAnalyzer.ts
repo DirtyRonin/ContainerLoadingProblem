@@ -1,10 +1,10 @@
-import { ICargo, ITruck, IContainer, IContainerHelper, ILoadAnalyzer, ILoadSummary } from '../../interfaces';
+import { ICargo, ITruck, IContainerHelper, ILoadAnalyzer, ILoadSummary } from '../../interfaces';
 import { KeyValueLoadSummary } from '../../models';
 import { LoadSummary } from './LoadSummary';
 
 import { TYPES } from '../../utils/shared/registerSymbols';
 import { inject, injectable } from 'inversify';
-import { AsDeepCopy, SortGeneric } from '../../utils/shared/ImmutableHelper';
+import { SortGeneric } from '../../utils/shared/ImmutableHelper';
 import { ILoadSummaryIds } from '../../interfaces/ILoadSummaryIds';
 
 @injectable()
@@ -97,6 +97,7 @@ export class LoadAnalyzer implements ILoadAnalyzer {
     // config https://www.goodloading.com/de/blog/beladung/wie-plane-ich-die-palettenplatzierung-im-fahrzeug/
 
     const result: ILoadSummary = {
+      _id: '',
       cargoId: cargo._id,
       truckId: truck._id,
       orderId: cargo.orderId,

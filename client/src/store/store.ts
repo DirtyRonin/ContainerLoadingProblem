@@ -1,13 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
-import trucksReducer from "./slices/truck/TruckSlice";
-import truckListReducer from "./slices/truck/TruckListSlice";
-import orderReducer from "./slices/order/OrderSlice";
-import orderListReducer from "./slices/order/OrderListSlice";
+import trucksReducer from './slices/truck/TruckSlice';
+import truckListReducer from './slices/truck/TruckListSlice';
+import orderReducer from './slices/order/OrderSlice';
+import orderListReducer from './slices/order/OrderListSlice';
 // import orderMultiSelectReducer from "./slices/order/OrderMultiSelectSlice";
-import cargoReducer from "./slices/cargo/CargoSlice";
-import cargoListReducer from "./slices/cargo/CargoListSlice";
-import summaryReducer from "./slices/summaryTree/summaryTreeSlice";
+import cargoReducer from './slices/cargo/CargoSlice';
+import cargoListReducer from './slices/cargo/CargoListSlice';
+import summaryReducer from './slices/summaryTree/summaryTreeSlice';
+import routeReducer from '../pages/route/slices/RouteSlice';
+import loadAnalyzerReducer from '../pages/loadFactor/slice/LoadAnalyzerSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +21,9 @@ export const store = configureStore({
     cargosGlobal: cargoReducer,
     cargoListGlobal: cargoListReducer,
     summaryGlobal: summaryReducer,
+    routesGlobal: routeReducer,
+    loadAnalyzerGlobal: loadAnalyzerReducer,
+    
   },
 });
 

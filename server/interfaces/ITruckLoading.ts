@@ -5,4 +5,5 @@ export interface ITruckLoading extends IEntity {
     cargoId: Schema.Types.ObjectId;
     truckId: Schema.Types.ObjectId;
     routeId: Schema.Types.ObjectId;
+    orderId: Schema.Types.ObjectId;
 }

@@ -7,4 +7,10 @@ export const truckLoadingRouter = (controller: ITruckLoadingController) =>
 
     .get('/truckLoadings/:id', controller.GetById)
 
-    .put('/truckLoadings', controller.Update);
+    .post('/truckLoadings', controller.Create)
+
+    .put('/truckLoadings', controller.Update)
+
+    .delete('/truckLoadings/:id', controller.Delete)
+    
+    .put('/truckLoadings/FilterByRouteId', controller.FilterByRouteId);

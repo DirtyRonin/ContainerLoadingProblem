@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose';
 
 import { orderSchema } from './order';
 import { ICargo, IOrder } from '../interfaces';
-import { ORDER_CONST } from '../config/consts';
+import { FIELDS_TRUCKLOADING_CONST, ID_CONST, ORDER_CONST, TRUCKLOADING_CARGOID_CONST, TRUCKLOADING_CONST } from '../config/consts';
 
 export const cargoSchema = new Schema<ICargo>({
   name: { type: String, required: true },
@@ -13,7 +13,17 @@ export const cargoSchema = new Schema<ICargo>({
   height: { type: Number, required: true },
   isStackable: { type: Boolean, required: true },
   orderId: { type: Schema.Types.ObjectId, ref: ORDER_CONST },
+},
+{
+  toJSON: { virtuals: true }, // So `res.json()` and other `JSON.stringify()` functions include virtuals
+  toObject: { virtuals: true }, // So `console.log()` and other functions that use `toObject()` include virtuals
 });
+
+cargoSchema.virtual(FIELDS_TRUCKLOADING_CONST,{
+  ref:TRUCKLOADING_CONST,
+  localField: ID_CONST,
+  foreignField: TRUCKLOADING_CARGOID_CONST
+})
 
 // /** saving object id on both sides, because in the app cargos will be fetched through 
 //  * the order.cargos and this._id as well and where need to be always the orderID available 

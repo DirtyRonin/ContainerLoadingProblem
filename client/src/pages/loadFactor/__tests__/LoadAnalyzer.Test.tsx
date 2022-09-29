@@ -106,7 +106,7 @@ describe('Testing Loading Meter Functions', () => {
       it('cargo should only occure once in a specific, if it matches with selected load summary ids', async () => {
         _trucks = [{ ...testTrucks.smallTruck_L420xW180xH170('1') }, { ...testTrucks.middleTruck_L620xW245xH240('2') }];
         _cargos = [testCargos.indu({ quantity: 10, isStackable: false, height: 10, id: '1' })];
-        _selectedLoadSummaryIds = [{ orderId: '2', cargoId: '1', truckId: '1' }];
+        _selectedLoadSummaryIds = [{ orderId: '2', cargoId: '1', truckId: '1' ,_id:''}];
 
         const results = await _loadingMeter.AnalyzeLoadingForSummaries(_cargos, _trucks, _selectedLoadSummaryIds);
 

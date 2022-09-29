@@ -1,35 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import { ListItemButton, ListItem, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
 import NextPlanIcon from '@mui/icons-material/NextPlan';
-import ListItem from '@mui/material/ListItem';
-import { Checkbox } from '@mui/material';
 
-import { addOrderId, removeOrderId, SelectLoadAnalyzerState } from '../slice/LoadAnalyzerSlice';
-import { IOrder } from '../../../interfaces';
-import { useAppDispatch,useAppSelector } from '../../../store';
+import { IRoute } from '../../../interfaces';
+import { addRouteId, clearSelectedLoadSummaryIds, removeRouteId, SelectLoadAnalyzerState } from '../slice/LoadAnalyzerSlice';
+import { useAppDispatch, useAppSelector } from '../../../store';
 interface Props {
-  order: IOrder;
+  route: IRoute;
 }
 
-export default function OrderSliderItem({order}: Props) {
+export default function RouteSliderItem({ route }: Props) {
   const dispatch = useAppDispatch();
-  const { selectedOrderIds } = useAppSelector(SelectLoadAnalyzerState);
+  const { selectedRouteId } = useAppSelector(SelectLoadAnalyzerState);
 
   const [isChecked, setChecked] = useState(false);
 
   useEffect(() => {
-    setChecked(isOrderChecked());
-  }, [selectedOrderIds]);
+    setChecked(isRouteChecked());
+  }, [selectedRouteId]);
 
-  const isOrderChecked = () => (selectedOrderIds.find((x) => x === order._id) ? true : false);
+  const isRouteChecked = () => selectedRouteId === route._id;
 
   const handleOnSelect = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isChecked) {
-      dispatch(removeOrderId(order._id));
+      {
+        dispatch(removeRouteId(route._id));
+        dispatch(clearSelectedLoadSummaryIds());
+      }
     } else {
-      dispatch(addOrderId(order._id));
+      dispatch(addRouteId(route._id));
     }
 
     setChecked(!isChecked);
@@ -41,7 +40,7 @@ export default function OrderSliderItem({order}: Props) {
         <ListItemIcon>
           <NextPlanIcon />
         </ListItemIcon>
-        <ListItemText primary={order.orderName} />
+        <ListItemText primary={`from ${route.from} to ${route.to}`} />
         <ListItemIcon>
           <Checkbox
             edge="end"

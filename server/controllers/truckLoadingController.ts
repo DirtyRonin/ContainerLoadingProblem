@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { ITruckLoadingController } from '../interfaces';
 import { Model } from 'mongoose';
 import { ITruckLoading } from '../interfaces/ITruckLoading';
+import { CARGO_CONST, FIELDS_CARGOS_CONST, FIELDS_TRUCKS_CONST, TRUCK_CONST } from '../config/consts';
 
 export class TruckLoadingController implements ITruckLoadingController {
   constructor(private readonly truckLoadingRepository: Model<ITruckLoading, {}, {}, {}, any>) {}
@@ -17,10 +18,22 @@ export class TruckLoadingController implements ITruckLoadingController {
     }
   };
 
+  public FilterByRouteId = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const routeId: string = req.body.routeId;
+      const truckLoadings = await this.truckLoadingRepository.find({ routeId }).populate(FIELDS_CARGOS_CONST).populate(FIELDS_TRUCKS_CONST);
+
+      if (!truckLoadings) return res.status(404).json('_ids not found');
+      return res.status(200).json(truckLoadings);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public GetById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const truckLoading = await this.truckLoadingRepository.findById(id);
+      const truckLoading = await this.truckLoadingRepository.findById(id).populate(FIELDS_CARGOS_CONST).populate(FIELDS_TRUCKS_CONST);
       if (!truckLoading) return res.status(404).json('id not found');
 
       return res.status(200).json(truckLoading);

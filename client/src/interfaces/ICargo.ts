@@ -1,7 +1,7 @@
-import { IContainer, IEntity, initializeContainer } from '.';
+import { IContainer, IEntity, initializeContainer, ITruckLoading } from '.';
 
 export interface ICargo extends IEntity, IContainer {
-  orderId:string
+  orderId: string;
   name: string;
   weight: number;
   quantity: number;
@@ -17,3 +17,15 @@ export const initializeCargo = ({ name = 'New Cargo', orderId = '' }): ICargo =>
   isStackable: false,
   ...initializeContainer(),
 });
+
+export interface IPopulatedCargo extends ICargo {
+  /** every truckLoadings should only have one entry */
+  truckLoadings: ITruckLoading[];
+}
+
+export const initializePopulatedCargo = (): IPopulatedCargo => ({
+  ...initializeCargo({}),
+  truckLoadings: [],
+});
+
+
